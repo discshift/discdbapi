@@ -1,0 +1,14 @@
+{
+  "name": "discdbapi",
+  "version": "0.1.0",
+  "module": "src/index.ts",
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.5",
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "type": "module",
+  "types": "src/types/index.ts"
+}
