@@ -15,10 +15,12 @@ yarn add discshift/discdbapi
 ## Usage
 
 ```ts
-const client = new DiscDBClient();
+import { DiscDBClient } from "discdbapi";
+
+const discdb = new DiscDBClient();
 
 // Resolve media information (movie/series) for a single disc
-const item = await client.getMediaItemByDiscHash("CDF7CFDBD00DE93CC559A2A8F326CC9D");
+const item = await discdb.getMediaItemByDiscHash("CDF7CFDBD00DE93CC559A2A8F326CC9D");
 console.log(item);
 // {
 //   id: 164,
@@ -50,7 +52,7 @@ console.log(item);
 // }
 
 // Resolve media information for multiple discs
-const itemsMap = await client.getMediaItemsByDiscHashes(["CDF7CFDBD00DE93CC559A2A8F326CC9D", "2114BF5CB3693167AE8FF4E9B0753531"]);
+const itemsMap = await discdb.getMediaItemsByDiscHashes(["CDF7CFDBD00DE93CC559A2A8F326CC9D", "2114BF5CB3693167AE8FF4E9B0753531"]);
 console.log(itemsMap);
 // {
 //   CDF7CFDBD00DE93CC559A2A8F326CC9D: [
