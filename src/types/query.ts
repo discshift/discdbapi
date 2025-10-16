@@ -1,5 +1,7 @@
-export interface MediaItemsResponse<T> {
+import type { MediaItem } from "./node";
+
+export interface MediaItemsResponse {
   mediaItems: {
-    nodes: T[];
+    nodes: MediaItem[];
   };
 }

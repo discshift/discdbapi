@@ -24,7 +24,7 @@ import type { Title } from "./title";
  * https://en.wikipedia.org/wiki/Blu-ray#Region_codes -
  * Blu-ray only specifies 3 region codes (A, B, C), but that does not mean
  * that Blu-ray region codes are always present in Blu-ray release files as
- * might be expected (see NodeRelease.regionCode)
+ * might be expected (see Release.regionCode)
  */
 export type NumberRegionCode =
   | "0"
@@ -45,6 +45,7 @@ export enum TitleType {
 }
 
 export interface ReleaseDisc {
+  contentHash: string | null;
   index: number;
   name: string;
   format: DiscFormat;
@@ -52,7 +53,7 @@ export interface ReleaseDisc {
   titles: Title[];
 }
 
-export interface NodeRelease {
+export interface Release {
   slug: string;
   locale: string;
   /**
@@ -70,12 +71,12 @@ export interface NodeRelease {
   boxset?: Boxset;
 }
 
-export interface DiscDetailNode {
+export interface MediaItem {
   id: number;
   title: string;
   year: number;
   slug: string;
   imageUrl: string | null;
   type: TitleType;
-  releases: NodeRelease[];
+  releases: Release[];
 }

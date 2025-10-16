@@ -1,9 +1,9 @@
 export const queries = {
-  GetDiscDetailByContentHash: `
-    query GetDiscDetailByContentHash($hash: String) {
+  GetDiscDetailByContentHashes: `
+    query GetDiscDetailByContentHashes($hashes: [String]) {
     mediaItems(
       where: {
-        releases: { some: { discs: { some: { contentHash: { eq: $hash } } } } }
+        releases: { some: { discs: { some: { contentHash: { in: $hashes } } } } }
       }
     ) {
       nodes {
@@ -21,6 +21,7 @@ export const queries = {
           title
           imageUrl
           discs(order: { index: ASC }) {
+            contentHash
             index
             name
             format

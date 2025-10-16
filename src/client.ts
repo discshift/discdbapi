@@ -1,6 +1,6 @@
 import { DISCDB_ORIGIN } from "./constants";
 import { queries } from "./graphql";
-import type { DiscDetailNode } from "./types/node";
+import type { MediaItem } from "./types/node";
 import type { MediaItemsResponse } from "./types/query";
 import { version } from "../package.json";
 
@@ -42,7 +42,9 @@ export class DiscDBClient {
       },
     });
     if (!response.ok) {
-      throw Error(`${response.status} ${response.statusText}`);
+      throw Error(
+        `${response.status} ${response.statusText}: ${await response.text()}`,
+      );
     }
 
     const { data } = (await response.json()) as { data: T };
@@ -50,22 +52,65 @@ export class DiscDBClient {
   }
 
   /**
-   * Returns a matching media item (movies/series) with releases that
-   * contain a disc with the specified hash and details for the disc.
-   * There may be multiple releases with the same disc.
+   * Returns a matching media item (movies/series) with releases that contain
+   * a disc with the specified hash and details for the disc. There may be
+   * multiple releases and media items with the same disc. This method will
+   * only return the first media item, use `getMediaItemsByDiscHashes` to
+   * receive all results.
    *
    * @param hash the disc hash (from `hashDisc`)
    * @returns matching media item
    */
-  async getMediaItemByDiscHash(hash: string): Promise<DiscDetailNode> {
-    const data = await this.graphql<MediaItemsResponse<DiscDetailNode>>(
-      "GetDiscDetailByContentHash",
-      { hash },
+  async getMediaItemByDiscHash(hash: string): Promise<MediaItem> {
+    const data = await this.graphql<MediaItemsResponse>(
+      "GetDiscDetailByContentHashes",
+      { hashes: [hash] },
     );
     const node = data.mediaItems.nodes[0];
     if (!node) {
       throw Error(`No such disc with hash "${hash}"`);
     }
     return node;
+  }
+
+  /**
+   * Returns multiple matching media items (movies/series) with releases that
+   * contain a disc with the specified hash and details for the disc.
+   * There may be multiple releases and media items with the same disc.
+   *
+   * Hashes with no matches will still be in the resulting record, but with an
+   * empty array.
+   *
+   * @param hash the disc hashes (from `hashDisc`)
+   * @returns a mapping of disc hashes to media item arrays
+   */
+  async getMediaItemsByDiscHashes(
+    hashes: string[],
+  ): Promise<Record<string, MediaItem[]>> {
+    const data = await this.graphql<MediaItemsResponse>(
+      "GetDiscDetailByContentHashes",
+      { hashes },
+    );
+    const nodes = data.mediaItems.nodes;
+    // build the map ahead of time so there is always an array even for hashes
+    // that returned no discs
+    const results: Record<string, MediaItem[]> = Object.fromEntries(
+      hashes.map((hash) => [hash, []]),
+    );
+    for (const node of nodes) {
+      for (const release of node.releases) {
+        for (const disc of release.discs) {
+          if (disc.contentHash && hashes.includes(disc.contentHash)) {
+            if (results[disc.contentHash]) {
+              results[disc.contentHash]?.push(node);
+            } else {
+              results[disc.contentHash] = [node];
+            }
+          }
+        }
+      }
+    }
+
+    return results;
   }
 }
