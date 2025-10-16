@@ -2,9 +2,14 @@
   "name": "discdbapi",
   "version": "0.1.0",
   "module": "src/index.ts",
+  "main": "dist/index.js",
   "devDependencies": {
     "@biomejs/biome": "^2.2.5",
     "@types/bun": "latest"
+  },
+  "scripts": {
+    "build": "bun build ./src/index.ts --outdir ./dist",
+    "prepare": "npx bun run build"
   },
   "peerDependencies": {
     "typescript": "^5"
