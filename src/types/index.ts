@@ -1,4 +1,4 @@
 export * from "./boxset";
-export * from "./node";
+export * from "./media";
 export * from "./query";
 export * from "./title";

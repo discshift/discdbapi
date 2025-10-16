@@ -1,4 +1,4 @@
-import type { MediaItem } from "./node";
+import type { MediaItem } from "./media";
 
 export interface MediaItemsResponse {
   mediaItems: {

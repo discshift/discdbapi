@@ -3,17 +3,19 @@
   "version": "0.1.0",
   "module": "src/index.ts",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "devDependencies": {
     "@biomejs/biome": "^2.2.5",
     "@types/bun": "latest"
   },
   "scripts": {
-    "build": "bun build ./src/index.ts --outdir ./dist",
-    "prepare": "npx bun run build"
+    "build:js": "bun build ./src/index.ts --outdir ./dist",
+    "build:ts": "tsc src/types/index.ts --outFile dist/index.d.ts --declaration --module system --emitDeclarationOnly --noCheck",
+    "build:all": "bun build:js && bun build:ts",
+    "prepare": "npx bun run build:all"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
-  "type": "module",
-  "types": "src/types/index.ts"
+  "type": "module"
 }

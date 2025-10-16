@@ -1,6 +1,6 @@
 # discdbapi
 
-This package is written and tested with Bun, but it doesn't use any Bun APIs, so it should also work in browsers and in Node. I haven't confirmed, but I doubt DiscDB allows cross-origin requests, so you may have to run a proxy if you are running in a browser environment. You can provide a custom origin to the `DiscDBClient` class when initializing.
+This package is written, tested, and built with Bun, but it doesn't use any Bun APIs, so it should also work in browsers and in Node. I haven't confirmed, but I doubt DiscDB allows cross-origin requests, so you may have to run a proxy if you are running in a browser environment. You can provide a custom origin to the `DiscDBClient` class when initializing.
 
 ## Installing
 

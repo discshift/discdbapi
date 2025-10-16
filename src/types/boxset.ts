@@ -1,4 +1,4 @@
-import type { NodeRelease, TitleType } from "./node";
+import type { Release, TitleType } from "./media";
 
 export interface Boxset {
   id: number;
@@ -6,7 +6,7 @@ export interface Boxset {
   sortTitle: string | null;
   slug: string | null;
   imageUrl: string | null;
-  release: NodeRelease | null;
+  release: Release | null;
   releaseId: number;
   type: TitleType;
 }

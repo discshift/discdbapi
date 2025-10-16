@@ -1,6 +1,6 @@
 import { DISCDB_ORIGIN } from "./constants";
 import { queries } from "./graphql";
-import type { MediaItem } from "./types/node";
+import type { MediaItem } from "./types/media";
 import type { MediaItemsResponse } from "./types/query";
 import { version } from "../package.json";
 
