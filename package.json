@@ -11,8 +11,7 @@
   "scripts": {
     "build:js": "bun build ./src/index.ts --outdir ./dist",
     "build:ts": "tsc src/types/index.ts --outFile dist/index.d.ts --declaration --module system --emitDeclarationOnly --noCheck",
-    "build:all": "bun build:js && bun build:ts",
-    "prepare": "npx bun run build:all"
+    "build:all": "bun build:js && bun build:ts"
   },
   "peerDependencies": {
     "typescript": "^5"
