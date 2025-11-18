@@ -1,4 +1,4 @@
-import type { Release, TitleType } from "./media";
+import type { Release, MediaItemType } from "./media";
 export interface Boxset {
     id: number;
     title: string | null;
@@ -7,5 +7,5 @@ export interface Boxset {
     imageUrl: string | null;
     release: Release | null;
     releaseId: number;
-    type: TitleType;
+    type: MediaItemType;
 }

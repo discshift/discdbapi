@@ -2,57 +2,103 @@
 var DISCDB_ORIGIN = "https://thediscdb.com";
 
 // src/graphql.ts
-var queries = {
-  GetDiscDetailByContentHashes: `
-    query GetDiscDetailByContentHashes($hashes: [String]) {
-    mediaItems(
-      where: {
-        releases: { some: { discs: { some: { contentHash: { in: $hashes } } } } }
-      }
-    ) {
-      nodes {
-        id
-        title
-        year
+var fullNodeQuery = `
+  nodes {
+    id
+    title
+    year
+    slug
+    imageUrl
+    type
+    externalids {
+      tmdb
+      imdb
+      tvdb
+    }
+    releases {
+      id
+      slug
+      locale
+      regionCode
+      year
+      title
+      imageUrl
+      discs(order: { index: ASC }) {
+        contentHash
+        index
+        name
+        format
         slug
-        imageUrl
-        type
-        releases {
-          slug
-          locale
-          regionCode
-          year
-          title
-          imageUrl
-          discs(order: { index: ASC }) {
-            contentHash
-            index
-            name
-            format
-            slug
-            titles(order: { index: ASC }) {
+        titles(order: { index: ASC }) {
+          index
+          duration
+          displaySize
+          sourceFile
+          size
+          segmentMap
+          item {
+            title
+            season
+            episode
+            type
+            chapters(order: { index: ASC }) {
               index
-              duration
-              displaySize
-              sourceFile
-              size
-              segmentMap
-              item {
-                title
-                season
-                episode
-                type
-                chapters(order: { index: ASC }) {
-                  index
-                  title
-                }
-              }
+              title
             }
           }
         }
       }
     }
-  }`
+  }
+`;
+var queries = {
+  GetDiscDetailByContentHashes: `
+    query GetDiscDetailByContentHashes($hashes: [String]) {
+      mediaItems(
+        where: {
+          releases: { some: { discs: { some: { contentHash: { in: $hashes } } } } }
+        }
+      ) {
+        ${fullNodeQuery}
+      }
+    }`,
+  GetReleasesById: `
+    query GetReleasesById($ids: [Int]) {
+      mediaItems(
+        where: {
+          releases: { some: { id: { in: $ids } } }
+        }
+      ) {
+        ${fullNodeQuery}
+      }
+    }`,
+  GetReleasesBySlugs: `
+    query GetReleasesBySlugs($mediaItemSlug: String, $slug: String) {
+      mediaItems(
+        where: {
+          slug: { eq: $mediaItemSlug },
+          releases: { some: { slug: { eq: $slug } } }
+        }
+      ) {
+        ${fullNodeQuery}
+      }
+    }`,
+  GetMediaItemsByExternalIds: `
+    query GetMediaItemsByExternalIds($imdbId: String, $tmdbId: String, $tvdbId: String) {
+      mediaItems(
+        where: {
+          externalids: {
+            or: [
+              { imdb: { eq: $imdbId } },
+              { tmdb: { eq: $tmdbId } },
+              { tvdb: { eq: $tvdbId } }
+            ]
+          }
+        }
+      ) {
+        ${fullNodeQuery}
+      }
+    }`
 };
 // package.json
 var version = "0.1.0";
@@ -116,13 +162,78 @@ class DiscDBClient {
     }
     return results;
   }
+  async getReleases(ids) {
+    const data = await this.graphql("GetReleasesById", {
+      ids
+    });
+    const nodes = data.mediaItems.nodes;
+    const results = {};
+    for (const node of nodes) {
+      for (const release of node.releases) {
+        results[release.id] = {
+          ...release,
+          mediaItem: {
+            ...node,
+            releases: node.releases.filter((r) => r.id !== release.id)
+          }
+        };
+      }
+    }
+    return results;
+  }
+  async getRelease(id) {
+    const releases = await this.getReleases([id]);
+    if (releases[id]) {
+      return releases[id];
+    }
+    throw Error(`No such release with ID "${id}"`);
+  }
+  async getReleaseBySlug(mediaItemSlug, slug) {
+    const data = await this.graphql("GetReleasesBySlugs", {
+      mediaItemSlug,
+      slug
+    });
+    const node = data.mediaItems.nodes[0];
+    if (!node) {
+      throw Error(`No such release matching slugs ${mediaItemSlug} / ${slug}`);
+    }
+    const release = node.releases.find((r) => r.slug === slug);
+    if (!release) {
+      throw Error(`No such release for item ${mediaItemSlug} with slug ${slug}`);
+    }
+    return {
+      ...release,
+      mediaItem: {
+        ...node,
+        releases: node.releases.filter((r) => r.id !== release.id)
+      }
+    };
+  }
+  async getMediaItemByExternalIds(ids) {
+    const data = await this.graphql("GetMediaItemsByExternalIds", {
+      imdbId: ids.imdbId ?? "",
+      tmdbId: ids.tmdbId ?? "",
+      tvdbId: ids.tvdbId ?? ""
+    });
+    const node = data.mediaItems.nodes[0];
+    if (!node) {
+      throw Error(`No media item matching any external IDs from ${JSON.stringify(ids)}`);
+    }
+    return node;
+  }
 }
 // src/types/media.ts
-var TitleType;
-((TitleType2) => {
-  TitleType2["Movie"] = "Movie";
-  TitleType2["Series"] = "Series";
-})(TitleType ||= {});
+var MediaItemType;
+((MediaItemType2) => {
+  MediaItemType2["Movie"] = "Movie";
+  MediaItemType2["Series"] = "Series";
+})(MediaItemType ||= {});
+var DiscFormat;
+((DiscFormat2) => {
+  DiscFormat2["DVD"] = "DVD";
+  DiscFormat2["Bluray"] = "Blu-Ray";
+  DiscFormat2["UHD"] = "UHD";
+})(DiscFormat ||= {});
 // src/types/title.ts
 var ItemType;
 ((ItemType2) => {
@@ -134,7 +245,8 @@ var ItemType;
 })(ItemType ||= {});
 export {
   getImageUrl,
-  TitleType,
+  MediaItemType,
   ItemType,
+  DiscFormat,
   DiscDBClient
 };

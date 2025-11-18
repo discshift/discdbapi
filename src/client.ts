@@ -1,8 +1,9 @@
 import { DISCDB_ORIGIN } from "./constants";
 import { queries } from "./graphql";
-import type { MediaItem } from "./types/media";
+import type { MediaItem, ReleaseWithMediaItem } from "./types/media";
 import type { MediaItemsResponse } from "./types/query";
 import { version } from "../package.json";
+import type { Release } from "../dist";
 
 /**
  * Returns a qualified image URL from a path
@@ -112,5 +113,131 @@ export class DiscDBClient {
     }
 
     return results;
+  }
+
+  /**
+   * Fetch multiple releases by their numeric IDs.
+   *
+   * If a requested ID is not found, it will be missing from the returned
+   * record, but no error will be thrown.
+   *
+   * @param id the release ID
+   * @returns a map of ID to releases with required `mediaItem` props, whose
+   *   `releases` arrays contains all releases for the media item other than
+   *   the parent.
+   */
+  async getReleases(
+    ids: number[],
+  ): Promise<Record<string, ReleaseWithMediaItem>> {
+    const data = await this.graphql<MediaItemsResponse>("GetReleasesById", {
+      ids,
+    });
+    const nodes = data.mediaItems.nodes;
+    // build reverse map for ease of use
+    const results: Record<string, ReleaseWithMediaItem> = {};
+    for (const node of nodes) {
+      for (const release of node.releases) {
+        results[release.id] = {
+          ...release,
+          mediaItem: {
+            ...node,
+            releases: node.releases.filter((r) => r.id !== release.id),
+          },
+        };
+      }
+    }
+
+    return results;
+  }
+
+  /**
+   * Fetch a single release by its numeric ID.
+   *
+   * @param id the release ID
+   * @returns a matching release with required `mediaItem` prop, whose
+   *   `releases` array contains all releases for the media item other
+   *   than the one requested.
+   */
+  async getRelease(id: number): Promise<ReleaseWithMediaItem> {
+    const releases = await this.getReleases([id]);
+    if (releases[id]) {
+      return releases[id];
+    }
+    throw Error(`No such release with ID "${id}"`);
+  }
+
+  /**
+   * Fetch a release by its URL slugs, useful for resolving a user-provided link.
+   *
+   * @param mediaItemSlug the slug for the media item as a whole on thediscdb.com
+   * @param slug the slug for just the release on thediscdb.com
+   * @returns a matching release with required `mediaItem` prop, whose
+   *   `releases` array contains all releases for the media item other
+   *   than the one requested.
+   */
+  async getReleaseBySlug(
+    mediaItemSlug: string,
+    slug: string,
+  ): Promise<ReleaseWithMediaItem> {
+    const data = await this.graphql<MediaItemsResponse>("GetReleasesBySlugs", {
+      mediaItemSlug,
+      slug,
+    });
+    const node = data.mediaItems.nodes[0];
+    if (!node) {
+      throw Error(`No such release matching slugs ${mediaItemSlug} / ${slug}`);
+    }
+
+    const release = node.releases.find((r) => r.slug === slug);
+    if (!release) {
+      // Shouldn't happen if the query is correct
+      throw Error(
+        `No such release for item ${mediaItemSlug} with slug ${slug}`,
+      );
+    }
+
+    return {
+      ...release,
+      mediaItem: {
+        ...node,
+        releases: node.releases.filter((r) => r.id !== release.id),
+      },
+    };
+  }
+
+  /**
+   * Fetch a media item by its external database IDs. If there are multiple
+   * results (e.g you provided IDs for items that are not the same), only the
+   * first result will be returned.
+   *
+   * Database items are created with their TMDB association, so every item
+   * should have one. If you only have an IMDb or TVDB ID, you may find more
+   * success if you first consult TMDB:
+   *
+   * @see https://developer.themoviedb.org/reference/find-by-id
+   *
+   * @param ids one or multiple IDs with which to try to identify the item.
+   * @returns a matching media item
+   */
+  async getMediaItemByExternalIds(ids: {
+    tmdbId?: string;
+    imdbId?: string;
+    tvdbId?: string;
+  }): Promise<MediaItem> {
+    const data = await this.graphql<MediaItemsResponse>(
+      "GetMediaItemsByExternalIds",
+      {
+        imdbId: ids.imdbId ?? "",
+        tmdbId: ids.tmdbId ?? "",
+        tvdbId: ids.tvdbId ?? "",
+      },
+    );
+    const node = data.mediaItems.nodes[0];
+    if (!node) {
+      throw Error(
+        `No media item matching any external IDs from ${JSON.stringify(ids)}`,
+      );
+    }
+    return node;
   }
 }

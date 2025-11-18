@@ -1,4 +1,3 @@
-import type { DiscFormat } from "../../src-legacy/types/disc";
 import type { Boxset } from "./boxset";
 import type { Title } from "./title";
 
@@ -39,9 +38,15 @@ export type NumberRegionCode =
 
 export type LetterRegionCode = "A" | "B" | "C";
 
-export enum TitleType {
+export enum MediaItemType {
   Movie = "Movie",
   Series = "Series",
+}
+
+export enum DiscFormat {
+  DVD = "DVD",
+  Bluray = "Blu-Ray",
+  UHD = "UHD",
 }
 
 export interface ReleaseDisc {
@@ -54,6 +59,7 @@ export interface ReleaseDisc {
 }
 
 export interface Release {
+  id: number;
   slug: string;
   locale: string;
   /**
@@ -67,9 +73,12 @@ export interface Release {
   imageUrl: string | null;
   discs: ReleaseDisc[];
 
-  mediaItem?: Title;
+  mediaItem?: MediaItem;
   boxset?: Boxset;
 }
+
+export type ReleaseWithMediaItem = Release &
+  Required<Pick<Release, "mediaItem">>;
 
 export interface MediaItem {
   id: number;
@@ -77,6 +86,11 @@ export interface MediaItem {
   year: number;
   slug: string;
   imageUrl: string | null;
-  type: TitleType;
+  type: MediaItemType;
+  externalids: {
+    tmdb: string | null;
+    imdb: string | null;
+    tvdb: string | null;
+  };
   releases: Release[];
 }
