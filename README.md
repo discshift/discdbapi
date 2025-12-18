@@ -79,3 +79,12 @@ console.log(itemsMap);
 //   ],
 // }
 ```
+
+### Identifying resources uniquely
+
+TheDiscDB provides resources with integer IDs, but unfortunately they are not guaranteed to always refer to the same object.
+
+- Media Items: `slug`
+- Releases: `mediaItem.slug` + `slug`
+- Discs: `release.mediaItem.slug` + `release.slug` + `index`
+  - If possible, the `contentHash` of the disc should be stored and used for identification, but keep in mind the same disc may be a member of several releases, and also that not all discs have a calculated hash. If you need to identify a disc within a specific release, use its index paired with the release's key.

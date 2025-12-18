@@ -11,7 +11,9 @@
   "scripts": {
     "build:js": "bun build ./src/index.ts --outdir ./dist",
     "build:ts": "tsc ./src/*.ts --outDir ./dist --declaration --module system --emitDeclarationOnly --noCheck",
-    "build:all": "bun build:js && bun build:ts"
+    "build:all": "bun build:js && bun build:ts",
+    "lint": "biome check .",
+    "format": "biome format . --write"
   },
   "peerDependencies": {
     "typescript": "^5"

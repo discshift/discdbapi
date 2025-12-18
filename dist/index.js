@@ -1,3 +1,6 @@
+// package.json
+var version = "0.1.0";
+
 // src/constants.ts
 var DISCDB_ORIGIN = "https://thediscdb.com";
 
@@ -88,8 +91,6 @@ var queries = {
       }
     }`
 };
-// package.json
-var version = "0.1.0";
 
 // src/client.ts
 var getImageUrl = (path, origin) => new URL(path, `${origin ?? DISCDB_ORIGIN}/images/`).href;

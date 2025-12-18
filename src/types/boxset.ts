@@ -1,4 +1,4 @@
-import type { Release, MediaItemType } from "./media";
+import type { MediaItemType, Release } from "./media";
 
 export interface Boxset {
   id: number;

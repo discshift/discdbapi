@@ -1,8 +1,8 @@
+import { version } from "../package.json";
 import { DISCDB_ORIGIN } from "./constants";
 import { queries } from "./graphql";
 import type { MediaItem, ReleaseWithMediaItem } from "./types/media";
 import type { MediaItemsResponse } from "./types/query";
-import { version } from "../package.json";
 
 /**
  * Returns a qualified image URL from a path
