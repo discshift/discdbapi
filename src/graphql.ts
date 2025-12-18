@@ -1,6 +1,5 @@
 const fullNodeQuery = `
   nodes {
-    id
     title
     year
     slug
@@ -12,7 +11,6 @@ const fullNodeQuery = `
       tvdb
     }
     releases {
-      id
       slug
       locale
       regionCode
@@ -54,16 +52,6 @@ export const queries = {
       mediaItems(
         where: {
           releases: { some: { discs: { some: { contentHash: { in: $hashes } } } } }
-        }
-      ) {
-        ${fullNodeQuery}
-      }
-    }`,
-  GetReleasesById: `
-    query GetReleasesById($ids: [Int]) {
-      mediaItems(
-        where: {
-          releases: { some: { id: { in: $ids } } }
         }
       ) {
         ${fullNodeQuery}

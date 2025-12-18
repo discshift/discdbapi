@@ -4,7 +4,6 @@ var DISCDB_ORIGIN = "https://thediscdb.com";
 // src/graphql.ts
 var fullNodeQuery = `
   nodes {
-    id
     title
     year
     slug
@@ -16,7 +15,6 @@ var fullNodeQuery = `
       tvdb
     }
     releases {
-      id
       slug
       locale
       regionCode
@@ -57,16 +55,6 @@ var queries = {
       mediaItems(
         where: {
           releases: { some: { discs: { some: { contentHash: { in: $hashes } } } } }
-        }
-      ) {
-        ${fullNodeQuery}
-      }
-    }`,
-  GetReleasesById: `
-    query GetReleasesById($ids: [Int]) {
-      mediaItems(
-        where: {
-          releases: { some: { id: { in: $ids } } }
         }
       ) {
         ${fullNodeQuery}
@@ -162,32 +150,6 @@ class DiscDBClient {
     }
     return results;
   }
-  async getReleases(ids) {
-    const data = await this.graphql("GetReleasesById", {
-      ids
-    });
-    const nodes = data.mediaItems.nodes;
-    const results = {};
-    for (const node of nodes) {
-      for (const release of node.releases) {
-        results[release.id] = {
-          ...release,
-          mediaItem: {
-            ...node,
-            releases: node.releases.filter((r) => r.id !== release.id)
-          }
-        };
-      }
-    }
-    return results;
-  }
-  async getRelease(id) {
-    const releases = await this.getReleases([id]);
-    if (releases[id]) {
-      return releases[id];
-    }
-    throw Error(`No such release with ID "${id}"`);
-  }
   async getReleaseBySlug(mediaItemSlug, slug) {
     const data = await this.graphql("GetReleasesBySlugs", {
       mediaItemSlug,
@@ -205,7 +167,7 @@ class DiscDBClient {
       ...release,
       mediaItem: {
         ...node,
-        releases: node.releases.filter((r) => r.id !== release.id)
+        releases: node.releases.filter((r) => r.slug !== release.slug)
       }
     };
   }

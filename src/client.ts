@@ -3,7 +3,6 @@ import { queries } from "./graphql";
 import type { MediaItem, ReleaseWithMediaItem } from "./types/media";
 import type { MediaItemsResponse } from "./types/query";
 import { version } from "../package.json";
-import type { Release } from "../dist";
 
 /**
  * Returns a qualified image URL from a path
@@ -12,7 +11,7 @@ export const getImageUrl = (path: string, origin?: string): string =>
   new URL(path, `${origin ?? DISCDB_ORIGIN}/images/`).href;
 
 export class DiscDBClient {
-  origin = DISCDB_ORIGIN;
+  public origin = DISCDB_ORIGIN;
 
   constructor(options?: {
     origin?: string;
@@ -116,57 +115,6 @@ export class DiscDBClient {
   }
 
   /**
-   * Fetch multiple releases by their numeric IDs.
-   *
-   * If a requested ID is not found, it will be missing from the returned
-   * record, but no error will be thrown.
-   *
-   * @param id the release ID
-   * @returns a map of ID to releases with required `mediaItem` props, whose
-   *   `releases` arrays contains all releases for the media item other than
-   *   the parent.
-   */
-  async getReleases(
-    ids: number[],
-  ): Promise<Record<string, ReleaseWithMediaItem>> {
-    const data = await this.graphql<MediaItemsResponse>("GetReleasesById", {
-      ids,
-    });
-    const nodes = data.mediaItems.nodes;
-    // build reverse map for ease of use
-    const results: Record<string, ReleaseWithMediaItem> = {};
-    for (const node of nodes) {
-      for (const release of node.releases) {
-        results[release.id] = {
-          ...release,
-          mediaItem: {
-            ...node,
-            releases: node.releases.filter((r) => r.id !== release.id),
-          },
-        };
-      }
-    }
-
-    return results;
-  }
-
-  /**
-   * Fetch a single release by its numeric ID.
-   *
-   * @param id the release ID
-   * @returns a matching release with required `mediaItem` prop, whose
-   *   `releases` array contains all releases for the media item other
-   *   than the one requested.
-   */
-  async getRelease(id: number): Promise<ReleaseWithMediaItem> {
-    const releases = await this.getReleases([id]);
-    if (releases[id]) {
-      return releases[id];
-    }
-    throw Error(`No such release with ID "${id}"`);
-  }
-
-  /**
    * Fetch a release by its URL slugs, useful for resolving a user-provided link.
    *
    * @param mediaItemSlug the slug for the media item as a whole on thediscdb.com
@@ -200,7 +148,7 @@ export class DiscDBClient {
       ...release,
       mediaItem: {
         ...node,
-        releases: node.releases.filter((r) => r.id !== release.id),
+        releases: node.releases.filter((r) => r.slug !== release.slug),
       },
     };
   }

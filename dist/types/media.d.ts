@@ -44,7 +44,6 @@ export interface ReleaseDisc {
     titles: Title[];
 }
 export interface Release {
-    id: number;
     slug: string;
     locale: string;
     /**
@@ -62,7 +61,6 @@ export interface Release {
 }
 export type ReleaseWithMediaItem = Release & Required<Pick<Release, "mediaItem">>;
 export interface MediaItem {
-    id: number;
     title: string;
     year: number;
     slug: string;
