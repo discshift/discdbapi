@@ -1,4 +1,3 @@
-import type { BodyInit } from "bun";
 import { version } from "../package.json";
 import { DISCDB_ORIGIN } from "./constants";
 import { queries } from "./graphql";
