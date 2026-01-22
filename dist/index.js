@@ -117,11 +117,12 @@ class DiscDBClient {
     if (!response.ok) {
       throw Error(`${response.status} ${response.statusText}: ${await response.text()}`);
     }
-    const { data } = await response.json();
+    const data = await response.json();
     return data;
   }
-  graphql(operationName, variables) {
-    return this.fetch("/graphql", {
+  async graphql(operationName, variables) {
+    const { data } = await this.fetch("/graphql", {
+      method: "POST",
       body: JSON.stringify({
         operationName,
         query: queries[operationName],
@@ -129,6 +130,7 @@ class DiscDBClient {
       }),
       headers: { "Content-Type": "application/json" }
     });
+    return data;
   }
   async getMediaItemByDiscHash(hash) {
     const data = await this.graphql("GetDiscDetailByContentHashes", { hashes: [hash] });

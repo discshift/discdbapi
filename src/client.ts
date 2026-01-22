@@ -41,12 +41,16 @@ export class DiscDBClient {
       );
     }
 
-    const { data } = (await response.json()) as { data: T };
+    const data = (await response.json()) as T;
     return data;
   }
 
-  private graphql<T>(operationName: keyof typeof queries, variables?: unknown) {
-    return this.fetch<T>("/graphql", {
+  private async graphql<T>(
+    operationName: keyof typeof queries,
+    variables?: unknown,
+  ) {
+    const { data } = await this.fetch<{ data: T }>("/graphql", {
+      method: "POST",
       body: JSON.stringify({
         operationName,
         query: queries[operationName],
@@ -54,6 +58,7 @@ export class DiscDBClient {
       }),
       headers: { "Content-Type": "application/json" },
     });
+    return data;
   }
 
   /**
