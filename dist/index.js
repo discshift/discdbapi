@@ -105,16 +105,12 @@ class DiscDBClient {
   getImageUrl(path) {
     return getImageUrl(path, this.origin);
   }
-  async graphql(operationName, variables) {
-    const response = await fetch(new URL("/graphql", this.origin), {
-      method: "POST",
-      body: JSON.stringify({
-        operationName,
-        query: queries[operationName],
-        variables
-      }),
+  async fetch(path, options) {
+    const response = await fetch(new URL(path, this.origin), {
+      method: options?.method ?? "GET",
+      ...options,
       headers: {
-        "Content-Type": "application/json",
+        ...options?.headers,
         "User-Agent": `discdbapi/${version}`
       }
     });
@@ -123,6 +119,16 @@ class DiscDBClient {
     }
     const { data } = await response.json();
     return data;
+  }
+  graphql(operationName, variables) {
+    return this.fetch("/graphql", {
+      body: JSON.stringify({
+        operationName,
+        query: queries[operationName],
+        variables
+      }),
+      headers: { "Content-Type": "application/json" }
+    });
   }
   async getMediaItemByDiscHash(hash) {
     const data = await this.graphql("GetDiscDetailByContentHashes", { hashes: [hash] });
@@ -183,6 +189,28 @@ class DiscDBClient {
       throw Error(`No media item matching any external IDs from ${JSON.stringify(ids)}`);
     }
     return node;
+  }
+  async hash(files) {
+    const data = await this.fetch("/api/hash", {
+      method: "POST",
+      body: JSON.stringify({
+        Files: files.map((file, i) => file instanceof File ? {
+          Index: i + 1,
+          Name: file.name,
+          Size: file.size,
+          CreationTime: new Date(file.lastModified).toISOString()
+        } : {
+          Index: file.index,
+          Name: file.name,
+          Size: file.size,
+          CreationTime: new Date(file.created).toISOString()
+        })
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    return data.hash;
   }
 }
 // src/types/media.ts
