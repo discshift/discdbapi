@@ -1,15 +1,29 @@
 import type { MediaItem, ReleaseWithMediaItem } from "./types/media";
 import type { FileHashInfo } from "./types/hash";
 /**
- * Returns a qualified image URL from a path
+ * Returns a qualified image URL from a path. If only one dimension is
+ * provided, the other dimension will be resized automatically, maintaining
+ * the original aspect ratio.
  */
-export declare const getImageUrl: (path: string, origin?: string) => string;
+export declare const getImageUrl: (path: string, options?: {
+    origin?: string;
+    width?: number;
+    height?: number;
+}) => string;
 export declare class DiscDBClient {
     origin: string;
     constructor(options?: {
         origin?: string;
     });
-    getImageUrl(path: string): string;
+    /**
+     * Returns a qualified image URL from a path. If only one dimension is
+     * provided, the other dimension will be resized automatically, maintaining
+     * the original aspect ratio.
+     */
+    getImageUrl(path: string, options?: {
+        width?: number;
+        height?: number;
+    }): string;
     private fetch;
     private graphql;
     /**

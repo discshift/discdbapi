@@ -93,7 +93,16 @@ var queries = {
 };
 
 // src/client.ts
-var getImageUrl = (path, origin) => new URL(path, `${origin ?? DISCDB_ORIGIN}/images/`).href;
+var getImageUrl = (path, options) => {
+  const url = new URL(path, `${options?.origin ?? DISCDB_ORIGIN}/images/`);
+  if (options?.width !== undefined) {
+    url.searchParams.set("width", String(options.width));
+  }
+  if (options?.height !== undefined) {
+    url.searchParams.set("height", String(options.height));
+  }
+  return url.href;
+};
 
 class DiscDBClient {
   origin = DISCDB_ORIGIN;
@@ -102,8 +111,8 @@ class DiscDBClient {
       this.origin = options.origin;
     }
   }
-  getImageUrl(path) {
-    return getImageUrl(path, this.origin);
+  getImageUrl(path, options) {
+    return getImageUrl(path, { origin: this.origin, ...options });
   }
   async fetch(path, options) {
     const response = await fetch(new URL(path, this.origin), {
