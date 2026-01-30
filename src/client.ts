@@ -6,10 +6,24 @@ import type { MediaItemsResponse } from "./types/query";
 import type { FileHashInfo } from "./types/hash";
 
 /**
- * Returns a qualified image URL from a path
+ * Returns a qualified image URL from a path. If only one dimension is
+ * provided, the other dimension will be resized automatically, maintaining
+ * the original aspect ratio.
  */
-export const getImageUrl = (path: string, origin?: string): string =>
-  new URL(path, `${origin ?? DISCDB_ORIGIN}/images/`).href;
+export const getImageUrl = (
+  path: string,
+  options?: { origin?: string; width?: number; height?: number },
+): string => {
+  const url = new URL(path, `${options?.origin ?? DISCDB_ORIGIN}/images/`);
+  if (options?.width !== undefined) {
+    url.searchParams.set("width", String(options.width));
+  }
+  if (options?.height !== undefined) {
+    url.searchParams.set("height", String(options.height));
+  }
+
+  return url.href;
+};
 
 export class DiscDBClient {
   public origin = DISCDB_ORIGIN;
@@ -22,8 +36,16 @@ export class DiscDBClient {
     }
   }
 
-  getImageUrl(path: string): string {
-    return getImageUrl(path, this.origin);
+  /**
+   * Returns a qualified image URL from a path. If only one dimension is
+   * provided, the other dimension will be resized automatically, maintaining
+   * the original aspect ratio.
+   */
+  getImageUrl(
+    path: string,
+    options?: { width?: number; height?: number },
+  ): string {
+    return getImageUrl(path, { origin: this.origin, ...options });
   }
 
   private async fetch<T>(path: string, options?: RequestInit) {
