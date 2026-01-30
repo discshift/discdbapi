@@ -1,9 +1,9 @@
 import { version } from "../package.json";
 import { DISCDB_ORIGIN } from "./constants";
 import { queries } from "./graphql";
+import type { FileHashInfo } from "./types/hash";
 import type { MediaItem, ReleaseWithMediaItem } from "./types/media";
 import type { MediaItemsResponse } from "./types/query";
-import type { FileHashInfo } from "./types/hash";
 
 /**
  * Returns a qualified image URL from a path. If only one dimension is
