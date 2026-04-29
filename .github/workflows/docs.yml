@@ -7,9 +7,14 @@ on:
 jobs:
   docs:
     name: Deploy Documentation
+
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
+    permissions:
+      id-token: 'write'
+        
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
