@@ -1,39 +1,53 @@
 import { version } from "../package.json";
 import { DISCDB_ORIGIN } from "./constants";
-import { queries } from "./graphql";
 import type { FileHashInfo } from "./types/hash";
-import type { MediaItem, ReleaseWithMediaItem } from "./types/media";
-import type { MediaItemsResponse } from "./types/query";
-
-/**
- * Returns a qualified image URL from a path. If only one dimension is
- * provided, the other dimension will be resized automatically, maintaining
- * the original aspect ratio.
- */
-export const getImageUrl = (
-  path: string,
-  options?: { origin?: string; width?: number; height?: number },
-): string => {
-  const url = new URL(path, `${options?.origin ?? DISCDB_ORIGIN}/images/`);
-  if (options?.width !== undefined) {
-    url.searchParams.set("width", String(options.width));
-  }
-  if (options?.height !== undefined) {
-    url.searchParams.set("height", String(options.height));
-  }
-
-  return url.href;
-};
+import {
+  createClient as createGqlClient,
+  enumSortEnumType,
+  type BoxsetFilterInput,
+  type BoxsetGenqlSelection,
+  type BoxsetSortInput,
+  type Client as GQLClient,
+  type MediaItemFilterInput,
+  type MediaItemGenqlSelection,
+  type MediaItemSortInput,
+} from "./genql";
+import {
+  fixMediaTypes,
+  getImageUrl,
+  unifyPageArgs,
+  unifyPageInfo,
+  type BidirectionalPaginationQuery,
+} from "./common";
+import type { MediaItemGroupRole, MediaItemType } from "./types";
 
 export class DiscDBClient {
   public origin = DISCDB_ORIGIN;
+  public userAgent = `discdbapi/${version}`;
+
+  /**
+   * Internal, typed GraphQL client that may be used to bypass wrapper logic
+   * or compose custom queries
+   *
+   * @see https://genql.dev/docs
+   */
+  public gql: GQLClient;
 
   constructor(options?: {
     origin?: string;
+    userAgent?: string;
   }) {
     if (options?.origin) {
       this.origin = options.origin;
     }
+    if (options?.userAgent !== undefined) {
+      this.userAgent = options.userAgent;
+    }
+
+    this.gql = createGqlClient({
+      url: new URL("/graphql", this.origin ?? DISCDB_ORIGIN).href,
+      headers: { "User-Agent": this.userAgent },
+    });
   }
 
   /**
@@ -48,13 +62,38 @@ export class DiscDBClient {
     return getImageUrl(path, { origin: this.origin, ...options });
   }
 
+  /**
+   * Returns a qualified image URL for a barcode representing a given UPC
+   *
+   * @see https://en.wikipedia.org/wiki/Universal_Product_Code
+   * @param code the UPC value
+   * @param options options for creating the image
+   *   - width: the width of the image
+   *   - label: whether to show the number in the image (not recommended; may gets cropped out)
+   * @returns URL to the barcode image
+   */
+  getBarcodeImageUrl(
+    code: string | number,
+    options?: { width?: number; label?: boolean },
+  ) {
+    const params = new URLSearchParams({
+      data: String(code),
+      width: options?.width?.toString() ?? "300",
+      showLabel: options?.label !== undefined ? String(options.label) : "false",
+    });
+    return getImageUrl(`/api/barcode?${params}`, { origin: this.origin });
+  }
+
   private async fetch<T>(path: string, options?: RequestInit) {
+    const headers = new Headers();
+    headers.set("User-Agent", this.userAgent);
+
     const response = await fetch(new URL(path, this.origin), {
       method: options?.method ?? "GET",
       ...options,
       headers: {
+        ...Object.fromEntries(headers.entries()),
         ...options?.headers,
-        "User-Agent": `discdbapi/${version}`,
       },
     });
     if (!response.ok) {
@@ -67,20 +106,200 @@ export class DiscDBClient {
     return data;
   }
 
-  private async graphql<T>(
-    operationName: keyof typeof queries,
-    variables?: unknown,
-  ) {
-    const { data } = await this.fetch<{ data: T }>("/graphql", {
-      method: "POST",
-      body: JSON.stringify({
-        operationName,
-        query: queries[operationName],
-        variables,
-      }),
-      headers: { "Content-Type": "application/json" },
+  /**
+   * Search media items and boxsets. Results are only returned for queries
+   * specified in options. As they use two separate filters and selections,
+   * they can be paginated independently.
+   * 
+   * @example Search for all The Mummy movies and boxsets
+   * ```ts
+   * const { mediaItems, boxsets } = await discdb.search({
+   *   mediaItems: {
+   *     query: "the mummy",
+   *     types: [MediaItemType.Movie],
+   *   },
+   *   boxsets: {
+   *     query: "the mummy",
+   *     types: [MediaItemType.Movie],
+   *   },
+   * })
+   * ```
+   */
+  async search<
+    MediaItemSelection extends MediaItemGenqlSelection = {
+      title: true;
+      slug: true;
+      imageUrl: true;
+      type: true;
+      year: true;
+    },
+    BoxsetSelection extends BoxsetGenqlSelection = {
+      title: true,
+                slug: true,
+                imageUrl: true,
+                release: {
+                  title: true,
+                  slug: true,
+                  year: true,
+                  upc: true,
+                },
+    },
+  >(options: {
+    mediaItems?:
+      | {
+          query: string;
+          year?: number;
+          types?: MediaItemType[];
+          after?: string;
+          limit?: number;
+        }
+      | {
+          input: BidirectionalPaginationQuery<
+            MediaItemFilterInput,
+            MediaItemSortInput
+          >;
+          select?: MediaItemSelection;
+        };
+    boxsets?:
+      | {
+          query: string;
+          year?: number;
+          // Can't figure out how to determine the media type of a boxset,
+          // since in my testing boxset.release.mediaItem is null
+          // types?: MediaItemType[];
+          after?: string;
+          limit?: number;
+        }
+      | {
+          input: BidirectionalPaginationQuery<
+            BoxsetFilterInput,
+            BoxsetSortInput
+          >;
+          select?: BoxsetSelection;
+        };
+  }) {
+    let mediaArgs:
+      | Partial<
+          ReturnType<
+            typeof unifyPageArgs<MediaItemFilterInput, MediaItemSortInput>
+          >
+        >
+      | undefined;
+    let mediaSelect: MediaItemSelection | undefined;
+    if (options.mediaItems) {
+      const opt = options.mediaItems;
+      if ("query" in opt) {
+        mediaArgs = {
+          where: { and: [{ title: { contains: opt.query } }] },
+          after: opt.after,
+          first: opt.limit,
+          // order: [{ sortTitle: enumSortEnumType.ASC }],
+        };
+        if (opt.year !== undefined) {
+          mediaArgs.where?.and?.push({ year: { eq: opt.year } });
+        }
+        if (opt.types !== undefined) {
+          mediaArgs.where?.and?.push({
+            type: {
+              or: opt.types.flatMap((type) => [
+                { eq: type },
+                { eq: type.toLowerCase() },
+              ]),
+            },
+          });
+        }
+      } else {
+        mediaArgs = unifyPageArgs(opt.input);
+        mediaSelect = opt.select;
+      }
+    }
+
+    let boxsetArgs:
+      | Partial<
+          ReturnType<typeof unifyPageArgs<BoxsetFilterInput, BoxsetSortInput>>
+        >
+      | undefined;
+    let boxsetSelect: BoxsetSelection | undefined;
+    if (options.boxsets) {
+      const opt = options.boxsets;
+      if ("query" in opt) {
+        boxsetArgs = {
+          where: { and: [{ title: { contains: opt.query } }] },
+          after: opt.after,
+          first: opt.limit,
+          // order: [{ sortTitle: enumSortEnumType.ASC }],
+        };
+        if (opt.year !== undefined) {
+          boxsetArgs.where?.and?.push({ release: { year: { eq: opt.year } } });
+        }
+        // if (opt.types !== undefined) {
+        //   boxsetArgs.where?.and?.push({
+        //     release: {
+        //       mediaItem: {
+        //         type: {
+        //           or: opt.types.flatMap((type) => [
+        //             { eq: type },
+        //             { eq: type.toLowerCase() },
+        //           ]),
+        //         },
+        //       },
+        //     },
+        //   });
+        // }
+      } else {
+        boxsetArgs = unifyPageArgs(opt.input);
+        boxsetSelect = opt.select;
+      }
+    }
+
+    const data = await this.gql.query({
+      mediaItems: mediaArgs
+        ? {
+            __args: mediaArgs,
+            nodes:
+              mediaSelect ??
+              ({
+                title: true,
+                slug: true,
+                imageUrl: true,
+                type: true,
+                year: true,
+              } as MediaItemSelection),
+            pageInfo: { __scalar: true },
+          }
+        : undefined,
+      boxsets: boxsetArgs
+        ? {
+            __args: boxsetArgs,
+            nodes:
+              boxsetSelect ??
+              ({
+                title: true,
+                slug: true,
+                imageUrl: true,
+                release: {
+                  title: true,
+                  slug: true,
+                  year: true,
+                  upc: true,
+                },
+              } as BoxsetSelection),
+            pageInfo: { __scalar: true },
+          }
+        : undefined,
     });
-    return data;
+    return {
+      mediaItems: data.mediaItems?.nodes,
+      mediaItemsPage:
+        data.mediaItems && options.mediaItems && "input" in options.mediaItems
+          ? unifyPageInfo(options.mediaItems.input, data.mediaItems.pageInfo)
+          : undefined,
+      boxsets: data.boxsets?.nodes,
+      boxsetsPage:
+        data.boxsets && options.boxsets && "input" in options.boxsets
+          ? unifyPageInfo(options.boxsets.input, data.boxsets.pageInfo)
+          : undefined,
+    };
   }
 
   /**
@@ -93,12 +312,20 @@ export class DiscDBClient {
    * @param hash the disc hash (from `hashDisc`)
    * @returns matching media item
    */
-  async getMediaItemByDiscHash(hash: string): Promise<MediaItem> {
-    const data = await this.graphql<MediaItemsResponse>(
-      "GetDiscDetailByContentHashes",
-      { hashes: [hash] },
-    );
-    const node = data.mediaItems.nodes[0];
+  async getMediaItemByDiscHash(hash: string) {
+    const data = await this.gql.query({
+      mediaItems: {
+        __args: {
+          where: {
+            releases: {
+              some: { discs: { some: { contentHash: { eq: hash } } } },
+            },
+          },
+        },
+        nodes: GQL_NODE_QUERY,
+      },
+    });
+    const node = data.mediaItems?.nodes?.[0];
     if (!node) {
       throw Error(`No such disc with hash "${hash}"`);
     }
@@ -113,20 +340,26 @@ export class DiscDBClient {
    * Hashes with no matches will still be in the resulting record, but with an
    * empty array.
    *
-   * @param hash the disc hashes (from `hashDisc`)
+   * @param hashes the disc hashes (from `hashDisc`)
    * @returns a mapping of disc hashes to media item arrays
    */
-  async getMediaItemsByDiscHashes(
-    hashes: string[],
-  ): Promise<Record<string, MediaItem[]>> {
-    const data = await this.graphql<MediaItemsResponse>(
-      "GetDiscDetailByContentHashes",
-      { hashes },
-    );
-    const nodes = data.mediaItems.nodes;
+  async getMediaItemsByDiscHashes(hashes: string[]) {
+    const data = await this.gql.query({
+      mediaItems: {
+        __args: {
+          where: {
+            releases: {
+              some: { discs: { some: { contentHash: { in: hashes } } } },
+            },
+          },
+        },
+        nodes: GQL_NODE_QUERY,
+      },
+    });
+    const nodes = data.mediaItems?.nodes ?? [];
     // build the map ahead of time so there is always an array even for hashes
     // that returned no discs
-    const results: Record<string, MediaItem[]> = Object.fromEntries(
+    const results: Record<string, typeof nodes> = Object.fromEntries(
       hashes.map((hash) => [hash, []]),
     );
     for (const node of nodes) {
@@ -147,6 +380,84 @@ export class DiscDBClient {
   }
 
   /**
+   * Get all media items which are "tagged" with a specific group.
+   * This is used by TheDiscDB to identify cast, crew, genres, and studios.
+   *
+   * @param slug group slug, e.g. comedy, jim-carrey, a24
+   * @param role narrow results by role, useful in removing irrelevant results
+   * @param input input & pagination options
+   * @returns media items and page info
+   *
+   * @example Get media items produced by Disney
+   * ```ts
+   * await discdb.getMediaItemsByGroup("disney", MediaItemGroupRole.Company);
+   * ```
+   *
+   * @example Get TV shows with Adam Scott
+   * ```ts
+   * await discdb.getMediaItemsByGroup(
+   *   "adam-scott",
+   *   MediaItemGroupRole.Actor,
+   *   { query: { type: MediaItemType.Series } },
+   * );
+   * ```
+   */
+  async getMediaItemsByGroup(
+    slug: string,
+    role?: MediaItemGroupRole,
+    input?: BidirectionalPaginationQuery<
+      MediaItemFilterInput,
+      MediaItemSortInput
+    >,
+  ) {
+    const data = await this.gql.query({
+      mediaItemsByGroup: {
+        __args: { slug, role, ...unifyPageArgs(input) },
+        nodes: {
+          slug: true,
+          year: true,
+          title: true,
+          type: true,
+          imageUrl: true,
+          mediaItemGroups: {
+            __args: { where: { group: { slug: { eq: slug } } } },
+            role: true,
+            group: {
+              name: true,
+              slug: true,
+              imageUrl: true,
+              on_Group: { id: true },
+            },
+            on_MediaItemGroup: { id: true },
+          },
+          releases: {
+            slug: true,
+            locale: true,
+            year: true,
+            title: true,
+            discs: {
+              index: true,
+              name: true,
+              format: true,
+              on_Disc: { id: true },
+            },
+            on_Release: { id: true },
+          },
+          on_MediaItem: { id: true },
+        },
+        pageInfo: { __scalar: true },
+      },
+    });
+
+    return {
+      mediaItems: data.mediaItemsByGroup?.nodes ?? [],
+      page: data.mediaItemsByGroup
+        ? unifyPageInfo(input, data.mediaItemsByGroup.pageInfo)
+        : undefined,
+    };
+  }
+
+  /**
    * Fetch a release by its URL slugs, useful for resolving a user-provided link.
    *
    * @param mediaItemSlug the slug for the media item as a whole on thediscdb.com
@@ -155,15 +466,21 @@ export class DiscDBClient {
    *   `releases` array contains all releases for the media item other
    *   than the one requested.
    */
-  async getReleaseBySlug(
-    mediaItemSlug: string,
-    slug: string,
-  ): Promise<ReleaseWithMediaItem> {
-    const data = await this.graphql<MediaItemsResponse>("GetReleasesBySlugs", {
-      mediaItemSlug,
-      slug,
+  async getReleaseBySlug(mediaItemSlug: string, slug: string) {
+    const data = await this.gql.query({
+      mediaItems: {
+        __args: {
+          where: {
+            and: [
+              { slug: { eq: mediaItemSlug } },
+              { releases: { some: { slug: { eq: slug } } } },
+            ],
+          },
+        },
+        nodes: GQL_NODE_QUERY,
+      },
     });
-    const node = data.mediaItems.nodes[0];
+    const node = data.mediaItems?.nodes?.[0];
     if (!node) {
       throw Error(`No such release matching slugs ${mediaItemSlug} / ${slug}`);
     }
@@ -203,16 +520,19 @@ export class DiscDBClient {
     tmdbId?: string;
     imdbId?: string;
     tvdbId?: string;
-  }): Promise<MediaItem> {
-    const data = await this.graphql<MediaItemsResponse>(
-      "GetMediaItemsByExternalIds",
-      {
-        imdbId: ids.imdbId ?? "",
-        tmdbId: ids.tmdbId ?? "",
-        tvdbId: ids.tvdbId ?? "",
+  }) {
+    const ors = [];
+    if (ids.imdbId) ors.push({ imdb: { eq: ids.imdbId } });
+    if (ids.tmdbId) ors.push({ tmdb: { eq: ids.tmdbId } });
+    if (ids.tvdbId) ors.push({ tvdb: { eq: ids.tvdbId } });
+
+    const data = await this.gql.query({
+      mediaItems: {
+        __args: { where: { externalids: { or: ors } } },
+        nodes: GQL_NODE_QUERY,
       },
-    );
-    const node = data.mediaItems.nodes[0];
+    });
+    const node = data.mediaItems?.nodes?.[0];
     if (!node) {
       throw Error(
         `No media item matching any external IDs from ${JSON.stringify(ids)}`,
@@ -261,4 +581,113 @@ export class DiscDBClient {
     });
     return data.hash;
   }
+
+  async getBoxsets<
+    Selection extends BoxsetGenqlSelection = {
+      title: true;
+      slug: true;
+      sortTitle: true;
+      imageUrl: true;
+      type: true;
+      release: { title: true; slug: true; year: true; imageUrl: true };
+    },
+  >(
+    input?: BidirectionalPaginationQuery<BoxsetFilterInput, BoxsetSortInput>,
+    select?: Selection,
+  ) {
+    const data = await this.gql.query({
+      boxsets: {
+        __args: unifyPageArgs(input),
+        nodes:
+          select ??
+          ({
+            title: true,
+            slug: true,
+            sortTitle: true,
+            imageUrl: true,
+            type: true,
+            release: {
+              title: true,
+              slug: true,
+              year: true,
+              imageUrl: true,
+            },
+          } as Selection),
+        pageInfo: { __scalar: true },
+      },
+    });
+    return {
+      boxsets: fixMediaTypes(data.boxsets?.nodes ?? [], "type"),
+      page: data.boxsets
+        ? unifyPageInfo(input, data.boxsets.pageInfo)
+        : undefined,
+    };
+  }
+
+  async getBoxsetBySlug(slug: string) {
+    const data = await this.getBoxsets(
+      { query: { slug: { eq: slug } } },
+      {
+        title: true,
+        slug: true,
+        sortTitle: true,
+        imageUrl: true,
+        type: true,
+        release: GQL_NODE_QUERY.releases,
+      },
+    );
+    if (data.boxsets.length === 0) {
+      throw Error(`No such boxset with slug "${slug}"`);
+    }
+    return data.boxsets[0];
+  }
 }
+
+const GQL_NODE_QUERY = {
+  title: true,
+  year: true,
+  slug: true,
+  imageUrl: true,
+  type: true,
+  externalids: {
+    tmdb: true,
+    imdb: true,
+    tvdb: true,
+  },
+  releases: {
+    slug: true,
+    locale: true,
+    regionCode: true,
+    year: true,
+    title: true,
+    imageUrl: true,
+    discs: {
+      __args: { order: [{ index: enumSortEnumType.ASC }] },
+      contentHash: true,
+      index: true,
+      name: true,
+      format: true,
+      slug: true,
+      titles: {
+        __args: { order: [{ index: enumSortEnumType.ASC }] },
+        index: true,
+        duration: true,
+        displaySize: true,
+        sourceFile: true,
+        size: true,
+        segmentMap: true,
+        item: {
+          title: true,
+          season: true,
+          episode: true,
+          type: true,
+          chapters: {
+            __args: { order: [{ index: enumSortEnumType.ASC }] },
+            index: true,
+            title: true,
+          },
+        },
+      },
+    },
+  },
+} satisfies MediaItemGenqlSelection;

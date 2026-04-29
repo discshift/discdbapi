@@ -49,10 +49,3 @@ export interface Title {
   segmentMap: string;
   item: TitleItem | null;
 }
-
-export interface ExternalIds {
-  tmdb: number;
-  imdb?: string | null;
-  tvdb?: string | null;
-  mediaItem?: Title | null;
-}

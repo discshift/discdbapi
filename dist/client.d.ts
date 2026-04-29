@@ -1,19 +1,20 @@
-import type { MediaItem, ReleaseWithMediaItem } from "./types/media";
 import type { FileHashInfo } from "./types/hash";
-/**
- * Returns a qualified image URL from a path. If only one dimension is
- * provided, the other dimension will be resized automatically, maintaining
- * the original aspect ratio.
- */
-export declare const getImageUrl: (path: string, options?: {
-    origin?: string;
-    width?: number;
-    height?: number;
-}) => string;
+import { type BoxsetFilterInput, type BoxsetGenqlSelection, type BoxsetSortInput, type Client as GQLClient, type MediaItemFilterInput, type MediaItemGenqlSelection, type MediaItemSortInput } from "./genql";
+import { type BidirectionalPaginationQuery } from "./common";
+import type { MediaItemGroupRole, MediaItemType } from "./types";
 export declare class DiscDBClient {
     origin: string;
+    userAgent: string;
+    /**
+     * Internal, typed GraphQL client that may be used to bypass wrapper logic
+     * or compose custom queries
+     *
+     * @see https://genql.dev/docs
+     */
+    gql: GQLClient;
     constructor(options?: {
         origin?: string;
+        userAgent?: string;
     });
     /**
      * Returns a qualified image URL from a path. If only one dimension is
@@ -24,8 +25,76 @@ export declare class DiscDBClient {
         width?: number;
         height?: number;
     }): string;
+    /**
+     * Returns a qualified image URL for a barcode representing a given UPC
+     *
+     * @see https://en.wikipedia.org/wiki/Universal_Product_Code
+     * @param code the UPC value
+     * @param options options for creating the image
+     *   - width: the width of the image
+     *   - label: whether to show the number in the image (not recommended; may gets cropped out)
+     * @returns URL to the barcode image
+     */
+    getBarcodeImageUrl(code: string | number, options?: {
+        width?: number;
+        label?: boolean;
+    }): string;
     private fetch;
-    private graphql;
+    /**
+     * Search media items and boxsets. Results are only returned for queries
+     * specified in options. As they use two separate filters and selections,
+     * they can be paginated independently.
+     */
+    search<MediaItemSelection extends MediaItemGenqlSelection = {
+        title: true;
+        slug: true;
+        imageUrl: true;
+        type: true;
+        year: true;
+    }, BoxsetSelection extends BoxsetGenqlSelection = {
+        title: true;
+        slug: true;
+        imageUrl: true;
+        type: true;
+        release: {
+            year: true;
+            releaseDate: true;
+            upc: true;
+            type: true;
+        };
+    }>(options: {
+        mediaItems?: {
+            query: string;
+            year?: number;
+            types?: MediaItemType[];
+            after?: string;
+            limit?: number;
+        } | {
+            input: BidirectionalPaginationQuery<MediaItemFilterInput, MediaItemSortInput>;
+            select?: MediaItemSelection;
+        };
+        boxsets?: {
+            query: string;
+            year?: number;
+            types?: MediaItemType[];
+            after?: string;
+            limit?: number;
+        } | {
+            input: BidirectionalPaginationQuery<BoxsetFilterInput, BoxsetSortInput>;
+            select?: BoxsetSelection;
+        };
+    }): Promise<{
+        mediaItems: any;
+        mediaItemsPage: {
+            cursor: PageInfo;
+            hasMoreData: PageInfo;
+        };
+        boxsets: any;
+        boxsetsPage: {
+            cursor: PageInfo;
+            hasMoreData: PageInfo;
+        };
+    }>;
     /**
      * Returns a matching media item (movies/series) with releases that contain
      * a disc with the specified hash and details for the disc. There may be
@@ -36,7 +105,7 @@ export declare class DiscDBClient {
      * @param hash the disc hash (from `hashDisc`)
      * @returns matching media item
      */
-    getMediaItemByDiscHash(hash: string): Promise<MediaItem>;
+    getMediaItemByDiscHash(hash: string): Promise<any>;
     /**
      * Returns multiple matching media items (movies/series) with releases that
      * contain a disc with the specified hash and details for the disc.
@@ -45,10 +114,40 @@ export declare class DiscDBClient {
      * Hashes with no matches will still be in the resulting record, but with an
      * empty array.
      *
-     * @param hash the disc hashes (from `hashDisc`)
+     * @param hashes the disc hashes (from `hashDisc`)
      * @returns a mapping of disc hashes to media item arrays
      */
-    getMediaItemsByDiscHashes(hashes: string[]): Promise<Record<string, MediaItem[]>>;
+    getMediaItemsByDiscHashes(hashes: string[]): Promise<Record<string, any>>;
+    /**
+     * Get all media items which are "tagged" with a specific group.
+     * This is used by TheDiscDB to identify cast, crew, genres, and studios.
+     *
+     * @param slug group slug, e.g. comedy, jim-carrey, a24
+     * @param role narrow results by role, useful in removing irrelevant results
+     * @param input input & pagination options
+     * @returns media items and page info
+     *
+     * @example Get media items produced by Disney
+     * ```ts
+     * await discdb.getMediaItemsByGroup("disney", MediaItemGroupRole.Company);
+     * ```
+     *
+     * @example Get TV shows with Adam Scott
+     * ```ts
+     * await discdb.getMediaItemsByGroup(
+     *   "adam-scott",
+     *   MediaItemGroupRole.Actor,
+     *   { query: { type: MediaItemType.Series } },
+     * );
+     * ```
+     */
+    getMediaItemsByGroup(slug: string, role?: MediaItemGroupRole, input?: BidirectionalPaginationQuery<MediaItemFilterInput, MediaItemSortInput>): Promise<{
+        mediaItems: any;
+        page: {
+            cursor: PageInfo;
+            hasMoreData: PageInfo;
+        };
+    }>;
     /**
      * Fetch a release by its URL slugs, useful for resolving a user-provided link.
      *
@@ -58,7 +157,7 @@ export declare class DiscDBClient {
      *   `releases` array contains all releases for the media item other
      *   than the one requested.
      */
-    getReleaseBySlug(mediaItemSlug: string, slug: string): Promise<ReleaseWithMediaItem>;
+    getReleaseBySlug(mediaItemSlug: string, slug: string): Promise<any>;
     /**
      * Fetch a media item by its external database IDs. If there are multiple
      * results (e.g you provided IDs for items that are not the same), only the
@@ -77,7 +176,7 @@ export declare class DiscDBClient {
         tmdbId?: string;
         imdbId?: string;
         tvdbId?: string;
-    }): Promise<MediaItem>;
+    }): Promise<any>;
     /**
      * Ask the server to hash a disc's files. It should be preferred to do this
      * locally when possible.
@@ -92,4 +191,24 @@ export declare class DiscDBClient {
      * @returns the computed hash
      */
     hash(files: (FileHashInfo | File)[]): Promise<string>;
+    getBoxsets<Selection extends BoxsetGenqlSelection = {
+        title: true;
+        slug: true;
+        sortTitle: true;
+        imageUrl: true;
+        type: true;
+        release: {
+            title: true;
+            slug: true;
+            year: true;
+            imageUrl: true;
+        };
+    }>(input?: BidirectionalPaginationQuery<BoxsetFilterInput, BoxsetSortInput>, select?: Selection): Promise<{
+        boxsets: any;
+        page: {
+            cursor: PageInfo;
+            hasMoreData: PageInfo;
+        };
+    }>;
+    getBoxsetBySlug(slug: string): Promise<any>;
 }

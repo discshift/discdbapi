@@ -73,3 +73,10 @@ export interface MediaItem {
     };
     releases: Release[];
 }
+export declare enum MediaItemGroupRole {
+    Company = "Company",
+    Genre = "Genre",
+    Actor = "Actor",
+    Writer = "Writer",
+    Director = "Director"
+}

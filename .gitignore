@@ -36,5 +36,5 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 database
 cache
 
-# old strategy i'm keeping around locally
-src-legacy
+# local-only artifacts
+docs/build/

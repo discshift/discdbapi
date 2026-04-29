@@ -1,0 +1,49 @@
+name: Docs
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  docs:
+    name: Deploy Documentation
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: "npm"
+
+      - name: TSDoc Action
+        uses: erikyo/tsdoc-action@v1
+        with:
+          entryPoints:
+            ./src/client.ts
+            ./src/contributions.ts
+            ./src/common.ts
+            ./src/types/*
+            ./src/genql
+            ./src/genql-contributions
+          output_dir: ./docs/build
+          options: typedoc.json
+          front_page: README.md
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v6
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          # Upload entire repository
+          path: './docs/build'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

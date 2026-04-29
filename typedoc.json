@@ -1,0 +1,10 @@
+{
+  "projectDocuments": ["docs/*.md"],
+  "excludeInternal": true,
+  "outputs": [
+    {
+      "name": "html",
+      "path": "./docs/build"
+    }
+  ]
+}

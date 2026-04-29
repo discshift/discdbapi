@@ -1,17 +1,25 @@
 {
   "name": "discdbapi",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "module": "src/index.ts",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/discshift/discdbapi"
+  },
   "devDependencies": {
     "@biomejs/biome": "^2.2.5",
-    "@types/bun": "latest"
+    "@types/bun": "^1.3.12",
+    "typedoc": "^0.28.19"
   },
   "scripts": {
+    "generate-gql": "bun x @genql/cli --endpoint https://thediscdb.com/graphql --output ./src/genql",
+    "generate-cgql": "bun x @genql/cli --schema contributions.graphql --output ./src/genql-contributions",
     "build:js": "bun build ./src/index.ts --outdir ./dist",
     "build:ts": "tsc ./src/*.ts --outDir ./dist --declaration --module system --emitDeclarationOnly --noCheck",
     "build:all": "bun build:js && bun build:ts",
+    "build:docs": "typedoc --entryPoints ./src/client.ts --entryPoints ./src/contributions.ts --entryPoints ./src/common.ts --entryPoints ./src/types/* --entryPoints ./src/genql --entryPoints ./src/genql-contributions --githubPages",
     "lint": "biome check .",
     "format": "biome format . --write"
   },
