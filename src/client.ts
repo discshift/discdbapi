@@ -1,31 +1,30 @@
 import { version } from "../package.json";
-import { DISCDB_ORIGIN } from "./constants";
-import type { FileHashInfo } from "./types/hash";
 import {
-  createClient as createGqlClient,
-  enumSortEnumType,
+  type BidirectionalPaginationQuery,
+  fixMediaTypes,
+  getImageUrl,
+  unifyPageArgs,
+  unifyPageInfo,
+} from "./common";
+import { DISCDB_ORIGIN } from "./constants";
+import {
   type BoxsetFilterInput,
   type BoxsetGenqlSelection,
   type BoxsetSortInput,
+  createClient as createGqlClient,
+  enumSortEnumType,
   type Client as GQLClient,
   type MediaItemFilterInput,
   type MediaItemGenqlSelection,
   type MediaItemSortInput,
 } from "./genql";
 import {
-  fixMediaTypes,
-  getImageUrl,
-  unifyPageArgs,
-  unifyPageInfo,
-  type BidirectionalPaginationQuery,
-} from "./common";
-import {
-  SearchType,
   type APISearchResult,
   type MediaItemGroupRole,
-  type MediaItemType,
   type SearchResult,
+  SearchType,
 } from "./types";
+import type { FileHashInfo } from "./types/hash";
 
 export class DiscDBClient {
   public origin = DISCDB_ORIGIN;

@@ -30,7 +30,7 @@ export const getImageUrl = (
  * Sometimes media item types are returned in lowercase by the server.
  * This function casts them to their appropriate enum values and returns the
  * iterable in place.
- * 
+ *
  * @internal
  */
 export const fixMediaTypes = <
@@ -101,17 +101,18 @@ export const unifyPageArgs = <F, S>(
 /**
  * Make a string URL-safe by turning it into a slug, thereby replacing or
  * omitting non-alphanumeric characters.
- * 
+ *
  * @see https://github.com/TheDiscDb/web/blob/main/code/TheDiscDb.Core/StringExtensions.cs
  * @param value value to be slugified
  * @returns slugified string
  */
-export const slugify = (value: string): string => value
-  // keep "and"s sensible while removing the & sign
-  .replace(/&/g, "and")
-  // replace whitespace with dashes
-  .replace(/\s/g, "-")
-  // lowercase all characters
-  .replace(/\w/g, (v) => v.toLowerCase())
-  // strip out everything that isn't compliant
-  .replace(/[^-a-z0-9]/g, "");
+export const slugify = (value: string): string =>
+  value
+    // keep "and"s sensible while removing the & sign
+    .replace(/&/g, "and")
+    // replace whitespace with dashes
+    .replace(/\s/g, "-")
+    // lowercase all characters
+    .replace(/\w/g, (v) => v.toLowerCase())
+    // strip out everything that isn't compliant
+    .replace(/[^-a-z0-9]/g, "");
