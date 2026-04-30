@@ -4,6 +4,7 @@
   "module": "src/index.ts",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/discshift/discdbapi"
