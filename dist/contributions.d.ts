@@ -1,4 +1,4 @@
-import type { ExternalMetadata, UpdateDiscInput, AddItemToDiscInput } from "./types/contributions";
+import type { ExternalMetadata, UpdateDiscInput, AddItemToDiscInput, WithEncodedId } from "./types/contributions";
 import { type ApiKeyInfoFilterInput, type ApiKeyInfoSortInput, type ApiKeyUsageLogInfoFilterInput, type ApiKeyUsageLogInfoSortInput, type ContributionHistorySortInput, type ContributionMutationRequestInput, type EditItemOnDiscInput, type Client as GQLClient, type UpdateContributionInput, type UserContributionFilterInput, type UserContributionGenqlSelection, type UserContributionSortInput, type UserMessageSortInput, type UserMessageType } from "./genql-contributions";
 import { type BidirectionalPaginationQuery } from "./common";
 import type { DiscFormat, MediaItemType } from "./types";
@@ -103,8 +103,8 @@ export declare class DiscDBContributionsClient {
         url: string;
     }>;
     deleteContributionImage(contributionId: string, variant: "front" | "back"): Promise<void>;
-    createContribution(input: ContributionMutationRequestInput): Promise<any>;
-    updateContribution(input: UpdateContributionInput): Promise<any>;
+    createContribution(input: Omit<ContributionMutationRequestInput, "releaseSlug"> & Partial<Pick<ContributionMutationRequestInput, "releaseSlug">>): Promise<WithEncodedId>;
+    updateContribution(input: UpdateContributionInput): Promise<WithEncodedId>;
     deleteContribution(contributionId: string): Promise<void>;
     /**
      * Generate a unique hash based on the files on a disc.
@@ -117,8 +117,20 @@ export declare class DiscDBContributionsClient {
      * @returns the computed hash
      */
     hash(contributionId: string, files: (FileHashInfo | File)[]): Promise<string>;
-    createDisc(contributionId: string, contentHash: string, format: DiscFormat, name: string, slug: string): Promise<any>;
-    updateDisc(contributionId: string, discId: string, input: Omit<UpdateDiscInput, "contributionId" | "discId">): Promise<any>;
+    /**
+     * Add a disc to a contribution. This is only for specifying the surface
+     * details of the disc; after creating it, you must
+     * {@link uploadDiscLogs | upload logs} before you can
+     * {@link addItemToDisc | identify items}.
+     *
+     * @param contributionId encoded ID of the contribtion
+     * @param contentHash {@link hash | content hash} of the disc
+     * @param format the disc format
+     * @param name the name of the disc, like "Disc 1", "Extras", "DVD"
+     * @param slug by default, a {@link common!slugify | slugified} version of the name is generated
+     */
+    createDisc(contributionId: string, contentHash: string, format: DiscFormat, name: string, slug?: string): Promise<WithEncodedId>;
+    updateDisc(contributionId: string, discId: string, input: Omit<UpdateDiscInput, "contributionId" | "discId">): Promise<WithEncodedId>;
     /**
      * Upload [MakeMKV](https://makemkv.com) logs to a contribution disc.
      *
@@ -153,8 +165,8 @@ export declare class DiscDBContributionsClient {
      * @returns parsed logs for the disc, including parent contribution info
      */
     getDiscLogs(contributionId: string, discId: string): Promise<any>;
-    addItemToDisc(contributionId: string, discId: string, input: Omit<AddItemToDiscInput, "contributionId" | "discId">): Promise<any>;
-    updateItemOnDisc(contributionId: string, discId: string, itemId: string, input: Omit<EditItemOnDiscInput, "contributionId" | "discId" | "itemId">): Promise<any>;
+    addItemToDisc(contributionId: string, discId: string, input: Omit<AddItemToDiscInput, "contributionId" | "discId">): Promise<WithEncodedId>;
+    updateItemOnDisc(contributionId: string, discId: string, itemId: string, input: Omit<EditItemOnDiscInput, "contributionId" | "discId" | "itemId">): Promise<WithEncodedId>;
     deleteItemFromDisc(contributionId: string, discId: string, itemId: string): Promise<void>;
     /**
      * Change the order of a contribution's discs by submitting all IDs in the
@@ -165,8 +177,8 @@ export declare class DiscDBContributionsClient {
      * @returns all discs in the contribution
      */
     reorderDiscs(contributionId: string, discIds: string[]): Promise<any>;
-    addAudioTrackToItem(contributionId: string, discId: string, itemId: string, trackIndex: number, trackName: string): Promise<any>;
-    addChapterToItem(contributionId: string, discId: string, itemId: string, chapterIndex: number, chapterName: string): Promise<any>;
+    addAudioTrackToItem(contributionId: string, discId: string, itemId: string, trackIndex: number, trackName: string): Promise<WithEncodedId>;
+    addChapterToItem(contributionId: string, discId: string, itemId: string, chapterIndex: number, chapterName: string): Promise<WithEncodedId>;
     /**
      * Get surface details for the series associated with a contribution,
      * including its full episode list

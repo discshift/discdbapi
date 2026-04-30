@@ -2479,6 +2479,12 @@ var MediaItemGroupRole;
   MediaItemGroupRole2["Writer"] = "Writer";
   MediaItemGroupRole2["Director"] = "Director";
 })(MediaItemGroupRole ||= {});
+// src/types/search.ts
+var MediaTypeExtended;
+((MediaTypeExtended2) => {
+  MediaTypeExtended2["Boxset"] = "Boxset";
+})(MediaTypeExtended ||= {});
+var SearchType = { ...MediaItemType, ...MediaTypeExtended };
 // src/types/title.ts
 var ItemType;
 ((ItemType2) => {
@@ -2526,6 +2532,7 @@ var unifyPageArgs = (input) => {
     order: input?.sort
   };
 };
+var slugify = (value) => value.replace(/&/g, "and").replace(/\s/g, "-").replace(/\w/g, (v) => v.toLowerCase()).replace(/[^-a-z0-9]/g, "");
 
 // src/client.ts
 class DiscDBClient {
@@ -2572,102 +2579,50 @@ class DiscDBClient {
     const data = await response.json();
     return data;
   }
-  async search(options) {
-    let mediaArgs;
-    let mediaSelect;
-    if (options.mediaItems) {
-      const opt = options.mediaItems;
-      if ("query" in opt) {
-        mediaArgs = {
-          where: { and: [{ title: { contains: opt.query } }] },
-          after: opt.after,
-          first: opt.limit
-        };
-        if (opt.year !== undefined) {
-          mediaArgs.where?.and?.push({ year: { eq: opt.year } });
-        }
-        if (opt.types !== undefined) {
-          mediaArgs.where?.and?.push({
-            type: {
-              or: opt.types.flatMap((type) => [
-                { eq: type },
-                { eq: type.toLowerCase() }
-              ])
-            }
-          });
-        }
-      } else {
-        mediaArgs = unifyPageArgs(opt.input);
-        mediaSelect = opt.select;
-      }
+  async search(query, options) {
+    const params = new URLSearchParams({ q: query });
+    if (options?.limit !== undefined) {
+      params.set("limit", String(options.limit));
     }
-    let boxsetArgs;
-    let boxsetSelect;
-    if (options.boxsets) {
-      const opt = options.boxsets;
-      if ("query" in opt) {
-        boxsetArgs = {
-          where: { and: [{ title: { contains: opt.query } }] },
-          after: opt.after,
-          first: opt.limit
-        };
-        if (opt.year !== undefined) {
-          boxsetArgs.where?.and?.push({ release: { year: { eq: opt.year } } });
-        }
-        if (opt.types !== undefined) {
-          boxsetArgs.where?.and?.push({
-            release: {
-              mediaItem: {
-                type: {
-                  or: opt.types.flatMap((type) => [
-                    { eq: type },
-                    { eq: type.toLowerCase() }
-                  ])
-                }
-              }
-            }
-          });
-        }
-      } else {
-        boxsetArgs = unifyPageArgs(opt.input);
-        boxsetSelect = opt.select;
-      }
-    }
-    const data = await this.gql.query({
-      mediaItems: mediaArgs ? {
-        __args: mediaArgs,
-        nodes: mediaSelect ?? {
-          title: true,
-          slug: true,
-          imageUrl: true,
-          type: true,
-          year: true
-        },
-        pageInfo: { __scalar: true }
-      } : undefined,
-      boxsets: boxsetArgs ? {
-        __args: boxsetArgs,
-        nodes: boxsetSelect ?? {
-          title: true,
-          slug: true,
-          imageUrl: true,
-          type: true,
-          release: {
-            year: true,
-            releaseDate: true,
-            upc: true,
-            type: true
-          }
-        },
-        pageInfo: { __scalar: true }
-      } : undefined
+    const data = await this.fetch(`/api/search?${params}`, {
+      method: "GET"
     });
-    return {
-      mediaItems: data.mediaItems?.nodes,
-      mediaItemsPage: data.mediaItems && options.mediaItems && "input" in options.mediaItems ? unifyPageInfo(options.mediaItems.input, data.mediaItems.pageInfo) : undefined,
-      boxsets: data.boxsets?.nodes,
-      boxsetsPage: data.boxsets && options.boxsets && "input" in options.boxsets ? unifyPageInfo(options.boxsets.input, data.boxsets.pageInfo) : undefined
-    };
+    const results = data.map((result) => {
+      const newResult = {
+        key: result.id,
+        title: result.title,
+        slug: result.mediaItem.slug,
+        imageUrl: result.imageUrl,
+        type: result.type,
+        relativeUrl: result.relativeUrl,
+        externalIds: {},
+        externalIdsRaw: result.identifiers,
+        groups: result.groups
+      };
+      if (result.type === SearchType.Boxset) {
+        newResult.key = `boxset-${result.mediaItem.slug}`;
+      }
+      let i = -1;
+      for (const id of result.identifiers) {
+        i += 1;
+        if (id.startsWith("tt") && i === 0) {
+          newResult.externalIds.imdb = id;
+          continue;
+        }
+        if (!Number.isNaN(Number(id))) {
+          const nextId = result.identifiers[i + 1];
+          if ((newResult.externalIds.imdb && i === 1 || i === 0) && (!nextId || (!Number.isNaN(Number(nextId)) ? nextId?.length === 12 : true))) {
+            newResult.externalIds.tmdb = Number(id);
+          } else if (id.length === 12) {
+            newResult.externalIds.upc = Number(id);
+          }
+        } else if (id.length === 10) {
+          newResult.externalIds.asin = id;
+        }
+      }
+      return newResult;
+    });
+    return results;
   }
   async getMediaItemByDiscHash(hash2) {
     const data = await this.gql.query({
@@ -7011,20 +6966,27 @@ class DiscDBContributionsClient {
     return getImageUrl(path, { origin: this.origin, ...options });
   }
   async fetch(path, options) {
+    const { ignoreResponseType, ...opts } = options ?? {};
     const headers = new Headers;
     headers.set("User-Agent", this.userAgent);
     if (this.cookies)
       headers.set("Cookie", this.cookies);
     const response = await fetch(new URL(path, this.origin), {
-      method: options?.method ?? "GET",
-      ...options,
+      method: opts?.method ?? "GET",
+      ...opts,
       headers: {
         ...Object.fromEntries(headers.entries()),
-        ...options?.headers
+        ...opts?.headers
       }
     });
     if (!response.ok) {
       throw Error(`${response.status} ${response.statusText}: ${await response.text()}`);
+    }
+    console.log(response.headers.get("Content-Type"));
+    if (ignoreResponseType)
+      return null;
+    if (!response.headers.get("Content-Type")?.startsWith("application/json")) {
+      throw Error("Invalid non-JSON response. Are you properly authenticated?");
     }
     const data = await response.json();
     return data;
@@ -7143,7 +7105,8 @@ class DiscDBContributionsClient {
     body.append(`uploader-${uploaderId}`, file);
     await this.fetch(`/api/contribute/images/${variant}/upload/${uploaderId}`, {
       method: "POST",
-      body
+      body,
+      ignoreResponseType: true
     });
     return {
       id: uploaderId,
@@ -7153,7 +7116,8 @@ class DiscDBContributionsClient {
   }
   async deleteTemporalContributionImage(uploaderId, variant) {
     await this.fetch(`/api/contribute/images/${variant}/remove/${uploaderId}`, {
-      method: "POST"
+      method: "POST",
+      ignoreResponseType: true
     });
   }
   async uploadContributionImage(contributionId, variant, file, uploaderId) {
@@ -7163,12 +7127,19 @@ class DiscDBContributionsClient {
     return { variant, url: data.imageUrl };
   }
   async deleteContributionImage(contributionId, variant) {
-    await this.fetch(`/api/contribute/${contributionId}/images/${variant}/delete`, { method: "POST" });
+    await this.fetch(`/api/contribute/${contributionId}/images/${variant}/delete`, { method: "POST", ignoreResponseType: true });
   }
   async createContribution(input) {
     const data = await this.gql.mutation({
       createContribution: {
-        __args: { input: { input } },
+        __args: {
+          input: {
+            input: {
+              releaseSlug: slugify(input.releaseTitle),
+              ...input
+            }
+          }
+        },
         userContribution: { encodedId: true, id: true },
         errors: { on_Error: { message: true } }
       }
@@ -7232,7 +7203,15 @@ class DiscDBContributionsClient {
   async createDisc(contributionId, contentHash, format, name, slug) {
     const data = await this.gql.mutation({
       createDisc: {
-        __args: { input: { contentHash, contributionId, format, name, slug } },
+        __args: {
+          input: {
+            contentHash,
+            contributionId,
+            format,
+            name,
+            slug: slug ?? slugify(name)
+          }
+        },
         userContributionDisc: { encodedId: true, id: true },
         errors: { on_Error: { message: true } }
       }
@@ -7730,18 +7709,23 @@ class DiscDBContributionsClient {
     const data = await this.gql.query({
       amazonProductMetadata: { __args: { asin }, __scalar: true }
     });
+    if (!data.amazonProductMetadata) {
+      throw Error(`No metadata found for ASIN "${asin}"`);
+    }
     return data.amazonProductMetadata;
   }
 }
 export {
   unifyPageInfo,
   unifyPageArgs,
+  slugify,
   getImageUrl,
   fixMediaTypes,
   enumUserMessageType,
   enumUserContributionStatus,
   enumContributionHistoryType,
   enumApplyPolicy,
+  SearchType,
   MediaItemType,
   MediaItemGroupRole,
   ItemType,

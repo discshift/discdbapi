@@ -1,6 +1,13 @@
 import type { DiscFormat } from "./media";
 import type { ItemType } from "./title";
 
+export interface WithEncodedId {
+  /** integer identifier */
+  id: number;
+  /** `id` encoded by [sqids](https://sqids.org/dotnet) */
+  encodedId: string;
+}
+
 export interface ExternalMetadata {
   /** TMDB ID of the item */
   id: number;

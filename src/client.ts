@@ -19,7 +19,13 @@ import {
   unifyPageInfo,
   type BidirectionalPaginationQuery,
 } from "./common";
-import type { MediaItemGroupRole, MediaItemType } from "./types";
+import {
+  SearchType,
+  type APISearchResult,
+  type MediaItemGroupRole,
+  type MediaItemType,
+  type SearchResult,
+} from "./types";
 
 export class DiscDBClient {
   public origin = DISCDB_ORIGIN;
@@ -107,199 +113,107 @@ export class DiscDBClient {
   }
 
   /**
-   * Search media items and boxsets. Results are only returned for queries
-   * specified in options. As they use two separate filters and selections,
-   * they can be paginated independently.
-   * 
+   * Search media items and boxsets.
+   *
+   * @param query Search string to find results with. The effective minimum
+   *  query length is 2.
+   * @param options.limit Truncate the number of results returned. I have seen
+   *  up to 467 results without providing a limit.
+   *
    * @example Search for all The Mummy movies and boxsets
    * ```ts
-   * const { mediaItems, boxsets } = await discdb.search({
-   *   mediaItems: {
-   *     query: "the mummy",
-   *     types: [MediaItemType.Movie],
-   *   },
-   *   boxsets: {
-   *     query: "the mummy",
-   *     types: [MediaItemType.Movie],
-   *   },
-   * })
+   * const results = await discdb.search("the mummy", { limit: 50 });
+   * console.log(results);
+   * // [
+   * //   {
+   * //     key: "movie-the-mummy-1999",
+   * //     type: SearchType.Movie,
+   * //     title: "The Mummy",
+   * //     slug: "the-mummy-1999",
+   * //     imageUrl: "Movie/the-mummy-1999/cover.jpg",
+   * //     relativeUrl: "/movie/the-mummy-1999",
+   * //     externalIds: {
+   * //       imdb: "tt0120616",
+   * //       tmdb: 564,
+   * //       upc: 191329243763,
+   * //       asin: "B0C25X1883",
+   * //     },
+   * //     groups: [],
+   * //   },
+   * //   // ...
+   * //   {
+   * //     key: "boxset-the-mummy-trilogy-4k",
+   * //     type: SearchType.Boxset,
+   * //     title: "The Mummy Trilogy 4K",
+   * //     slug: "the-mummy-trilogy-4k",
+   * //     imageUrl: "boxset/the-mummy-trilogy-4k.jpg",
+   * //     relativeUrl: "/boxset/the-mummy-trilogy-4k",
+   * //     externalIds: {},
+   * //     groups: [],
+   * //   },
+   * //   // ...
+   * // ]
    * ```
    */
-  async search<
-    MediaItemSelection extends MediaItemGenqlSelection = {
-      title: true;
-      slug: true;
-      imageUrl: true;
-      type: true;
-      year: true;
-    },
-    BoxsetSelection extends BoxsetGenqlSelection = {
-      title: true,
-                slug: true,
-                imageUrl: true,
-                release: {
-                  title: true,
-                  slug: true,
-                  year: true,
-                  upc: true,
-                },
-    },
-  >(options: {
-    mediaItems?:
-      | {
-          query: string;
-          year?: number;
-          types?: MediaItemType[];
-          after?: string;
-          limit?: number;
-        }
-      | {
-          input: BidirectionalPaginationQuery<
-            MediaItemFilterInput,
-            MediaItemSortInput
-          >;
-          select?: MediaItemSelection;
-        };
-    boxsets?:
-      | {
-          query: string;
-          year?: number;
-          // Can't figure out how to determine the media type of a boxset,
-          // since in my testing boxset.release.mediaItem is null
-          // types?: MediaItemType[];
-          after?: string;
-          limit?: number;
-        }
-      | {
-          input: BidirectionalPaginationQuery<
-            BoxsetFilterInput,
-            BoxsetSortInput
-          >;
-          select?: BoxsetSelection;
-        };
-  }) {
-    let mediaArgs:
-      | Partial<
-          ReturnType<
-            typeof unifyPageArgs<MediaItemFilterInput, MediaItemSortInput>
-          >
-        >
-      | undefined;
-    let mediaSelect: MediaItemSelection | undefined;
-    if (options.mediaItems) {
-      const opt = options.mediaItems;
-      if ("query" in opt) {
-        mediaArgs = {
-          where: { and: [{ title: { contains: opt.query } }] },
-          after: opt.after,
-          first: opt.limit,
-          // order: [{ sortTitle: enumSortEnumType.ASC }],
-        };
-        if (opt.year !== undefined) {
-          mediaArgs.where?.and?.push({ year: { eq: opt.year } });
-        }
-        if (opt.types !== undefined) {
-          mediaArgs.where?.and?.push({
-            type: {
-              or: opt.types.flatMap((type) => [
-                { eq: type },
-                { eq: type.toLowerCase() },
-              ]),
-            },
-          });
-        }
-      } else {
-        mediaArgs = unifyPageArgs(opt.input);
-        mediaSelect = opt.select;
-      }
+  async search(
+    query: string,
+    options?: { limit: number },
+  ): Promise<SearchResult[]> {
+    const params = new URLSearchParams({ q: query });
+    if (options?.limit !== undefined) {
+      params.set("limit", String(options.limit));
     }
-
-    let boxsetArgs:
-      | Partial<
-          ReturnType<typeof unifyPageArgs<BoxsetFilterInput, BoxsetSortInput>>
-        >
-      | undefined;
-    let boxsetSelect: BoxsetSelection | undefined;
-    if (options.boxsets) {
-      const opt = options.boxsets;
-      if ("query" in opt) {
-        boxsetArgs = {
-          where: { and: [{ title: { contains: opt.query } }] },
-          after: opt.after,
-          first: opt.limit,
-          // order: [{ sortTitle: enumSortEnumType.ASC }],
-        };
-        if (opt.year !== undefined) {
-          boxsetArgs.where?.and?.push({ release: { year: { eq: opt.year } } });
-        }
-        // if (opt.types !== undefined) {
-        //   boxsetArgs.where?.and?.push({
-        //     release: {
-        //       mediaItem: {
-        //         type: {
-        //           or: opt.types.flatMap((type) => [
-        //             { eq: type },
-        //             { eq: type.toLowerCase() },
-        //           ]),
-        //         },
-        //       },
-        //     },
-        //   });
-        // }
-      } else {
-        boxsetArgs = unifyPageArgs(opt.input);
-        boxsetSelect = opt.select;
-      }
-    }
-
-    const data = await this.gql.query({
-      mediaItems: mediaArgs
-        ? {
-            __args: mediaArgs,
-            nodes:
-              mediaSelect ??
-              ({
-                title: true,
-                slug: true,
-                imageUrl: true,
-                type: true,
-                year: true,
-              } as MediaItemSelection),
-            pageInfo: { __scalar: true },
-          }
-        : undefined,
-      boxsets: boxsetArgs
-        ? {
-            __args: boxsetArgs,
-            nodes:
-              boxsetSelect ??
-              ({
-                title: true,
-                slug: true,
-                imageUrl: true,
-                release: {
-                  title: true,
-                  slug: true,
-                  year: true,
-                  upc: true,
-                },
-              } as BoxsetSelection),
-            pageInfo: { __scalar: true },
-          }
-        : undefined,
+    const data = await this.fetch<APISearchResult[]>(`/api/search?${params}`, {
+      method: "GET",
     });
-    return {
-      mediaItems: data.mediaItems?.nodes,
-      mediaItemsPage:
-        data.mediaItems && options.mediaItems && "input" in options.mediaItems
-          ? unifyPageInfo(options.mediaItems.input, data.mediaItems.pageInfo)
-          : undefined,
-      boxsets: data.boxsets?.nodes,
-      boxsetsPage:
-        data.boxsets && options.boxsets && "input" in options.boxsets
-          ? unifyPageInfo(options.boxsets.input, data.boxsets.pageInfo)
-          : undefined,
-    };
+    const results = data.map((result) => {
+      const newResult: SearchResult = {
+        key: result.id,
+        title: result.title,
+        slug: result.mediaItem.slug,
+        imageUrl: result.imageUrl,
+        type: result.type,
+        relativeUrl: result.relativeUrl,
+        externalIds: {},
+        externalIdsRaw: result.identifiers,
+        groups: result.groups,
+      };
+      // Not very consequential but the default is inconsistent with the
+      // keys used for media items
+      if (result.type === SearchType.Boxset) {
+        newResult.key = `boxset-${result.mediaItem.slug}`;
+      }
+
+      // No individual ID is guaranteed (except probably TMDB on non-boxsets),
+      // so we have to make some educated guesses as to which ID is which
+      // based on its structure and location.
+      let i = -1;
+      for (const id of result.identifiers) {
+        i += 1;
+        if (id.startsWith("tt") && i === 0) {
+          newResult.externalIds.imdb = id;
+          continue;
+        }
+        if (!Number.isNaN(Number(id))) {
+          const nextId = result.identifiers[i + 1];
+          if (
+            // This is the second item or there was no imdb item
+            ((newResult.externalIds.imdb && i === 1) || i === 0) &&
+            // If the next item is numeric, it must be a UPC
+            (!nextId ||
+              (!Number.isNaN(Number(nextId)) ? nextId?.length === 12 : true))
+          ) {
+            newResult.externalIds.tmdb = Number(id);
+          } else if (id.length === 12) {
+            newResult.externalIds.upc = Number(id);
+          }
+        } else if (id.length === 10) {
+          newResult.externalIds.asin = id;
+        }
+      }
+      return newResult;
+    });
+    return results;
   }
 
   /**

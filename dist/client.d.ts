@@ -1,7 +1,7 @@
 import type { FileHashInfo } from "./types/hash";
-import { type BoxsetFilterInput, type BoxsetGenqlSelection, type BoxsetSortInput, type Client as GQLClient, type MediaItemFilterInput, type MediaItemGenqlSelection, type MediaItemSortInput } from "./genql";
+import { type BoxsetFilterInput, type BoxsetGenqlSelection, type BoxsetSortInput, type Client as GQLClient, type MediaItemFilterInput, type MediaItemSortInput } from "./genql";
 import { type BidirectionalPaginationQuery } from "./common";
-import type { MediaItemGroupRole, MediaItemType } from "./types";
+import { type MediaItemGroupRole, type SearchResult } from "./types";
 export declare class DiscDBClient {
     origin: string;
     userAgent: string;
@@ -41,60 +41,51 @@ export declare class DiscDBClient {
     }): string;
     private fetch;
     /**
-     * Search media items and boxsets. Results are only returned for queries
-     * specified in options. As they use two separate filters and selections,
-     * they can be paginated independently.
+     * Search media items and boxsets.
+     *
+     * @param query Search string to find results with. The effective minimum
+     *  query length is 2.
+     * @param options.limit Truncate the number of results returned. I have seen
+     *  up to 467 results without providing a limit.
+     *
+     * @example Search for all The Mummy movies and boxsets
+     * ```ts
+     * const results = await discdb.search("the mummy", { limit: 50 });
+     * console.log(results);
+     * // [
+     * //   {
+     * //     key: "movie-the-mummy-1999",
+     * //     type: SearchType.Movie,
+     * //     title: "The Mummy",
+     * //     slug: "the-mummy-1999",
+     * //     imageUrl: "Movie/the-mummy-1999/cover.jpg",
+     * //     relativeUrl: "/movie/the-mummy-1999",
+     * //     externalIds: {
+     * //       imdb: "tt0120616",
+     * //       tmdb: 564,
+     * //       upc: 191329243763,
+     * //       asin: "B0C25X1883",
+     * //     },
+     * //     groups: [],
+     * //   },
+     * //   // ...
+     * //   {
+     * //     key: "boxset-the-mummy-trilogy-4k",
+     * //     type: SearchType.Boxset,
+     * //     title: "The Mummy Trilogy 4K",
+     * //     slug: "the-mummy-trilogy-4k",
+     * //     imageUrl: "boxset/the-mummy-trilogy-4k.jpg",
+     * //     relativeUrl: "/boxset/the-mummy-trilogy-4k",
+     * //     externalIds: {},
+     * //     groups: [],
+     * //   },
+     * //   // ...
+     * // ]
+     * ```
      */
-    search<MediaItemSelection extends MediaItemGenqlSelection = {
-        title: true;
-        slug: true;
-        imageUrl: true;
-        type: true;
-        year: true;
-    }, BoxsetSelection extends BoxsetGenqlSelection = {
-        title: true;
-        slug: true;
-        imageUrl: true;
-        type: true;
-        release: {
-            year: true;
-            releaseDate: true;
-            upc: true;
-            type: true;
-        };
-    }>(options: {
-        mediaItems?: {
-            query: string;
-            year?: number;
-            types?: MediaItemType[];
-            after?: string;
-            limit?: number;
-        } | {
-            input: BidirectionalPaginationQuery<MediaItemFilterInput, MediaItemSortInput>;
-            select?: MediaItemSelection;
-        };
-        boxsets?: {
-            query: string;
-            year?: number;
-            types?: MediaItemType[];
-            after?: string;
-            limit?: number;
-        } | {
-            input: BidirectionalPaginationQuery<BoxsetFilterInput, BoxsetSortInput>;
-            select?: BoxsetSelection;
-        };
-    }): Promise<{
-        mediaItems: any;
-        mediaItemsPage: {
-            cursor: PageInfo;
-            hasMoreData: PageInfo;
-        };
-        boxsets: any;
-        boxsetsPage: {
-            cursor: PageInfo;
-            hasMoreData: PageInfo;
-        };
-    }>;
+    search(query: string, options?: {
+        limit: number;
+    }): Promise<SearchResult[]>;
     /**
      * Returns a matching media item (movies/series) with releases that contain
      * a disc with the specified hash and details for the disc. There may be

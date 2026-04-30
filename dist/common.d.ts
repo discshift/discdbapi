@@ -51,3 +51,12 @@ export declare const unifyPageArgs: <F, S>(input: BidirectionalPaginationQuery<F
     where: F;
     order: S[];
 };
+/**
+ * Make a string URL-safe by turning it into a slug, thereby replacing or
+ * omitting non-alphanumeric characters.
+ *
+ * @see https://github.com/TheDiscDb/web/blob/main/code/TheDiscDb.Core/StringExtensions.cs
+ * @param value value to be slugified
+ * @returns slugified string
+ */
+export declare const slugify: (value: string) => string;

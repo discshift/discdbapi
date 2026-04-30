@@ -1,20 +1,22 @@
-# discdbapi
+# TheDiscDB API for JavaScript
 
-TypeScript package for interfacing with [TheDiscDB](https://thediscdb.com), an open-source optical media database.
+[TheDiscDB](https://thediscdb.com) is an open-source optical media database for which this package provides a friendly interface.
 
-This package is written, tested, and built with Bun, but it doesn't use any Bun APIs, so it will also work in browsers and in Node. DiscDB does not allow cross-origin requests, so you will have to use a proxy if you are running in a browser environment: you can provide a custom origin to the `DiscDBClient` class when initializing.
+This library is designed to work in browsers, Node.js, and any other common JavaScript runtime (like [Bun](https://bun.com)!). It has no dependencies.
+
+**Browser disclaimer:** TheDiscDB does not allow cross-origin requests, so you will have to use a proxy. You can provide a custom origin to the `DiscDBClient` and `DiscDBContributionsClient` classes when initializing.
 
 ## Installing
 
-This package is not published on NPM. You can instead install it like so:
+This package is not currently published on NPM. You can install it like so:
 
 ```bash
+bun add github:discshift/discdbapi
+# or
 yarn add discdbapi@discshift/discdbapi
 # or
 npm install git+https://github.com/discshift/discdbapi.git
 ```
-
-... which will install the latest commit on the main branch.
 
 For a full reference, [read the docs](https://discshift.github.io/discdbapi).
 
@@ -31,10 +33,12 @@ const discdb = new DiscDBClient({
 });
 ```
 
+This is your basic class for everything not associated with adding new releases to the database. For contribution information, see [Contributions](https://discshift.github.io/discdbapi/documents/Contributions.html).
+
 ### Search media items
 
 ```ts
-await discdb.search("Shrek", { type: MediaItemType.Movie })
+await discdb.search("Shrek", { limit: 50 });
 ```
 
 ### Resolve a media item (movie/series) for a single disc
@@ -128,6 +132,8 @@ console.log(hash);
 ```
 
 ## Development
+
+Pull requests are welcome. Please refrain from using generative AI to wholly compose your contribution, and please check and test its work if you use it in any way. Remember that this is an MIT-licensed repository.
 
 ### GraphQL
 

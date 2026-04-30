@@ -97,3 +97,21 @@ export const unifyPageArgs = <F, S>(
     order: input?.sort,
   };
 };
+
+/**
+ * Make a string URL-safe by turning it into a slug, thereby replacing or
+ * omitting non-alphanumeric characters.
+ * 
+ * @see https://github.com/TheDiscDb/web/blob/main/code/TheDiscDb.Core/StringExtensions.cs
+ * @param value value to be slugified
+ * @returns slugified string
+ */
+export const slugify = (value: string): string => value
+  // keep "and"s sensible while removing the & sign
+  .replace(/&/g, "and")
+  // replace whitespace with dashes
+  .replace(/\s/g, "-")
+  // lowercase all characters
+  .replace(/\w/g, (v) => v.toLowerCase())
+  // strip out everything that isn't compliant
+  .replace(/[^-a-z0-9]/g, "");

@@ -6,6 +6,7 @@ import type {
   HashDiscInput,
   UpdateDiscInput,
   AddItemToDiscInput,
+  WithEncodedId,
 } from "./types/contributions";
 import {
   createClient,
@@ -28,6 +29,7 @@ import {
 import {
   fixMediaTypes,
   getImageUrl,
+  slugify,
   unifyPageArgs,
   unifyPageInfo,
   type BidirectionalPaginationQuery,
@@ -124,23 +126,34 @@ export class DiscDBContributionsClient {
     return getImageUrl(path, { origin: this.origin, ...options });
   }
 
-  private async fetch<T>(path: string, options?: RequestInit) {
+  private async fetch<T>(
+    path: string,
+    options?: RequestInit & { ignoreResponseType?: boolean },
+  ) {
+    const { ignoreResponseType, ...opts } = options ?? {};
+
     const headers = new Headers();
     headers.set("User-Agent", this.userAgent);
     if (this.cookies) headers.set("Cookie", this.cookies);
 
     const response = await fetch(new URL(path, this.origin), {
-      method: options?.method ?? "GET",
-      ...options,
+      method: opts?.method ?? "GET",
+      ...opts,
       headers: {
         ...Object.fromEntries(headers.entries()),
-        ...options?.headers,
+        ...opts?.headers,
       },
     });
     if (!response.ok) {
       throw Error(
         `${response.status} ${response.statusText}: ${await response.text()}`,
       );
+    }
+    console.log(response.headers.get("Content-Type"));
+    if (ignoreResponseType) return null as T;
+
+    if (!response.headers.get("Content-Type")?.startsWith("application/json")) {
+      throw Error("Invalid non-JSON response. Are you properly authenticated?");
     }
 
     const data = (await response.json()) as T;
@@ -336,6 +349,7 @@ export class DiscDBContributionsClient {
     await this.fetch(`/api/contribute/images/${variant}/upload/${uploaderId}`, {
       method: "POST",
       body,
+      ignoreResponseType: true,
     });
     return {
       id: uploaderId,
@@ -352,6 +366,7 @@ export class DiscDBContributionsClient {
   ) {
     await this.fetch(`/api/contribute/images/${variant}/remove/${uploaderId}`, {
       method: "POST",
+      ignoreResponseType: true,
     });
   }
 
@@ -388,14 +403,24 @@ export class DiscDBContributionsClient {
   ) {
     await this.fetch(
       `/api/contribute/${contributionId}/images/${variant}/delete`,
-      { method: "POST" },
+      { method: "POST", ignoreResponseType: true },
     );
   }
 
-  async createContribution(input: ContributionMutationRequestInput) {
+  async createContribution(
+    input: Omit<ContributionMutationRequestInput, "releaseSlug"> &
+      Partial<Pick<ContributionMutationRequestInput, "releaseSlug">>,
+  ): Promise<WithEncodedId> {
     const data = await this.gql.mutation({
       createContribution: {
-        __args: { input: { input } },
+        __args: {
+          input: {
+            input: {
+              releaseSlug: slugify(input.releaseTitle),
+              ...input,
+            },
+          },
+        },
         userContribution: { encodedId: true, id: true },
         errors: { on_Error: { message: true } },
       },
@@ -406,7 +431,9 @@ export class DiscDBContributionsClient {
     return data.createContribution.userContribution;
   }
 
-  async updateContribution(input: UpdateContributionInput) {
+  async updateContribution(
+    input: UpdateContributionInput,
+  ): Promise<WithEncodedId> {
     const data = await this.gql.mutation({
       updateContribution: {
         __args: { input },
@@ -420,7 +447,7 @@ export class DiscDBContributionsClient {
     return data.updateContribution.userContribution;
   }
 
-  async deleteContribution(contributionId: string) {
+  async deleteContribution(contributionId: string): Promise<void> {
     const data = await this.gql.mutation({
       deleteContribution: {
         __args: { input: { contributionId } },
@@ -477,16 +504,36 @@ export class DiscDBContributionsClient {
     return data.hashDisc.discHash.hash;
   }
 
+  /**
+   * Add a disc to a contribution. This is only for specifying the surface
+   * details of the disc; after creating it, you must
+   * {@link uploadDiscLogs | upload logs} before you can
+   * {@link addItemToDisc | identify items}.
+   *
+   * @param contributionId encoded ID of the contribtion
+   * @param contentHash {@link hash | content hash} of the disc
+   * @param format the disc format
+   * @param name the name of the disc, like "Disc 1", "Extras", "DVD"
+   * @param slug by default, a {@link common!slugify | slugified} version of the name is generated
+   */
   async createDisc(
     contributionId: string,
     contentHash: string,
     format: DiscFormat,
     name: string,
-    slug: string,
-  ) {
+    slug?: string,
+  ): Promise<WithEncodedId> {
     const data = await this.gql.mutation({
       createDisc: {
-        __args: { input: { contentHash, contributionId, format, name, slug } },
+        __args: {
+          input: {
+            contentHash,
+            contributionId,
+            format,
+            name,
+            slug: slug ?? slugify(name),
+          },
+        },
         userContributionDisc: { encodedId: true, id: true },
         errors: { on_Error: { message: true } },
       },
@@ -501,7 +548,7 @@ export class DiscDBContributionsClient {
     contributionId: string,
     discId: string,
     input: Omit<UpdateDiscInput, "contributionId" | "discId">,
-  ) {
+  ): Promise<WithEncodedId> {
     const data = await this.gql.mutation({
       updateDisc: {
         __args: { input: { contributionId, discId, ...input } },
@@ -528,7 +575,11 @@ export class DiscDBContributionsClient {
    * @param discId encoded ID of the disc
    * @param logs plaintext log output from MakeMKV
    */
-  async uploadDiscLogs(contributionId: string, discId: string, logs: string) {
+  async uploadDiscLogs(
+    contributionId: string,
+    discId: string,
+    logs: string,
+  ): Promise<void> {
     await this.fetch(`/api/contribute/${contributionId}/discs/${discId}/logs`, {
       method: "POST",
       body: logs,
@@ -662,7 +713,7 @@ export class DiscDBContributionsClient {
     contributionId: string,
     discId: string,
     input: Omit<AddItemToDiscInput, "contributionId" | "discId">,
-  ) {
+  ): Promise<WithEncodedId> {
     const data = await this.gql.mutation({
       addItemToDisc: {
         __args: { input: { contributionId, discId, ...input } },
@@ -681,7 +732,7 @@ export class DiscDBContributionsClient {
     discId: string,
     itemId: string,
     input: Omit<EditItemOnDiscInput, "contributionId" | "discId" | "itemId">,
-  ) {
+  ): Promise<WithEncodedId> {
     const data = await this.gql.mutation({
       editItemOnDisc: {
         __args: { input: { contributionId, discId, itemId, ...input } },
@@ -699,7 +750,7 @@ export class DiscDBContributionsClient {
     contributionId: string,
     discId: string,
     itemId: string,
-  ) {
+  ): Promise<void> {
     const data = await this.gql.mutation({
       deleteItemFromDisc: {
         __args: { input: { contributionId, discId, itemId } },
@@ -747,7 +798,7 @@ export class DiscDBContributionsClient {
     itemId: string,
     trackIndex: number,
     trackName: string,
-  ) {
+  ): Promise<WithEncodedId> {
     const data = await this.gql.mutation({
       addAudioTrackToItem: {
         __args: {
@@ -771,7 +822,7 @@ export class DiscDBContributionsClient {
     itemId: string,
     chapterIndex: number,
     chapterName: string,
-  ) {
+  ): Promise<WithEncodedId> {
     const data = await this.gql.mutation({
       addChapterToItem: {
         __args: {
@@ -1206,6 +1257,9 @@ export class DiscDBContributionsClient {
     const data = await this.gql.query({
       amazonProductMetadata: { __args: { asin }, __scalar: true },
     });
+    if (!data.amazonProductMetadata) {
+      throw Error(`No metadata found for ASIN "${asin}"`);
+    }
     return data.amazonProductMetadata;
   }
 }
