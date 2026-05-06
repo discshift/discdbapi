@@ -1,6 +1,6 @@
 import { DISCDB_ORIGIN } from "./constants";
 import type { PageInfo } from "./genql";
-import { MediaItemType } from "./types";
+import { ItemType, MediaItemType } from "./types";
 
 /**
  * Returns a qualified image URL from a path. If only one dimension is
@@ -116,3 +116,31 @@ export const slugify = (value: string): string =>
     .replace(/\w/g, (v) => v.toLowerCase())
     // strip out everything that isn't compliant
     .replace(/[^-a-z0-9]/g, "");
+
+const extraTypes = [
+  ItemType.Extra,
+  ItemType.Featurette,
+  ItemType.Interview,
+  ItemType.Music,
+  ItemType.Other,
+  ItemType.Scene,
+  ItemType.Short,
+] as const;
+
+type ExtraType = (typeof extraTypes)[number];
+
+/**
+ * Check whether an item is "an extra"; it is one of the following types:
+ * - {@link ItemType.Extra}
+ * - {@link ItemType.Featurette}
+ * - {@link ItemType.Interview}
+ * - {@link ItemType.Music}
+ * - {@link ItemType.Other}
+ * - {@link ItemType.Scene}
+ * - {@link ItemType.Short}
+ *
+ * @param type The title type to check
+ * @returns Whether the type is Extra or one of its subtypes
+ */
+export const isExtra = (type: ItemType): type is ExtraType =>
+  extraTypes.includes(type as ExtraType);
