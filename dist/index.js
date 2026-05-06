@@ -3,6 +3,96 @@ var version = "1.0.0";
 
 // src/constants.ts
 var DISCDB_ORIGIN = "https://thediscdb.com";
+// src/types/media.ts
+var MediaItemType;
+((MediaItemType2) => {
+  MediaItemType2["Movie"] = "Movie";
+  MediaItemType2["Series"] = "Series";
+})(MediaItemType ||= {});
+var DiscFormat;
+((DiscFormat2) => {
+  DiscFormat2["DVD"] = "DVD";
+  DiscFormat2["Bluray"] = "Blu-Ray";
+  DiscFormat2["UHD"] = "UHD";
+})(DiscFormat ||= {});
+var MediaItemGroupRole;
+((MediaItemGroupRole2) => {
+  MediaItemGroupRole2["Company"] = "Company";
+  MediaItemGroupRole2["Genre"] = "Genre";
+  MediaItemGroupRole2["Actor"] = "Actor";
+  MediaItemGroupRole2["Writer"] = "Writer";
+  MediaItemGroupRole2["Director"] = "Director";
+})(MediaItemGroupRole ||= {});
+// src/types/search.ts
+var MediaTypeExtended;
+((MediaTypeExtended2) => {
+  MediaTypeExtended2["Boxset"] = "Boxset";
+})(MediaTypeExtended ||= {});
+var SearchType = { ...MediaItemType, ...MediaTypeExtended };
+// src/types/title.ts
+var ItemType;
+((ItemType2) => {
+  ItemType2["MainMovie"] = "MainMovie";
+  ItemType2["DeletedScene"] = "DeletedScene";
+  ItemType2["Trailer"] = "Trailer";
+  ItemType2["Episode"] = "Episode";
+  ItemType2["Extra"] = "Extra";
+  ItemType2["Featurette"] = "Featurette";
+  ItemType2["Interview"] = "Interview";
+  ItemType2["Scene"] = "Scene";
+  ItemType2["Music"] = "Music";
+  ItemType2["Short"] = "Short";
+  ItemType2["Other"] = "Other";
+})(ItemType ||= {});
+// src/common.ts
+var getImageUrl = (path, options) => {
+  const origin = options?.origin ?? DISCDB_ORIGIN;
+  const url = new URL(path, path.startsWith("/") ? origin : `${origin}/images/`);
+  if (options?.width !== undefined) {
+    url.searchParams.set("width", String(options.width));
+  }
+  if (options?.height !== undefined) {
+    url.searchParams.set("height", String(options.height));
+  }
+  return url.href;
+};
+var fixMediaTypes = (items, key) => {
+  for (const item of items) {
+    if (item[key].toLowerCase() === "series") {
+      item[key] = "Series" /* Series */;
+    } else if (item[key].toLowerCase() === "movie") {
+      item[key] = "Movie" /* Movie */;
+    }
+  }
+  return items;
+};
+var unifyPageInfo = (input, info) => {
+  if (!input || "first" in input || "after" in input) {
+    return { cursor: info.endCursor, hasMoreData: info.hasNextPage };
+  }
+  return { cursor: info.startCursor, hasMoreData: info.hasPreviousPage };
+};
+var unifyPageArgs = (input) => {
+  return {
+    first: input ? "first" in input ? input.first : null : null,
+    last: input ? "last" in input ? input.last : null : null,
+    after: input ? "after" in input ? input.after : null : null,
+    before: input ? "before" in input ? input.before : null : null,
+    where: input?.query,
+    order: input?.sort
+  };
+};
+var slugify = (value) => value.replace(/&/g, "and").replace(/\s/g, "-").replace(/\w/g, (v) => v.toLowerCase()).replace(/[^-a-z0-9]/g, "");
+var extraTypes = [
+  "Extra" /* Extra */,
+  "Featurette" /* Featurette */,
+  "Interview" /* Interview */,
+  "Music" /* Music */,
+  "Other" /* Other */,
+  "Scene" /* Scene */,
+  "Short" /* Short */
+];
+var isExtra = (type) => extraTypes.includes(type);
 
 // src/genql/runtime/error.ts
 class GenqlError extends Error {
@@ -2459,80 +2549,6 @@ var createClient2 = function(options) {
     subscriptionRoot: typeMap.Subscription
   });
 };
-// src/types/media.ts
-var MediaItemType;
-((MediaItemType2) => {
-  MediaItemType2["Movie"] = "Movie";
-  MediaItemType2["Series"] = "Series";
-})(MediaItemType ||= {});
-var DiscFormat;
-((DiscFormat2) => {
-  DiscFormat2["DVD"] = "DVD";
-  DiscFormat2["Bluray"] = "Blu-Ray";
-  DiscFormat2["UHD"] = "UHD";
-})(DiscFormat ||= {});
-var MediaItemGroupRole;
-((MediaItemGroupRole2) => {
-  MediaItemGroupRole2["Company"] = "Company";
-  MediaItemGroupRole2["Genre"] = "Genre";
-  MediaItemGroupRole2["Actor"] = "Actor";
-  MediaItemGroupRole2["Writer"] = "Writer";
-  MediaItemGroupRole2["Director"] = "Director";
-})(MediaItemGroupRole ||= {});
-// src/types/search.ts
-var MediaTypeExtended;
-((MediaTypeExtended2) => {
-  MediaTypeExtended2["Boxset"] = "Boxset";
-})(MediaTypeExtended ||= {});
-var SearchType = { ...MediaItemType, ...MediaTypeExtended };
-// src/types/title.ts
-var ItemType;
-((ItemType2) => {
-  ItemType2["MainMovie"] = "MainMovie";
-  ItemType2["DeletedScene"] = "DeletedScene";
-  ItemType2["Trailer"] = "Trailer";
-  ItemType2["Extra"] = "Extra";
-  ItemType2["Episode"] = "Episode";
-})(ItemType ||= {});
-// src/common.ts
-var getImageUrl = (path, options) => {
-  const origin = options?.origin ?? DISCDB_ORIGIN;
-  const url = new URL(path, path.startsWith("/") ? origin : `${origin}/images/`);
-  if (options?.width !== undefined) {
-    url.searchParams.set("width", String(options.width));
-  }
-  if (options?.height !== undefined) {
-    url.searchParams.set("height", String(options.height));
-  }
-  return url.href;
-};
-var fixMediaTypes = (items, key) => {
-  for (const item of items) {
-    if (item[key].toLowerCase() === "series") {
-      item[key] = "Series" /* Series */;
-    } else if (item[key].toLowerCase() === "movie") {
-      item[key] = "Movie" /* Movie */;
-    }
-  }
-  return items;
-};
-var unifyPageInfo = (input, info) => {
-  if (!input || "first" in input || "after" in input) {
-    return { cursor: info.endCursor, hasMoreData: info.hasNextPage };
-  }
-  return { cursor: info.startCursor, hasMoreData: info.hasPreviousPage };
-};
-var unifyPageArgs = (input) => {
-  return {
-    first: input ? "first" in input ? input.first : null : null,
-    last: input ? "last" in input ? input.last : null : null,
-    after: input ? "after" in input ? input.after : null : null,
-    before: input ? "before" in input ? input.before : null : null,
-    where: input?.query,
-    order: input?.sort
-  };
-};
-var slugify = (value) => value.replace(/&/g, "and").replace(/\s/g, "-").replace(/\w/g, (v) => v.toLowerCase()).replace(/[^-a-z0-9]/g, "");
 
 // src/client.ts
 class DiscDBClient {
@@ -7719,6 +7735,7 @@ export {
   unifyPageInfo,
   unifyPageArgs,
   slugify,
+  isExtra,
   getImageUrl,
   fixMediaTypes,
   enumUserMessageType,

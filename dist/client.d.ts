@@ -1,7 +1,7 @@
-import type { FileHashInfo } from "./types/hash";
-import { type BoxsetFilterInput, type BoxsetGenqlSelection, type BoxsetSortInput, type Client as GQLClient, type MediaItemFilterInput, type MediaItemSortInput } from "./genql";
 import { type BidirectionalPaginationQuery } from "./common";
+import { type BoxsetFilterInput, type BoxsetGenqlSelection, type BoxsetSortInput, type Client as GQLClient, type MediaItemFilterInput, type MediaItemSortInput } from "./genql";
 import { type MediaItemGroupRole, type SearchResult } from "./types";
+import type { FileHashInfo } from "./types/hash";
 export declare class DiscDBClient {
     origin: string;
     userAgent: string;

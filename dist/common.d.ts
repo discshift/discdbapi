@@ -1,4 +1,5 @@
 import type { PageInfo } from "./genql";
+import { ItemType } from "./types";
 /**
  * Returns a qualified image URL from a path. If only one dimension is
  * provided, the other dimension will be resized automatically, maintaining
@@ -60,3 +61,20 @@ export declare const unifyPageArgs: <F, S>(input: BidirectionalPaginationQuery<F
  * @returns slugified string
  */
 export declare const slugify: (value: string) => string;
+declare const extraTypes: readonly [any, any, any, any, any, any, any];
+type ExtraType = (typeof extraTypes)[number];
+/**
+ * Check whether an item is "an extra"; it is one of the following types:
+ * - {@link ItemType.Extra}
+ * - {@link ItemType.Featurette}
+ * - {@link ItemType.Interview}
+ * - {@link ItemType.Music}
+ * - {@link ItemType.Other}
+ * - {@link ItemType.Scene}
+ * - {@link ItemType.Short}
+ *
+ * @param type The title type to check
+ * @returns Whether the type is Extra or one of its subtypes
+ */
+export declare const isExtra: (type: ItemType) => type is ExtraType;
+export {};
