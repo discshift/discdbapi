@@ -150,6 +150,12 @@ export declare class DiscDBClient {
      */
     getReleaseBySlug(mediaItemSlug: string, slug: string): Promise<any>;
     /**
+     * Fetch a release by its Universal Product Code (UPC).
+     *
+     * @param upc the upc for the release, a 12-digit number
+     */
+    getReleaseByUPC(upc: string | number): Promise<any>;
+    /**
      * Fetch a media item by its external database IDs. If there are multiple
      * results (e.g you provided IDs for items that are not the same), only the
      * first result will be returned.

@@ -2763,6 +2763,28 @@ class DiscDBClient {
       }
     };
   }
+  async getReleaseByUPC(upc) {
+    const data = await this.gql.query({
+      mediaItems: {
+        __args: { where: { releases: { some: { upc: { eq: String(upc) } } } } },
+        nodes: GQL_NODE_QUERY
+      }
+    });
+    const node = data.mediaItems?.nodes?.[0];
+    if (!node)
+      throw Error(`No release with UPC ${upc}`);
+    const release = node.releases.find((r) => r.upc === String(upc));
+    if (!release) {
+      throw Error(`No release with UPC ${upc}`);
+    }
+    return {
+      ...release,
+      mediaItem: {
+        ...node,
+        releases: node.releases.filter((r) => r.slug !== release.slug)
+      }
+    };
+  }
   async getMediaItemByExternalIds(ids) {
     const ors = [];
     if (ids.imdbId)
@@ -2863,6 +2885,8 @@ var GQL_NODE_QUERY = {
     year: true,
     title: true,
     imageUrl: true,
+    upc: true,
+    asin: true,
     discs: {
       __args: { order: [{ index: enumSortEnumType.ASC }] },
       contentHash: true,

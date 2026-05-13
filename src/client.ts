@@ -416,6 +416,36 @@ export class DiscDBClient {
   }
 
   /**
+   * Fetch a release by its Universal Product Code (UPC).
+   *
+   * @param upc the upc for the release, a 12-digit number
+   */
+  async getReleaseByUPC(upc: string | number) {
+    const data = await this.gql.query({
+      mediaItems: {
+        __args: { where: { releases: { some: { upc: { eq: String(upc) } } } } },
+        nodes: GQL_NODE_QUERY,
+      },
+    });
+    const node = data.mediaItems?.nodes?.[0];
+    if (!node) throw Error(`No release with UPC ${upc}`);
+
+    const release = node.releases.find((r) => r.upc === String(upc));
+    if (!release) {
+      // Shouldn't happen if the query is correct
+      throw Error(`No release with UPC ${upc}`);
+    }
+
+    return {
+      ...release,
+      mediaItem: {
+        ...node,
+        releases: node.releases.filter((r) => r.slug !== release.slug),
+      },
+    };
+  }
+
+  /**
    * Fetch a media item by its external database IDs. If there are multiple
    * results (e.g you provided IDs for items that are not the same), only the
    * first result will be returned.
@@ -574,6 +604,8 @@ const GQL_NODE_QUERY = {
     year: true,
     title: true,
     imageUrl: true,
+    upc: true,
+    asin: true,
     discs: {
       __args: { order: [{ index: enumSortEnumType.ASC }] },
       contentHash: true,
