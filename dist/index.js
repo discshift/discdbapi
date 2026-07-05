@@ -1,6 +1,3 @@
-// package.json
-var version = "1.0.0";
-
 // src/constants.ts
 var DISCDB_ORIGIN = "https://thediscdb.com";
 // src/types/media.ts
@@ -537,1997 +534,2149 @@ var resolveConcreteTypes = (linkedTypeMap) => {
 // src/genql/types.ts
 var types_default = {
   scalars: [
-    0,
-    1,
-    2,
-    17,
-    26,
-    40
+    12,
+    36,
+    42,
+    46,
+    50,
+    59
   ],
   types: {
-    String: {},
-    Boolean: {},
-    Int: {},
-    Query: {
-      mediaItems: [
-        8,
+    ListFilterInputTypeOfTrackFilterInput: {
+      all: [
+        35
+      ],
+      none: [
+        35
+      ],
+      some: [
+        35
+      ],
+      any: [
+        36
+      ],
+      __typename: [
+        50
+      ]
+    },
+    MediaItem: {
+      id: [
+        46
+      ],
+      title: [
+        50
+      ],
+      slug: [
+        50
+      ],
+      fullTitle: [
+        50
+      ],
+      sortTitle: [
+        50
+      ],
+      year: [
+        46
+      ],
+      type: [
+        50
+      ],
+      imageUrl: [
+        50
+      ],
+      externalids: [
+        45
+      ],
+      externalIdsId: [
+        46
+      ],
+      releases: [
+        56,
         {
-          first: [
-            2
-          ],
-          after: [
-            0
-          ],
-          last: [
-            2
-          ],
-          before: [
-            0
-          ],
           where: [
-            4
+            62
           ],
           order: [
-            5,
+            4,
+            "[ReleaseSortInput!]"
+          ]
+        }
+      ],
+      mediaItemGroups: [
+        66,
+        {
+          where: [
+            19
+          ],
+          order: [
+            11,
+            "[MediaItemGroupSortInput!]"
+          ]
+        }
+      ],
+      plot: [
+        50
+      ],
+      tagline: [
+        50
+      ],
+      directors: [
+        50
+      ],
+      writers: [
+        50
+      ],
+      stars: [
+        50
+      ],
+      genres: [
+        50
+      ],
+      runtimeMinutes: [
+        46
+      ],
+      runtime: [
+        50
+      ],
+      contentRating: [
+        50
+      ],
+      releaseDate: [
+        59
+      ],
+      latestReleaseDate: [
+        59
+      ],
+      dateAdded: [
+        59
+      ],
+      __typename: [
+        50
+      ]
+    },
+    DateTimeOperationFilterInput: {
+      eq: [
+        59
+      ],
+      neq: [
+        59
+      ],
+      in: [
+        59
+      ],
+      nin: [
+        59
+      ],
+      gt: [
+        59
+      ],
+      ngt: [
+        59
+      ],
+      gte: [
+        59
+      ],
+      ngte: [
+        59
+      ],
+      lt: [
+        59
+      ],
+      nlt: [
+        59
+      ],
+      lte: [
+        59
+      ],
+      nlte: [
+        59
+      ],
+      __typename: [
+        50
+      ]
+    },
+    MediaItemSortInput: {
+      id: [
+        12
+      ],
+      title: [
+        12
+      ],
+      slug: [
+        12
+      ],
+      fullTitle: [
+        12
+      ],
+      sortTitle: [
+        12
+      ],
+      year: [
+        12
+      ],
+      type: [
+        12
+      ],
+      imageUrl: [
+        12
+      ],
+      externalids: [
+        38
+      ],
+      externalIdsId: [
+        12
+      ],
+      plot: [
+        12
+      ],
+      tagline: [
+        12
+      ],
+      directors: [
+        12
+      ],
+      writers: [
+        12
+      ],
+      stars: [
+        12
+      ],
+      genres: [
+        12
+      ],
+      runtimeMinutes: [
+        12
+      ],
+      runtime: [
+        12
+      ],
+      contentRating: [
+        12
+      ],
+      releaseDate: [
+        12
+      ],
+      latestReleaseDate: [
+        12
+      ],
+      dateAdded: [
+        12
+      ],
+      __typename: [
+        50
+      ]
+    },
+    ReleaseSortInput: {
+      id: [
+        12
+      ],
+      slug: [
+        12
+      ],
+      title: [
+        12
+      ],
+      regionCode: [
+        12
+      ],
+      locale: [
+        12
+      ],
+      year: [
+        12
+      ],
+      upc: [
+        12
+      ],
+      isbn: [
+        12
+      ],
+      asin: [
+        12
+      ],
+      imageUrl: [
+        12
+      ],
+      backImageUrl: [
+        12
+      ],
+      releaseDate: [
+        12
+      ],
+      dateAdded: [
+        12
+      ],
+      fullTitle: [
+        12
+      ],
+      type: [
+        12
+      ],
+      mediaItem: [
+        3
+      ],
+      boxset: [
+        40
+      ],
+      __typename: [
+        50
+      ]
+    },
+    ChapterSortInput: {
+      id: [
+        12
+      ],
+      index: [
+        12
+      ],
+      title: [
+        12
+      ],
+      __typename: [
+        50
+      ]
+    },
+    ListFilterInputTypeOfReleaseFilterInput: {
+      all: [
+        62
+      ],
+      none: [
+        62
+      ],
+      some: [
+        62
+      ],
+      any: [
+        36
+      ],
+      __typename: [
+        50
+      ]
+    },
+    ReleaseGroupSortInput: {
+      id: [
+        12
+      ],
+      releaseId: [
+        12
+      ],
+      groupId: [
+        12
+      ],
+      release: [
+        4
+      ],
+      group: [
+        24
+      ],
+      __typename: [
+        50
+      ]
+    },
+    MediaItemFilterInput: {
+      and: [
+        8
+      ],
+      or: [
+        8
+      ],
+      id: [
+        14
+      ],
+      title: [
+        57
+      ],
+      slug: [
+        57
+      ],
+      fullTitle: [
+        57
+      ],
+      sortTitle: [
+        57
+      ],
+      year: [
+        14
+      ],
+      type: [
+        57
+      ],
+      imageUrl: [
+        57
+      ],
+      externalids: [
+        33
+      ],
+      externalIdsId: [
+        14
+      ],
+      releases: [
+        6
+      ],
+      mediaItemGroups: [
+        18
+      ],
+      plot: [
+        57
+      ],
+      tagline: [
+        57
+      ],
+      directors: [
+        57
+      ],
+      writers: [
+        57
+      ],
+      stars: [
+        57
+      ],
+      genres: [
+        57
+      ],
+      runtimeMinutes: [
+        14
+      ],
+      runtime: [
+        57
+      ],
+      contentRating: [
+        57
+      ],
+      releaseDate: [
+        2
+      ],
+      latestReleaseDate: [
+        2
+      ],
+      dateAdded: [
+        2
+      ],
+      __typename: [
+        50
+      ]
+    },
+    Group: {
+      id: [
+        46
+      ],
+      imdbId: [
+        50
+      ],
+      name: [
+        50
+      ],
+      slug: [
+        50
+      ],
+      imageUrl: [
+        50
+      ],
+      mediaItemGroups: [
+        66,
+        {
+          where: [
+            19
+          ],
+          order: [
+            11,
+            "[MediaItemGroupSortInput!]"
+          ]
+        }
+      ],
+      releaseGroups: [
+        44,
+        {
+          where: [
+            60
+          ],
+          order: [
+            7,
+            "[ReleaseGroupSortInput!]"
+          ]
+        }
+      ],
+      __typename: [
+        50
+      ]
+    },
+    FileNameTemplateInput: {
+      itemType: [
+        50
+      ],
+      template: [
+        50
+      ],
+      __typename: [
+        50
+      ]
+    },
+    MediaItemGroupSortInput: {
+      id: [
+        12
+      ],
+      mediaItemId: [
+        12
+      ],
+      groupId: [
+        12
+      ],
+      role: [
+        12
+      ],
+      isFeatured: [
+        12
+      ],
+      mediaItem: [
+        3
+      ],
+      group: [
+        24
+      ],
+      __typename: [
+        50
+      ]
+    },
+    SortEnumType: {},
+    BoxsetFilterInput: {
+      and: [
+        13
+      ],
+      or: [
+        13
+      ],
+      id: [
+        14
+      ],
+      title: [
+        57
+      ],
+      sortTitle: [
+        57
+      ],
+      slug: [
+        57
+      ],
+      imageUrl: [
+        57
+      ],
+      release: [
+        62
+      ],
+      releaseId: [
+        14
+      ],
+      type: [
+        57
+      ],
+      __typename: [
+        50
+      ]
+    },
+    IntOperationFilterInput: {
+      eq: [
+        46
+      ],
+      neq: [
+        46
+      ],
+      in: [
+        46
+      ],
+      nin: [
+        46
+      ],
+      gt: [
+        46
+      ],
+      ngt: [
+        46
+      ],
+      gte: [
+        46
+      ],
+      ngte: [
+        46
+      ],
+      lt: [
+        46
+      ],
+      nlt: [
+        46
+      ],
+      lte: [
+        46
+      ],
+      nlte: [
+        46
+      ],
+      __typename: [
+        50
+      ]
+    },
+    MediaItemsConnection: {
+      pageInfo: [
+        30
+      ],
+      edges: [
+        26
+      ],
+      nodes: [
+        1
+      ],
+      __typename: [
+        50
+      ]
+    },
+    ReleaseDiscFilterInput: {
+      and: [
+        16
+      ],
+      or: [
+        16
+      ],
+      id: [
+        14
+      ],
+      releaseId: [
+        14
+      ],
+      release: [
+        62
+      ],
+      discId: [
+        14
+      ],
+      disc: [
+        52
+      ],
+      index: [
+        14
+      ],
+      slug: [
+        57
+      ],
+      name: [
+        57
+      ],
+      titles: [
+        37
+      ],
+      format: [
+        57
+      ],
+      contentHash: [
+        57
+      ],
+      __typename: [
+        50
+      ]
+    },
+    ListFilterInputTypeOfReleaseGroupFilterInput: {
+      all: [
+        60
+      ],
+      none: [
+        60
+      ],
+      some: [
+        60
+      ],
+      any: [
+        36
+      ],
+      __typename: [
+        50
+      ]
+    },
+    ListFilterInputTypeOfMediaItemGroupFilterInput: {
+      all: [
+        19
+      ],
+      none: [
+        19
+      ],
+      some: [
+        19
+      ],
+      any: [
+        36
+      ],
+      __typename: [
+        50
+      ]
+    },
+    MediaItemGroupFilterInput: {
+      and: [
+        19
+      ],
+      or: [
+        19
+      ],
+      id: [
+        14
+      ],
+      mediaItemId: [
+        14
+      ],
+      groupId: [
+        14
+      ],
+      role: [
+        57
+      ],
+      isFeatured: [
+        25
+      ],
+      mediaItem: [
+        8
+      ],
+      group: [
+        48
+      ],
+      __typename: [
+        50
+      ]
+    },
+    LongOperationFilterInput: {
+      eq: [
+        42
+      ],
+      neq: [
+        42
+      ],
+      in: [
+        42
+      ],
+      nin: [
+        42
+      ],
+      gt: [
+        42
+      ],
+      ngt: [
+        42
+      ],
+      gte: [
+        42
+      ],
+      ngte: [
+        42
+      ],
+      lt: [
+        42
+      ],
+      nlt: [
+        42
+      ],
+      lte: [
+        42
+      ],
+      nlte: [
+        42
+      ],
+      __typename: [
+        50
+      ]
+    },
+    TrackSortInput: {
+      id: [
+        12
+      ],
+      index: [
+        12
+      ],
+      name: [
+        12
+      ],
+      type: [
+        12
+      ],
+      resolution: [
+        12
+      ],
+      aspectRatio: [
+        12
+      ],
+      audioType: [
+        12
+      ],
+      languageCode: [
+        12
+      ],
+      language: [
+        12
+      ],
+      description: [
+        12
+      ],
+      title: [
+        53
+      ],
+      __typename: [
+        50
+      ]
+    },
+    ListReleaseDiscFilterTypeFilterInput: {
+      all: [
+        16
+      ],
+      none: [
+        16
+      ],
+      some: [
+        16
+      ],
+      any: [
+        36
+      ],
+      __typename: [
+        50
+      ]
+    },
+    Chapter: {
+      id: [
+        46
+      ],
+      index: [
+        46
+      ],
+      title: [
+        50
+      ],
+      __typename: [
+        50
+      ]
+    },
+    GroupSortInput: {
+      id: [
+        12
+      ],
+      imdbId: [
+        12
+      ],
+      name: [
+        12
+      ],
+      slug: [
+        12
+      ],
+      imageUrl: [
+        12
+      ],
+      __typename: [
+        50
+      ]
+    },
+    BooleanOperationFilterInput: {
+      eq: [
+        36
+      ],
+      neq: [
+        36
+      ],
+      __typename: [
+        50
+      ]
+    },
+    MediaItemsEdge: {
+      cursor: [
+        50
+      ],
+      node: [
+        1
+      ],
+      __typename: [
+        50
+      ]
+    },
+    BoxsetsEdge: {
+      cursor: [
+        50
+      ],
+      node: [
+        31
+      ],
+      __typename: [
+        50
+      ]
+    },
+    Contributor: {
+      id: [
+        46
+      ],
+      name: [
+        50
+      ],
+      releases: [
+        56
+      ],
+      userId: [
+        50
+      ],
+      source: [
+        50
+      ],
+      __typename: [
+        50
+      ]
+    },
+    TitleFilterInput: {
+      and: [
+        29
+      ],
+      or: [
+        29
+      ],
+      index: [
+        14
+      ],
+      disc: [
+        52
+      ],
+      id: [
+        14
+      ],
+      comment: [
+        57
+      ],
+      sourceFile: [
+        57
+      ],
+      segmentMap: [
+        57
+      ],
+      duration: [
+        57
+      ],
+      size: [
+        20
+      ],
+      displaySize: [
+        57
+      ],
+      item: [
+        34
+      ],
+      discItemReferenceId: [
+        14
+      ],
+      tracks: [
+        0
+      ],
+      description: [
+        57
+      ],
+      itemType: [
+        57
+      ],
+      season: [
+        57
+      ],
+      episode: [
+        57
+      ],
+      hasItem: [
+        25
+      ],
+      __typename: [
+        50
+      ]
+    },
+    PageInfo: {
+      hasNextPage: [
+        36
+      ],
+      hasPreviousPage: [
+        36
+      ],
+      startCursor: [
+        50
+      ],
+      endCursor: [
+        50
+      ],
+      __typename: [
+        50
+      ]
+    },
+    Boxset: {
+      id: [
+        46
+      ],
+      title: [
+        50
+      ],
+      sortTitle: [
+        50
+      ],
+      slug: [
+        50
+      ],
+      imageUrl: [
+        50
+      ],
+      release: [
+        56
+      ],
+      releaseId: [
+        46
+      ],
+      type: [
+        50
+      ],
+      __typename: [
+        50
+      ]
+    },
+    ContributorFilterInput: {
+      and: [
+        32
+      ],
+      or: [
+        32
+      ],
+      id: [
+        14
+      ],
+      name: [
+        57
+      ],
+      releases: [
+        6
+      ],
+      userId: [
+        57
+      ],
+      source: [
+        57
+      ],
+      __typename: [
+        50
+      ]
+    },
+    ExternalIdsFilterInput: {
+      and: [
+        33
+      ],
+      or: [
+        33
+      ],
+      id: [
+        14
+      ],
+      tmdb: [
+        57
+      ],
+      imdb: [
+        57
+      ],
+      tvdb: [
+        57
+      ],
+      mediaItem: [
+        8
+      ],
+      __typename: [
+        50
+      ]
+    },
+    DiscItemReferenceFilterInput: {
+      and: [
+        34
+      ],
+      or: [
+        34
+      ],
+      id: [
+        14
+      ],
+      title: [
+        57
+      ],
+      type: [
+        57
+      ],
+      description: [
+        57
+      ],
+      chapters: [
+        64
+      ],
+      season: [
+        57
+      ],
+      episode: [
+        57
+      ],
+      discItem: [
+        29
+      ],
+      __typename: [
+        50
+      ]
+    },
+    TrackFilterInput: {
+      and: [
+        35
+      ],
+      or: [
+        35
+      ],
+      id: [
+        14
+      ],
+      index: [
+        14
+      ],
+      name: [
+        57
+      ],
+      type: [
+        57
+      ],
+      resolution: [
+        57
+      ],
+      aspectRatio: [
+        57
+      ],
+      audioType: [
+        57
+      ],
+      languageCode: [
+        57
+      ],
+      language: [
+        57
+      ],
+      description: [
+        57
+      ],
+      title: [
+        29
+      ],
+      __typename: [
+        50
+      ]
+    },
+    Boolean: {},
+    ListFilterInputTypeOfTitleFilterInput: {
+      all: [
+        29
+      ],
+      none: [
+        29
+      ],
+      some: [
+        29
+      ],
+      any: [
+        36
+      ],
+      __typename: [
+        50
+      ]
+    },
+    ExternalIdsSortInput: {
+      id: [
+        12
+      ],
+      tmdb: [
+        12
+      ],
+      imdb: [
+        12
+      ],
+      tvdb: [
+        12
+      ],
+      mediaItem: [
+        3
+      ],
+      __typename: [
+        50
+      ]
+    },
+    MediaItemsByGroupEdge: {
+      cursor: [
+        50
+      ],
+      node: [
+        1
+      ],
+      __typename: [
+        50
+      ]
+    },
+    BoxsetSortInput: {
+      id: [
+        12
+      ],
+      title: [
+        12
+      ],
+      sortTitle: [
+        12
+      ],
+      slug: [
+        12
+      ],
+      imageUrl: [
+        12
+      ],
+      release: [
+        4
+      ],
+      releaseId: [
+        12
+      ],
+      type: [
+        12
+      ],
+      __typename: [
+        50
+      ]
+    },
+    DiscSortInput: {
+      id: [
+        12
+      ],
+      index: [
+        12
+      ],
+      slug: [
+        12
+      ],
+      name: [
+        12
+      ],
+      format: [
+        12
+      ],
+      contentHash: [
+        12
+      ],
+      release: [
+        4
+      ],
+      __typename: [
+        50
+      ]
+    },
+    Long: {},
+    Track: {
+      id: [
+        46
+      ],
+      index: [
+        46
+      ],
+      name: [
+        50
+      ],
+      type: [
+        50
+      ],
+      resolution: [
+        50
+      ],
+      aspectRatio: [
+        50
+      ],
+      audioType: [
+        50
+      ],
+      languageCode: [
+        50
+      ],
+      language: [
+        50
+      ],
+      description: [
+        50
+      ],
+      title: [
+        58
+      ],
+      __typename: [
+        50
+      ]
+    },
+    ReleaseGroup: {
+      id: [
+        46
+      ],
+      releaseId: [
+        46
+      ],
+      groupId: [
+        46
+      ],
+      release: [
+        56,
+        {
+          where: [
+            62
+          ],
+          order: [
+            4,
+            "[ReleaseSortInput!]"
+          ]
+        }
+      ],
+      group: [
+        9,
+        {
+          where: [
+            48
+          ],
+          order: [
+            24,
+            "[GroupSortInput!]"
+          ]
+        }
+      ],
+      __typename: [
+        50
+      ]
+    },
+    ExternalIds: {
+      id: [
+        46
+      ],
+      tmdb: [
+        50
+      ],
+      imdb: [
+        50
+      ],
+      tvdb: [
+        50
+      ],
+      mediaItem: [
+        1
+      ],
+      __typename: [
+        50
+      ]
+    },
+    Int: {},
+    DiscItemReferenceSortInput: {
+      id: [
+        12
+      ],
+      title: [
+        12
+      ],
+      type: [
+        12
+      ],
+      description: [
+        12
+      ],
+      season: [
+        12
+      ],
+      episode: [
+        12
+      ],
+      discItem: [
+        53
+      ],
+      __typename: [
+        50
+      ]
+    },
+    GroupFilterInput: {
+      and: [
+        48
+      ],
+      or: [
+        48
+      ],
+      id: [
+        14
+      ],
+      imdbId: [
+        57
+      ],
+      name: [
+        57
+      ],
+      slug: [
+        57
+      ],
+      imageUrl: [
+        57
+      ],
+      mediaItemGroups: [
+        18
+      ],
+      releaseGroups: [
+        17
+      ],
+      __typename: [
+        50
+      ]
+    },
+    Query: {
+      mediaItems: [
+        15,
+        {
+          first: [
+            46
+          ],
+          after: [
+            50
+          ],
+          last: [
+            46
+          ],
+          before: [
+            50
+          ],
+          where: [
+            8
+          ],
+          order: [
+            3,
             "[MediaItemSortInput!]"
           ]
         }
       ],
       boxsets: [
-        9,
+        68,
         {
           first: [
-            2
+            46
           ],
           after: [
-            0
+            50
           ],
           last: [
-            2
+            46
           ],
           before: [
-            0
+            50
           ],
           where: [
-            6
+            13
           ],
           order: [
-            7,
+            40,
             "[BoxsetSortInput!]"
           ]
         }
       ],
       mediaItemsByGroup: [
-        10,
+        51,
         {
           slug: [
-            0,
+            50,
             "String!"
           ],
           role: [
-            0
+            50
           ],
           first: [
-            2
+            46
           ],
           after: [
-            0
+            50
           ],
           last: [
-            2
+            46
           ],
           before: [
-            0
+            50
           ],
           where: [
-            4
+            8
           ],
           order: [
-            5,
+            3,
             "[MediaItemSortInput!]"
           ]
         }
       ],
       __typename: [
-        0
+        50
       ]
     },
-    MediaItemFilterInput: {
-      and: [
-        4
-      ],
-      or: [
-        4
-      ],
-      id: [
-        11
-      ],
-      title: [
-        12
-      ],
-      slug: [
-        12
-      ],
-      fullTitle: [
-        12
-      ],
-      sortTitle: [
-        12
-      ],
-      year: [
-        11
-      ],
-      type: [
-        12
-      ],
-      imageUrl: [
-        12
-      ],
-      externalids: [
-        13
-      ],
-      externalIdsId: [
-        11
-      ],
-      releases: [
-        14
-      ],
-      mediaItemGroups: [
-        15
-      ],
-      plot: [
-        12
-      ],
-      tagline: [
-        12
-      ],
-      directors: [
-        12
-      ],
-      writers: [
-        12
-      ],
-      stars: [
-        12
-      ],
-      genres: [
-        12
-      ],
-      runtimeMinutes: [
-        11
-      ],
-      runtime: [
-        12
-      ],
-      contentRating: [
-        12
-      ],
-      releaseDate: [
-        16
-      ],
-      latestReleaseDate: [
-        16
-      ],
-      dateAdded: [
-        16
-      ],
-      __typename: [
-        0
-      ]
-    },
-    MediaItemSortInput: {
-      id: [
-        17
-      ],
-      title: [
-        17
-      ],
-      slug: [
-        17
-      ],
-      fullTitle: [
-        17
-      ],
-      sortTitle: [
-        17
-      ],
-      year: [
-        17
-      ],
-      type: [
-        17
-      ],
-      imageUrl: [
-        17
-      ],
-      externalids: [
-        18
-      ],
-      externalIdsId: [
-        17
-      ],
-      plot: [
-        17
-      ],
-      tagline: [
-        17
-      ],
-      directors: [
-        17
-      ],
-      writers: [
-        17
-      ],
-      stars: [
-        17
-      ],
-      genres: [
-        17
-      ],
-      runtimeMinutes: [
-        17
-      ],
-      runtime: [
-        17
-      ],
-      contentRating: [
-        17
-      ],
-      releaseDate: [
-        17
-      ],
-      latestReleaseDate: [
-        17
-      ],
-      dateAdded: [
-        17
-      ],
-      __typename: [
-        0
-      ]
-    },
-    BoxsetFilterInput: {
-      and: [
-        6
-      ],
-      or: [
-        6
-      ],
-      id: [
-        11
-      ],
-      title: [
-        12
-      ],
-      sortTitle: [
-        12
-      ],
-      slug: [
-        12
-      ],
-      imageUrl: [
-        12
-      ],
-      release: [
-        19
-      ],
-      releaseId: [
-        11
-      ],
-      type: [
-        12
-      ],
-      __typename: [
-        0
-      ]
-    },
-    BoxsetSortInput: {
-      id: [
-        17
-      ],
-      title: [
-        17
-      ],
-      sortTitle: [
-        17
-      ],
-      slug: [
-        17
-      ],
-      imageUrl: [
-        17
-      ],
-      release: [
-        20
-      ],
-      releaseId: [
-        17
-      ],
-      type: [
-        17
-      ],
-      __typename: [
-        0
-      ]
-    },
-    MediaItemsConnection: {
-      pageInfo: [
-        21
-      ],
-      edges: [
-        22
-      ],
-      nodes: [
-        45
-      ],
-      __typename: [
-        0
-      ]
-    },
-    BoxsetsConnection: {
-      pageInfo: [
-        21
-      ],
-      edges: [
-        23
-      ],
-      nodes: [
-        44
-      ],
-      __typename: [
-        0
-      ]
-    },
+    String: {},
     MediaItemsByGroupConnection: {
       pageInfo: [
-        21
-      ],
-      edges: [
-        24
-      ],
-      nodes: [
-        45
-      ],
-      __typename: [
-        0
-      ]
-    },
-    IntOperationFilterInput: {
-      eq: [
-        2
-      ],
-      neq: [
-        2
-      ],
-      in: [
-        2
-      ],
-      nin: [
-        2
-      ],
-      gt: [
-        2
-      ],
-      ngt: [
-        2
-      ],
-      gte: [
-        2
-      ],
-      ngte: [
-        2
-      ],
-      lt: [
-        2
-      ],
-      nlt: [
-        2
-      ],
-      lte: [
-        2
-      ],
-      nlte: [
-        2
-      ],
-      __typename: [
-        0
-      ]
-    },
-    StringOperationFilterInput: {
-      and: [
-        12
-      ],
-      or: [
-        12
-      ],
-      eq: [
-        0
-      ],
-      neq: [
-        0
-      ],
-      contains: [
-        0
-      ],
-      ncontains: [
-        0
-      ],
-      in: [
-        0
-      ],
-      nin: [
-        0
-      ],
-      startsWith: [
-        0
-      ],
-      nstartsWith: [
-        0
-      ],
-      endsWith: [
-        0
-      ],
-      nendsWith: [
-        0
-      ],
-      __typename: [
-        0
-      ]
-    },
-    ExternalIdsFilterInput: {
-      and: [
-        13
-      ],
-      or: [
-        13
-      ],
-      id: [
-        11
-      ],
-      tmdb: [
-        12
-      ],
-      imdb: [
-        12
-      ],
-      tvdb: [
-        12
-      ],
-      mediaItem: [
-        4
-      ],
-      __typename: [
-        0
-      ]
-    },
-    ListFilterInputTypeOfReleaseFilterInput: {
-      all: [
-        19
-      ],
-      none: [
-        19
-      ],
-      some: [
-        19
-      ],
-      any: [
-        1
-      ],
-      __typename: [
-        0
-      ]
-    },
-    ListFilterInputTypeOfMediaItemGroupFilterInput: {
-      all: [
-        25
-      ],
-      none: [
-        25
-      ],
-      some: [
-        25
-      ],
-      any: [
-        1
-      ],
-      __typename: [
-        0
-      ]
-    },
-    DateTimeOperationFilterInput: {
-      eq: [
-        26
-      ],
-      neq: [
-        26
-      ],
-      in: [
-        26
-      ],
-      nin: [
-        26
-      ],
-      gt: [
-        26
-      ],
-      ngt: [
-        26
-      ],
-      gte: [
-        26
-      ],
-      ngte: [
-        26
-      ],
-      lt: [
-        26
-      ],
-      nlt: [
-        26
-      ],
-      lte: [
-        26
-      ],
-      nlte: [
-        26
-      ],
-      __typename: [
-        0
-      ]
-    },
-    SortEnumType: {},
-    ExternalIdsSortInput: {
-      id: [
-        17
-      ],
-      tmdb: [
-        17
-      ],
-      imdb: [
-        17
-      ],
-      tvdb: [
-        17
-      ],
-      mediaItem: [
-        5
-      ],
-      __typename: [
-        0
-      ]
-    },
-    ReleaseFilterInput: {
-      and: [
-        19
-      ],
-      or: [
-        19
-      ],
-      id: [
-        11
-      ],
-      slug: [
-        12
-      ],
-      title: [
-        12
-      ],
-      regionCode: [
-        12
-      ],
-      locale: [
-        12
-      ],
-      year: [
-        11
-      ],
-      upc: [
-        12
-      ],
-      isbn: [
-        12
-      ],
-      asin: [
-        12
-      ],
-      imageUrl: [
-        12
-      ],
-      backImageUrl: [
-        12
-      ],
-      releaseDate: [
-        16
-      ],
-      dateAdded: [
-        16
-      ],
-      fullTitle: [
-        12
-      ],
-      type: [
-        12
-      ],
-      discs: [
-        27
-      ],
-      releaseGroups: [
-        28
-      ],
-      mediaItem: [
-        4
-      ],
-      boxset: [
-        6
-      ],
-      contributors: [
-        29
-      ],
-      __typename: [
-        0
-      ]
-    },
-    ReleaseSortInput: {
-      id: [
-        17
-      ],
-      slug: [
-        17
-      ],
-      title: [
-        17
-      ],
-      regionCode: [
-        17
-      ],
-      locale: [
-        17
-      ],
-      year: [
-        17
-      ],
-      upc: [
-        17
-      ],
-      isbn: [
-        17
-      ],
-      asin: [
-        17
-      ],
-      imageUrl: [
-        17
-      ],
-      backImageUrl: [
-        17
-      ],
-      releaseDate: [
-        17
-      ],
-      dateAdded: [
-        17
-      ],
-      fullTitle: [
-        17
-      ],
-      type: [
-        17
-      ],
-      mediaItem: [
-        5
-      ],
-      boxset: [
-        7
-      ],
-      __typename: [
-        0
-      ]
-    },
-    PageInfo: {
-      hasNextPage: [
-        1
-      ],
-      hasPreviousPage: [
-        1
-      ],
-      startCursor: [
-        0
-      ],
-      endCursor: [
-        0
-      ],
-      __typename: [
-        0
-      ]
-    },
-    MediaItemsEdge: {
-      cursor: [
-        0
-      ],
-      node: [
-        45
-      ],
-      __typename: [
-        0
-      ]
-    },
-    BoxsetsEdge: {
-      cursor: [
-        0
-      ],
-      node: [
-        44
-      ],
-      __typename: [
-        0
-      ]
-    },
-    MediaItemsByGroupEdge: {
-      cursor: [
-        0
-      ],
-      node: [
-        45
-      ],
-      __typename: [
-        0
-      ]
-    },
-    MediaItemGroupFilterInput: {
-      and: [
-        25
-      ],
-      or: [
-        25
-      ],
-      id: [
-        11
-      ],
-      mediaItemId: [
-        11
-      ],
-      groupId: [
-        11
-      ],
-      role: [
-        12
-      ],
-      isFeatured: [
         30
       ],
-      mediaItem: [
-        4
+      edges: [
+        39
       ],
-      group: [
-        31
-      ],
-      __typename: [
-        0
-      ]
-    },
-    DateTime: {},
-    ListFilterInputTypeOfDiscFilterInput: {
-      all: [
-        32
-      ],
-      none: [
-        32
-      ],
-      some: [
-        32
-      ],
-      any: [
+      nodes: [
         1
       ],
       __typename: [
-        0
-      ]
-    },
-    ListFilterInputTypeOfReleaseGroupFilterInput: {
-      all: [
-        33
-      ],
-      none: [
-        33
-      ],
-      some: [
-        33
-      ],
-      any: [
-        1
-      ],
-      __typename: [
-        0
-      ]
-    },
-    ListFilterInputTypeOfContributorFilterInput: {
-      all: [
-        34
-      ],
-      none: [
-        34
-      ],
-      some: [
-        34
-      ],
-      any: [
-        1
-      ],
-      __typename: [
-        0
-      ]
-    },
-    BooleanOperationFilterInput: {
-      eq: [
-        1
-      ],
-      neq: [
-        1
-      ],
-      __typename: [
-        0
-      ]
-    },
-    GroupFilterInput: {
-      and: [
-        31
-      ],
-      or: [
-        31
-      ],
-      id: [
-        11
-      ],
-      imdbId: [
-        12
-      ],
-      name: [
-        12
-      ],
-      slug: [
-        12
-      ],
-      imageUrl: [
-        12
-      ],
-      mediaItemGroups: [
-        15
-      ],
-      releaseGroups: [
-        28
-      ],
-      __typename: [
-        0
+        50
       ]
     },
     DiscFilterInput: {
       and: [
-        32
+        52
       ],
       or: [
-        32
+        52
       ],
       id: [
-        11
-      ],
-      index: [
-        11
-      ],
-      slug: [
-        12
-      ],
-      name: [
-        12
-      ],
-      format: [
-        12
-      ],
-      contentHash: [
-        12
-      ],
-      titles: [
-        35
-      ],
-      release: [
-        19
-      ],
-      __typename: [
-        0
-      ]
-    },
-    ReleaseGroupFilterInput: {
-      and: [
-        33
-      ],
-      or: [
-        33
-      ],
-      id: [
-        11
-      ],
-      releaseId: [
-        11
-      ],
-      groupId: [
-        11
-      ],
-      release: [
-        19
-      ],
-      group: [
-        31
-      ],
-      __typename: [
-        0
-      ]
-    },
-    ContributorFilterInput: {
-      and: [
-        34
-      ],
-      or: [
-        34
-      ],
-      id: [
-        11
-      ],
-      name: [
-        12
-      ],
-      releases: [
         14
       ],
-      userId: [
-        12
-      ],
-      source: [
-        12
-      ],
-      __typename: [
-        0
-      ]
-    },
-    ListFilterInputTypeOfTitleFilterInput: {
-      all: [
-        36
-      ],
-      none: [
-        36
-      ],
-      some: [
-        36
-      ],
-      any: [
-        1
-      ],
-      __typename: [
-        0
-      ]
-    },
-    TitleFilterInput: {
-      and: [
-        36
-      ],
-      or: [
-        36
-      ],
       index: [
-        11
+        14
       ],
-      disc: [
-        32
-      ],
-      id: [
-        11
-      ],
-      comment: [
-        12
-      ],
-      sourceFile: [
-        12
-      ],
-      segmentMap: [
-        12
-      ],
-      duration: [
-        12
-      ],
-      size: [
-        37
-      ],
-      displaySize: [
-        12
-      ],
-      item: [
-        38
-      ],
-      discItemReferenceId: [
-        11
-      ],
-      tracks: [
-        39
-      ],
-      description: [
-        12
-      ],
-      itemType: [
-        12
-      ],
-      season: [
-        12
-      ],
-      episode: [
-        12
-      ],
-      hasItem: [
-        30
-      ],
-      __typename: [
-        0
-      ]
-    },
-    LongOperationFilterInput: {
-      eq: [
-        40
-      ],
-      neq: [
-        40
-      ],
-      in: [
-        40
-      ],
-      nin: [
-        40
-      ],
-      gt: [
-        40
-      ],
-      ngt: [
-        40
-      ],
-      gte: [
-        40
-      ],
-      ngte: [
-        40
-      ],
-      lt: [
-        40
-      ],
-      nlt: [
-        40
-      ],
-      lte: [
-        40
-      ],
-      nlte: [
-        40
-      ],
-      __typename: [
-        0
-      ]
-    },
-    DiscItemReferenceFilterInput: {
-      and: [
-        38
-      ],
-      or: [
-        38
-      ],
-      id: [
-        11
-      ],
-      title: [
-        12
-      ],
-      type: [
-        12
-      ],
-      description: [
-        12
-      ],
-      chapters: [
-        41
-      ],
-      season: [
-        12
-      ],
-      episode: [
-        12
-      ],
-      discItem: [
-        36
-      ],
-      __typename: [
-        0
-      ]
-    },
-    ListFilterInputTypeOfTrackFilterInput: {
-      all: [
-        42
-      ],
-      none: [
-        42
-      ],
-      some: [
-        42
-      ],
-      any: [
-        1
-      ],
-      __typename: [
-        0
-      ]
-    },
-    Long: {},
-    ListFilterInputTypeOfChapterFilterInput: {
-      all: [
-        43
-      ],
-      none: [
-        43
-      ],
-      some: [
-        43
-      ],
-      any: [
-        1
-      ],
-      __typename: [
-        0
-      ]
-    },
-    TrackFilterInput: {
-      and: [
-        42
-      ],
-      or: [
-        42
-      ],
-      id: [
-        11
-      ],
-      index: [
-        11
+      slug: [
+        57
       ],
       name: [
-        12
-      ],
-      type: [
-        12
-      ],
-      resolution: [
-        12
-      ],
-      aspectRatio: [
-        12
-      ],
-      audioType: [
-        12
-      ],
-      languageCode: [
-        12
-      ],
-      language: [
-        12
-      ],
-      description: [
-        12
-      ],
-      title: [
-        36
-      ],
-      __typename: [
-        0
-      ]
-    },
-    ChapterFilterInput: {
-      and: [
-        43
-      ],
-      or: [
-        43
-      ],
-      id: [
-        11
-      ],
-      index: [
-        11
-      ],
-      title: [
-        12
-      ],
-      __typename: [
-        0
-      ]
-    },
-    Boxset: {
-      id: [
-        2
-      ],
-      title: [
-        0
-      ],
-      sortTitle: [
-        0
-      ],
-      slug: [
-        0
-      ],
-      imageUrl: [
-        0
-      ],
-      release: [
-        49
-      ],
-      releaseId: [
-        2
-      ],
-      type: [
-        0
-      ],
-      __typename: [
-        0
-      ]
-    },
-    MediaItem: {
-      id: [
-        2
-      ],
-      title: [
-        0
-      ],
-      slug: [
-        0
-      ],
-      fullTitle: [
-        0
-      ],
-      sortTitle: [
-        0
-      ],
-      year: [
-        2
-      ],
-      type: [
-        0
-      ],
-      imageUrl: [
-        0
-      ],
-      externalids: [
-        48
-      ],
-      externalIdsId: [
-        2
-      ],
-      releases: [
-        49,
-        {
-          where: [
-            19
-          ],
-          order: [
-            20,
-            "[ReleaseSortInput!]"
-          ]
-        }
-      ],
-      mediaItemGroups: [
-        50,
-        {
-          where: [
-            25
-          ],
-          order: [
-            46,
-            "[MediaItemGroupSortInput!]"
-          ]
-        }
-      ],
-      plot: [
-        0
-      ],
-      tagline: [
-        0
-      ],
-      directors: [
-        0
-      ],
-      writers: [
-        0
-      ],
-      stars: [
-        0
-      ],
-      genres: [
-        0
-      ],
-      runtimeMinutes: [
-        2
-      ],
-      runtime: [
-        0
-      ],
-      contentRating: [
-        0
-      ],
-      releaseDate: [
-        26
-      ],
-      latestReleaseDate: [
-        26
-      ],
-      dateAdded: [
-        26
-      ],
-      __typename: [
-        0
-      ]
-    },
-    MediaItemGroupSortInput: {
-      id: [
-        17
-      ],
-      mediaItemId: [
-        17
-      ],
-      groupId: [
-        17
-      ],
-      role: [
-        17
-      ],
-      isFeatured: [
-        17
-      ],
-      mediaItem: [
-        5
-      ],
-      group: [
-        47
-      ],
-      __typename: [
-        0
-      ]
-    },
-    GroupSortInput: {
-      id: [
-        17
-      ],
-      imdbId: [
-        17
-      ],
-      name: [
-        17
-      ],
-      slug: [
-        17
-      ],
-      imageUrl: [
-        17
-      ],
-      __typename: [
-        0
-      ]
-    },
-    ExternalIds: {
-      id: [
-        2
-      ],
-      tmdb: [
-        0
-      ],
-      imdb: [
-        0
-      ],
-      tvdb: [
-        0
-      ],
-      mediaItem: [
-        45
-      ],
-      __typename: [
-        0
-      ]
-    },
-    Release: {
-      id: [
-        2
-      ],
-      slug: [
-        0
-      ],
-      title: [
-        0
-      ],
-      regionCode: [
-        0
-      ],
-      locale: [
-        0
-      ],
-      year: [
-        2
-      ],
-      upc: [
-        0
-      ],
-      isbn: [
-        0
-      ],
-      asin: [
-        0
-      ],
-      imageUrl: [
-        0
-      ],
-      backImageUrl: [
-        0
-      ],
-      releaseDate: [
-        26
-      ],
-      dateAdded: [
-        26
-      ],
-      fullTitle: [
-        0
-      ],
-      type: [
-        0
-      ],
-      discs: [
-        55,
-        {
-          where: [
-            32
-          ],
-          order: [
-            51,
-            "[DiscSortInput!]"
-          ]
-        }
-      ],
-      releaseGroups: [
-        54,
-        {
-          where: [
-            33
-          ],
-          order: [
-            52,
-            "[ReleaseGroupSortInput!]"
-          ]
-        }
-      ],
-      mediaItem: [
-        45
-      ],
-      boxset: [
-        44
-      ],
-      contributors: [
-        53
-      ],
-      __typename: [
-        0
-      ]
-    },
-    MediaItemGroup: {
-      id: [
-        2
-      ],
-      mediaItemId: [
-        2
-      ],
-      groupId: [
-        2
-      ],
-      role: [
-        0
-      ],
-      isFeatured: [
-        1
-      ],
-      mediaItem: [
-        45,
-        {
-          where: [
-            4
-          ],
-          order: [
-            5,
-            "[MediaItemSortInput!]"
-          ]
-        }
-      ],
-      group: [
-        56,
-        {
-          where: [
-            31
-          ],
-          order: [
-            47,
-            "[GroupSortInput!]"
-          ]
-        }
-      ],
-      __typename: [
-        0
-      ]
-    },
-    DiscSortInput: {
-      id: [
-        17
-      ],
-      index: [
-        17
-      ],
-      slug: [
-        17
-      ],
-      name: [
-        17
+        57
       ],
       format: [
-        17
+        57
       ],
       contentHash: [
-        17
-      ],
-      release: [
-        20
-      ],
-      __typename: [
-        0
-      ]
-    },
-    ReleaseGroupSortInput: {
-      id: [
-        17
-      ],
-      releaseId: [
-        17
-      ],
-      groupId: [
-        17
-      ],
-      release: [
-        20
-      ],
-      group: [
-        47
-      ],
-      __typename: [
-        0
-      ]
-    },
-    Contributor: {
-      id: [
-        2
-      ],
-      name: [
-        0
-      ],
-      releases: [
-        49
-      ],
-      userId: [
-        0
-      ],
-      source: [
-        0
-      ],
-      __typename: [
-        0
-      ]
-    },
-    ReleaseGroup: {
-      id: [
-        2
-      ],
-      releaseId: [
-        2
-      ],
-      groupId: [
-        2
-      ],
-      release: [
-        49,
-        {
-          where: [
-            19
-          ],
-          order: [
-            20,
-            "[ReleaseSortInput!]"
-          ]
-        }
-      ],
-      group: [
-        56,
-        {
-          where: [
-            31
-          ],
-          order: [
-            47,
-            "[GroupSortInput!]"
-          ]
-        }
-      ],
-      __typename: [
-        0
-      ]
-    },
-    Disc: {
-      id: [
-        2
-      ],
-      index: [
-        2
-      ],
-      slug: [
-        0
-      ],
-      name: [
-        0
-      ],
-      format: [
-        0
-      ],
-      contentHash: [
-        0
+        57
       ],
       titles: [
-        59,
-        {
-          where: [
-            36
-          ],
-          order: [
-            57,
-            "[TitleSortInput!]"
-          ]
-        }
+        37
       ],
       release: [
-        49
+        62
+      ],
+      releaseDiscs: [
+        22
       ],
       __typename: [
-        0
-      ]
-    },
-    Group: {
-      id: [
-        2
-      ],
-      imdbId: [
-        0
-      ],
-      name: [
-        0
-      ],
-      slug: [
-        0
-      ],
-      imageUrl: [
-        0
-      ],
-      mediaItemGroups: [
-        50,
-        {
-          where: [
-            25
-          ],
-          order: [
-            46,
-            "[MediaItemGroupSortInput!]"
-          ]
-        }
-      ],
-      releaseGroups: [
-        54,
-        {
-          where: [
-            33
-          ],
-          order: [
-            52,
-            "[ReleaseGroupSortInput!]"
-          ]
-        }
-      ],
-      __typename: [
-        0
+        50
       ]
     },
     TitleSortInput: {
       index: [
-        17
+        12
       ],
       disc: [
-        51
+        41
       ],
       id: [
-        17
+        12
       ],
       comment: [
-        17
+        12
       ],
       sourceFile: [
-        17
+        12
       ],
       segmentMap: [
-        17
+        12
       ],
       duration: [
-        17
+        12
       ],
       size: [
-        17
+        12
       ],
       displaySize: [
-        17
+        12
       ],
       item: [
-        58
+        47
       ],
       discItemReferenceId: [
-        17
+        12
       ],
       description: [
-        17
+        12
       ],
       itemType: [
-        17
+        12
       ],
       season: [
-        17
+        12
       ],
       episode: [
-        17
+        12
       ],
       hasItem: [
-        17
+        12
       ],
       __typename: [
-        0
+        50
       ]
     },
-    DiscItemReferenceSortInput: {
+    ChapterFilterInput: {
+      and: [
+        54
+      ],
+      or: [
+        54
+      ],
       id: [
-        17
+        14
+      ],
+      index: [
+        14
       ],
       title: [
-        17
-      ],
-      type: [
-        17
-      ],
-      description: [
-        17
-      ],
-      season: [
-        17
-      ],
-      episode: [
-        17
-      ],
-      discItem: [
         57
       ],
       __typename: [
-        0
+        50
+      ]
+    },
+    ReleaseDiscSortInput: {
+      id: [
+        12
+      ],
+      releaseId: [
+        12
+      ],
+      release: [
+        4
+      ],
+      discId: [
+        12
+      ],
+      disc: [
+        41
+      ],
+      index: [
+        12
+      ],
+      slug: [
+        12
+      ],
+      name: [
+        12
+      ],
+      format: [
+        12
+      ],
+      contentHash: [
+        12
+      ],
+      __typename: [
+        50
+      ]
+    },
+    Release: {
+      id: [
+        46
+      ],
+      slug: [
+        50
+      ],
+      title: [
+        50
+      ],
+      regionCode: [
+        50
+      ],
+      locale: [
+        50
+      ],
+      year: [
+        46
+      ],
+      upc: [
+        50
+      ],
+      isbn: [
+        50
+      ],
+      asin: [
+        50
+      ],
+      imageUrl: [
+        50
+      ],
+      backImageUrl: [
+        50
+      ],
+      releaseDate: [
+        59
+      ],
+      dateAdded: [
+        59
+      ],
+      fullTitle: [
+        50
+      ],
+      type: [
+        50
+      ],
+      discs: [
+        67,
+        {
+          where: [
+            16
+          ],
+          order: [
+            55,
+            "[ReleaseDiscSortInput!]"
+          ]
+        }
+      ],
+      releaseGroups: [
+        44,
+        {
+          where: [
+            60
+          ],
+          order: [
+            7,
+            "[ReleaseGroupSortInput!]"
+          ]
+        }
+      ],
+      mediaItem: [
+        1
+      ],
+      boxset: [
+        31
+      ],
+      contributors: [
+        28
+      ],
+      __typename: [
+        50
+      ]
+    },
+    StringOperationFilterInput: {
+      and: [
+        57
+      ],
+      or: [
+        57
+      ],
+      eq: [
+        50
+      ],
+      neq: [
+        50
+      ],
+      contains: [
+        50
+      ],
+      ncontains: [
+        50
+      ],
+      in: [
+        50
+      ],
+      nin: [
+        50
+      ],
+      startsWith: [
+        50
+      ],
+      nstartsWith: [
+        50
+      ],
+      endsWith: [
+        50
+      ],
+      nendsWith: [
+        50
+      ],
+      __typename: [
+        50
       ]
     },
     Title: {
       index: [
-        2
+        46
       ],
       disc: [
-        55
+        61
       ],
       id: [
-        2
+        46
       ],
       comment: [
-        0
+        50
       ],
       sourceFile: [
-        0
+        50
       ],
       segmentMap: [
-        0
+        50
       ],
       duration: [
-        0
+        50
       ],
       size: [
-        40
+        42
       ],
       displaySize: [
-        0
+        50
       ],
       item: [
-        62
+        63
       ],
       discItemReferenceId: [
-        2
+        46
       ],
       tracks: [
-        61,
+        43,
         {
           where: [
-            42
+            35
           ],
           order: [
-            60,
+            21,
             "[TrackSortInput!]"
           ]
         }
       ],
       description: [
-        0
+        50
       ],
       itemType: [
-        0
+        50
       ],
       season: [
-        0
+        50
       ],
       episode: [
-        0
+        50
       ],
       hasItem: [
-        1
+        36
+      ],
+      filename: [
+        50,
+        {
+          templates: [
+            10,
+            "[FileNameTemplateInput!]"
+          ]
+        }
       ],
       __typename: [
-        0
+        50
       ]
     },
-    TrackSortInput: {
+    DateTime: {},
+    ReleaseGroupFilterInput: {
+      and: [
+        60
+      ],
+      or: [
+        60
+      ],
       id: [
-        17
+        14
+      ],
+      releaseId: [
+        14
+      ],
+      groupId: [
+        14
+      ],
+      release: [
+        62
+      ],
+      group: [
+        48
+      ],
+      __typename: [
+        50
+      ]
+    },
+    Disc: {
+      id: [
+        46
       ],
       index: [
-        17
+        46
+      ],
+      slug: [
+        50
       ],
       name: [
-        17
+        50
       ],
-      type: [
-        17
+      format: [
+        50
       ],
-      resolution: [
-        17
+      contentHash: [
+        50
       ],
-      aspectRatio: [
-        17
+      titles: [
+        58,
+        {
+          where: [
+            29
+          ],
+          order: [
+            53,
+            "[TitleSortInput!]"
+          ]
+        }
       ],
-      audioType: [
-        17
+      release: [
+        56
       ],
-      languageCode: [
-        17
+      releaseDiscs: [
+        67
       ],
-      language: [
-        17
+      __typename: [
+        50
+      ]
+    },
+    ReleaseFilterInput: {
+      and: [
+        62
       ],
-      description: [
-        17
+      or: [
+        62
+      ],
+      id: [
+        14
+      ],
+      slug: [
+        57
       ],
       title: [
         57
       ],
-      __typename: [
-        0
-      ]
-    },
-    Track: {
-      id: [
+      regionCode: [
+        57
+      ],
+      locale: [
+        57
+      ],
+      year: [
+        14
+      ],
+      upc: [
+        57
+      ],
+      isbn: [
+        57
+      ],
+      asin: [
+        57
+      ],
+      imageUrl: [
+        57
+      ],
+      backImageUrl: [
+        57
+      ],
+      releaseDate: [
         2
       ],
-      index: [
+      dateAdded: [
         2
       ],
-      name: [
-        0
+      fullTitle: [
+        57
       ],
       type: [
-        0
+        57
       ],
-      resolution: [
-        0
+      discs: [
+        22
       ],
-      aspectRatio: [
-        0
+      releaseGroups: [
+        17
       ],
-      audioType: [
-        0
+      mediaItem: [
+        8
       ],
-      languageCode: [
-        0
+      boxset: [
+        13
       ],
-      language: [
-        0
-      ],
-      description: [
-        0
-      ],
-      title: [
-        59
+      contributors: [
+        65
       ],
       __typename: [
-        0
+        50
       ]
     },
     DiscItemReference: {
       id: [
-        2
+        46
       ],
       title: [
-        0
+        50
       ],
       type: [
-        0
+        50
       ],
       description: [
-        0
+        50
       ],
       chapters: [
-        64,
+        23,
         {
           where: [
-            43
+            54
           ],
           order: [
-            63,
+            5,
             "[ChapterSortInput!]"
           ]
         }
       ],
       season: [
-        0
+        50
       ],
       episode: [
-        0
+        50
       ],
       discItem: [
-        59
+        58
       ],
       __typename: [
-        0
+        50
       ]
     },
-    ChapterSortInput: {
-      id: [
-        17
+    ListFilterInputTypeOfChapterFilterInput: {
+      all: [
+        54
       ],
-      index: [
-        17
+      none: [
+        54
       ],
-      title: [
-        17
+      some: [
+        54
+      ],
+      any: [
+        36
       ],
       __typename: [
-        0
+        50
       ]
     },
-    Chapter: {
-      id: [
-        2
+    ListFilterInputTypeOfContributorFilterInput: {
+      all: [
+        32
       ],
-      index: [
-        2
+      none: [
+        32
       ],
-      title: [
-        0
+      some: [
+        32
+      ],
+      any: [
+        36
       ],
       __typename: [
-        0
+        50
+      ]
+    },
+    MediaItemGroup: {
+      id: [
+        46
+      ],
+      mediaItemId: [
+        46
+      ],
+      groupId: [
+        46
+      ],
+      role: [
+        50
+      ],
+      isFeatured: [
+        36
+      ],
+      mediaItem: [
+        1,
+        {
+          where: [
+            8
+          ],
+          order: [
+            3,
+            "[MediaItemSortInput!]"
+          ]
+        }
+      ],
+      group: [
+        9,
+        {
+          where: [
+            48
+          ],
+          order: [
+            24,
+            "[GroupSortInput!]"
+          ]
+        }
+      ],
+      __typename: [
+        50
+      ]
+    },
+    ReleaseDisc: {
+      id: [
+        46
+      ],
+      releaseId: [
+        46
+      ],
+      release: [
+        56
+      ],
+      discId: [
+        46
+      ],
+      disc: [
+        61
+      ],
+      index: [
+        46
+      ],
+      slug: [
+        50
+      ],
+      name: [
+        50
+      ],
+      format: [
+        50
+      ],
+      contentHash: [
+        50
+      ],
+      titles: [
+        58,
+        {
+          where: [
+            29
+          ],
+          order: [
+            53,
+            "[TitleSortInput!]"
+          ]
+        }
+      ],
+      __typename: [
+        50
+      ]
+    },
+    BoxsetsConnection: {
+      pageInfo: [
+        30
+      ],
+      edges: [
+        27
+      ],
+      nodes: [
+        31
+      ],
+      __typename: [
+        50
       ]
     }
   }
@@ -2553,7 +2702,7 @@ var createClient2 = function(options) {
 // src/client.ts
 class DiscDBClient {
   origin = DISCDB_ORIGIN;
-  userAgent = `discdbapi/${version}`;
+  userAgent = `discdbapi/1.0.0`;
   gql;
   constructor(options) {
     if (options?.origin) {
@@ -2917,6 +3066,9 @@ var GQL_NODE_QUERY = {
     }
   }
 };
+// package.json
+var version = "1.0.0";
+
 // src/genql-contributions/runtime/error.ts
 class GenqlError2 extends Error {
   errors = [];

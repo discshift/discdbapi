@@ -18,7 +18,7 @@
     "generate-gql": "bun x @genql/cli --endpoint https://thediscdb.com/graphql --output ./src/genql",
     "generate-cgql": "bun x @genql/cli --schema contributions.graphql --output ./src/genql-contributions",
     "build:js": "bun build ./src/index.ts --outdir ./dist",
-    "build:ts": "tsc ./src/*.ts --outDir ./dist --declaration --module system --emitDeclarationOnly --noCheck",
+    "build:ts": "tsc --noCheck",
     "build:all": "bun build:js && bun build:ts",
     "build:docs": "typedoc --entryPoints ./src/client.ts --entryPoints ./src/contributions.ts --entryPoints ./src/common.ts --entryPoints ./src/types/* --entryPoints ./src/genql --entryPoints ./src/genql-contributions --githubPages",
     "lint": "biome check .",

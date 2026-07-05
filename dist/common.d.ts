@@ -40,17 +40,17 @@ export type BidirectionalPaginationQuery<F, S> = {
 };
 /** @internal */
 export declare const unifyPageInfo: (input: BidirectionalPaginationQuery<unknown, unknown> | undefined, info: Omit<PageInfo, "__typename">) => {
-    cursor: PageInfo;
-    hasMoreData: PageInfo;
+    cursor: string | null;
+    hasMoreData: boolean;
 };
 /** @internal */
 export declare const unifyPageArgs: <F, S>(input: BidirectionalPaginationQuery<F, S> | undefined) => {
-    first: number;
-    last: number;
-    after: string;
-    before: string;
-    where: F;
-    order: S[];
+    first: number | null | undefined;
+    last: number | null | undefined;
+    after: string | null | undefined;
+    before: string | null | undefined;
+    where: F | undefined;
+    order: S[] | undefined;
 };
 /**
  * Make a string URL-safe by turning it into a slug, thereby replacing or
@@ -61,7 +61,7 @@ export declare const unifyPageArgs: <F, S>(input: BidirectionalPaginationQuery<F
  * @returns slugified string
  */
 export declare const slugify: (value: string) => string;
-declare const extraTypes: readonly [any, any, any, any, any, any, any];
+declare const extraTypes: readonly [ItemType.Extra, ItemType.Featurette, ItemType.Interview, ItemType.Music, ItemType.Other, ItemType.Scene, ItemType.Short];
 type ExtraType = (typeof extraTypes)[number];
 /**
  * Check whether an item is "an extra"; it is one of the following types:

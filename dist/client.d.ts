@@ -1,5 +1,5 @@
 import { type BidirectionalPaginationQuery } from "./common";
-import { type BoxsetFilterInput, type BoxsetGenqlSelection, type BoxsetSortInput, type Client as GQLClient, type MediaItemFilterInput, type MediaItemSortInput } from "./genql";
+import { type BoxsetFilterInput, type BoxsetGenqlSelection, type BoxsetSortInput, type FieldsSelection, type Client as GQLClient, type MediaItem, type MediaItemFilterInput, type MediaItemSortInput, type Release } from "./genql";
 import { type MediaItemGroupRole, type SearchResult } from "./types";
 import type { FileHashInfo } from "./types/hash";
 export declare class DiscDBClient {
@@ -96,7 +96,7 @@ export declare class DiscDBClient {
      * @param hash the disc hash (from `hashDisc`)
      * @returns matching media item
      */
-    getMediaItemByDiscHash(hash: string): Promise<any>;
+    getMediaItemByDiscHash(hash: string): Promise<MediaItemViaStandardQuery>;
     /**
      * Returns multiple matching media items (movies/series) with releases that
      * contain a disc with the specified hash and details for the disc.
@@ -108,7 +108,7 @@ export declare class DiscDBClient {
      * @param hashes the disc hashes (from `hashDisc`)
      * @returns a mapping of disc hashes to media item arrays
      */
-    getMediaItemsByDiscHashes(hashes: string[]): Promise<Record<string, any>>;
+    getMediaItemsByDiscHashes(hashes: string[]): Promise<Record<string, MediaItemViaStandardQuery[]>>;
     /**
      * Get all media items which are "tagged" with a specific group.
      * This is used by TheDiscDB to identify cast, crew, genres, and studios.
@@ -133,11 +133,88 @@ export declare class DiscDBClient {
      * ```
      */
     getMediaItemsByGroup(slug: string, role?: MediaItemGroupRole, input?: BidirectionalPaginationQuery<MediaItemFilterInput, MediaItemSortInput>): Promise<{
-        mediaItems: any;
+        mediaItems: MediaItem[] | Pick<{
+            id: import("./genql").Scalars["Int"];
+            title: (import("./genql").Scalars["String"] | null);
+            slug: (import("./genql").Scalars["String"] | null);
+            fullTitle: (import("./genql").Scalars["String"] | null);
+            sortTitle: (import("./genql").Scalars["String"] | null);
+            year: import("./genql").Scalars["Int"];
+            type: (import("./genql").Scalars["String"] | null);
+            imageUrl: (import("./genql").Scalars["String"] | null);
+            externalids: import("./genql").ExternalIds;
+            externalIdsId: import("./genql").Scalars["Int"];
+            releases: Pick<{
+                id: import("./genql").Scalars["Int"];
+                slug: (import("./genql").Scalars["String"] | null);
+                title: (import("./genql").Scalars["String"] | null);
+                regionCode: (import("./genql").Scalars["String"] | null);
+                locale: (import("./genql").Scalars["String"] | null);
+                year: import("./genql").Scalars["Int"];
+                upc: (import("./genql").Scalars["String"] | null);
+                isbn: (import("./genql").Scalars["String"] | null);
+                asin: (import("./genql").Scalars["String"] | null);
+                imageUrl: (import("./genql").Scalars["String"] | null);
+                backImageUrl: (import("./genql").Scalars["String"] | null);
+                releaseDate: import("./genql").Scalars["DateTime"];
+                dateAdded: import("./genql").Scalars["DateTime"];
+                fullTitle: import("./genql").Scalars["String"];
+                type: import("./genql").Scalars["String"];
+                discs: Pick<{
+                    id: import("./genql").Scalars["Int"];
+                    releaseId: import("./genql").Scalars["Int"];
+                    release: (Release | null);
+                    discId: import("./genql").Scalars["Int"];
+                    disc: (import("./genql").Disc | null);
+                    index: import("./genql").Scalars["Int"];
+                    slug: (import("./genql").Scalars["String"] | null);
+                    name: (import("./genql").Scalars["String"] | null);
+                    format: (import("./genql").Scalars["String"] | null);
+                    contentHash: (import("./genql").Scalars["String"] | null);
+                    titles: import("./genql").Title[];
+                    __typename: "ReleaseDisc";
+                }, "name" | "index" | "format" | "on_Disc">[];
+                releaseGroups: import("./genql").ReleaseGroup[];
+                mediaItem: (MediaItem | null);
+                boxset: (import("./genql").Boxset | null);
+                contributors: import("./genql").Contributor[];
+                __typename: "Release";
+            }, "title" | "slug" | "year" | "locale" | "discs" | "on_Release">[];
+            mediaItemGroups: Pick<{
+                id: import("./genql").Scalars["Int"];
+                mediaItemId: import("./genql").Scalars["Int"];
+                groupId: import("./genql").Scalars["Int"];
+                role: (import("./genql").Scalars["String"] | null);
+                isFeatured: import("./genql").Scalars["Boolean"];
+                mediaItem: (MediaItem | null);
+                group: FieldsSelection<import("./genql").Group | null, {
+                    name: true;
+                    slug: true;
+                    imageUrl: true;
+                    on_Group: {
+                        id: boolean;
+                    };
+                }>;
+                __typename: "MediaItemGroup";
+            }, "group" | "role" | "on_MediaItemGroup">[];
+            plot: (import("./genql").Scalars["String"] | null);
+            tagline: (import("./genql").Scalars["String"] | null);
+            directors: (import("./genql").Scalars["String"] | null);
+            writers: (import("./genql").Scalars["String"] | null);
+            stars: (import("./genql").Scalars["String"] | null);
+            genres: (import("./genql").Scalars["String"] | null);
+            runtimeMinutes: import("./genql").Scalars["Int"];
+            runtime: (import("./genql").Scalars["String"] | null);
+            contentRating: (import("./genql").Scalars["String"] | null);
+            releaseDate: import("./genql").Scalars["DateTime"];
+            latestReleaseDate: import("./genql").Scalars["DateTime"];
+            dateAdded: import("./genql").Scalars["DateTime"];
+            __typename: "MediaItem";
+        }, "title" | "slug" | "year" | "type" | "imageUrl" | "releases" | "mediaItemGroups" | "on_MediaItem">[];
         page: {
-            cursor: PageInfo;
-            hasMoreData: PageInfo;
-        };
+            cursor: string | null;
+            hasMoreData: boolean;
+        } | undefined;
     }>;
     /**
      * Fetch a release by its URL slugs, useful for resolving a user-provided link.
@@ -148,13 +225,17 @@ export declare class DiscDBClient {
      *   `releases` array contains all releases for the media item other
      *   than the one requested.
      */
-    getReleaseBySlug(mediaItemSlug: string, slug: string): Promise<any>;
+    getReleaseBySlug(mediaItemSlug: string, slug: string): Promise<FieldsSelection<Release, (typeof GQL_NODE_QUERY)["releases"]> & {
+        mediaItem: MediaItemViaStandardQuery;
+    }>;
     /**
      * Fetch a release by its Universal Product Code (UPC).
      *
      * @param upc the upc for the release, a 12-digit number
      */
-    getReleaseByUPC(upc: string | number): Promise<any>;
+    getReleaseByUPC(upc: string | number): Promise<FieldsSelection<Release, (typeof GQL_NODE_QUERY)["releases"]> & {
+        mediaItem: MediaItemViaStandardQuery;
+    }>;
     /**
      * Fetch a media item by its external database IDs. If there are multiple
      * results (e.g you provided IDs for items that are not the same), only the
@@ -173,7 +254,7 @@ export declare class DiscDBClient {
         tmdbId?: string;
         imdbId?: string;
         tvdbId?: string;
-    }): Promise<any>;
+    }): Promise<MediaItemViaStandardQuery>;
     /**
      * Ask the server to hash a disc's files. It should be preferred to do this
      * locally when possible.
@@ -201,11 +282,136 @@ export declare class DiscDBClient {
             imageUrl: true;
         };
     }>(input?: BidirectionalPaginationQuery<BoxsetFilterInput, BoxsetSortInput>, select?: Selection): Promise<{
-        boxsets: any;
+        boxsets: import("./genql").Boxset[] | NonNullable<FieldsSelection<import("./genql").Boxset[] | null, NonNullable<Selection>>>;
         page: {
-            cursor: PageInfo;
-            hasMoreData: PageInfo;
-        };
+            cursor: string | null;
+            hasMoreData: boolean;
+        } | undefined;
     }>;
-    getBoxsetBySlug(slug: string): Promise<any>;
+    getBoxsetBySlug(slug: string): Promise<import("./genql").Boxset | Pick<{
+        id: import("./genql").Scalars["Int"];
+        title: (import("./genql").Scalars["String"] | null);
+        sortTitle: (import("./genql").Scalars["String"] | null);
+        slug: (import("./genql").Scalars["String"] | null);
+        imageUrl: (import("./genql").Scalars["String"] | null);
+        release: FieldsSelection<Release | null, {
+            slug: boolean;
+            locale: boolean;
+            regionCode: boolean;
+            year: boolean;
+            title: boolean;
+            imageUrl: boolean;
+            upc: boolean;
+            asin: boolean;
+            discs: {
+                __args: {
+                    order: {
+                        index: "ASC";
+                    }[];
+                };
+                contentHash: boolean;
+                index: boolean;
+                name: boolean;
+                format: boolean;
+                slug: boolean;
+                titles: {
+                    __args: {
+                        order: {
+                            index: "ASC";
+                        }[];
+                    };
+                    index: boolean;
+                    duration: boolean;
+                    displaySize: boolean;
+                    sourceFile: boolean;
+                    size: boolean;
+                    segmentMap: boolean;
+                    item: {
+                        title: boolean;
+                        season: boolean;
+                        episode: boolean;
+                        type: boolean;
+                        chapters: {
+                            __args: {
+                                order: {
+                                    index: "ASC";
+                                }[];
+                            };
+                            index: boolean;
+                            title: boolean;
+                        };
+                    };
+                };
+            };
+        }>;
+        releaseId: import("./genql").Scalars["Int"];
+        type: import("./genql").Scalars["String"];
+        __typename: "Boxset";
+    }, "title" | "slug" | "sortTitle" | "type" | "imageUrl" | "release"> | undefined>;
 }
+declare const GQL_NODE_QUERY: {
+    title: boolean;
+    year: boolean;
+    slug: boolean;
+    imageUrl: boolean;
+    type: boolean;
+    externalids: {
+        tmdb: boolean;
+        imdb: boolean;
+        tvdb: boolean;
+    };
+    releases: {
+        slug: boolean;
+        locale: boolean;
+        regionCode: boolean;
+        year: boolean;
+        title: boolean;
+        imageUrl: boolean;
+        upc: boolean;
+        asin: boolean;
+        discs: {
+            __args: {
+                order: {
+                    index: "ASC";
+                }[];
+            };
+            contentHash: boolean;
+            index: boolean;
+            name: boolean;
+            format: boolean;
+            slug: boolean;
+            titles: {
+                __args: {
+                    order: {
+                        index: "ASC";
+                    }[];
+                };
+                index: boolean;
+                duration: boolean;
+                displaySize: boolean;
+                sourceFile: boolean;
+                size: boolean;
+                segmentMap: boolean;
+                item: {
+                    title: boolean;
+                    season: boolean;
+                    episode: boolean;
+                    type: boolean;
+                    chapters: {
+                        __args: {
+                            order: {
+                                index: "ASC";
+                            }[];
+                        };
+                        index: boolean;
+                        title: boolean;
+                    };
+                };
+            };
+        };
+    };
+};
+export type MediaItemViaStandardQuery = FieldsSelection<MediaItem, typeof GQL_NODE_QUERY>;
+export type MediaItemVSQRelease = MediaItemViaStandardQuery["releases"][number];
+export type MediaItemVSQDisc = MediaItemVSQRelease["discs"][number];
+export {};

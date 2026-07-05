@@ -1,4 +1,4 @@
-import { version } from "../package.json";
+// import { version } from "../package.json";
 import {
   type BidirectionalPaginationQuery,
   fixMediaTypes,
@@ -13,10 +13,12 @@ import {
   type BoxsetSortInput,
   createClient as createGqlClient,
   enumSortEnumType,
+  type FieldsSelection,
   type Client as GQLClient,
+  type MediaItem,
   type MediaItemFilterInput,
-  type MediaItemGenqlSelection,
   type MediaItemSortInput,
+  type Release,
 } from "./genql";
 import {
   type APISearchResult,
@@ -28,7 +30,7 @@ import type { FileHashInfo } from "./types/hash";
 
 export class DiscDBClient {
   public origin = DISCDB_ORIGIN;
-  public userAgent = `discdbapi/${version}`;
+  public userAgent = `discdbapi/1.0.0`;
 
   /**
    * Internal, typed GraphQL client that may be used to bypass wrapper logic
@@ -225,7 +227,9 @@ export class DiscDBClient {
    * @param hash the disc hash (from `hashDisc`)
    * @returns matching media item
    */
-  async getMediaItemByDiscHash(hash: string) {
+  async getMediaItemByDiscHash(
+    hash: string,
+  ): Promise<MediaItemViaStandardQuery> {
     const data = await this.gql.query({
       mediaItems: {
         __args: {
@@ -256,7 +260,9 @@ export class DiscDBClient {
    * @param hashes the disc hashes (from `hashDisc`)
    * @returns a mapping of disc hashes to media item arrays
    */
-  async getMediaItemsByDiscHashes(hashes: string[]) {
+  async getMediaItemsByDiscHashes(
+    hashes: string[],
+  ): Promise<Record<string, MediaItemViaStandardQuery[]>> {
     const data = await this.gql.query({
       mediaItems: {
         __args: {
@@ -379,7 +385,14 @@ export class DiscDBClient {
    *   `releases` array contains all releases for the media item other
    *   than the one requested.
    */
-  async getReleaseBySlug(mediaItemSlug: string, slug: string) {
+  async getReleaseBySlug(
+    mediaItemSlug: string,
+    slug: string,
+  ): Promise<
+    FieldsSelection<Release, (typeof GQL_NODE_QUERY)["releases"]> & {
+      mediaItem: MediaItemViaStandardQuery;
+    }
+  > {
     const data = await this.gql.query({
       mediaItems: {
         __args: {
@@ -420,7 +433,11 @@ export class DiscDBClient {
    *
    * @param upc the upc for the release, a 12-digit number
    */
-  async getReleaseByUPC(upc: string | number) {
+  async getReleaseByUPC(upc: string | number): Promise<
+    FieldsSelection<Release, (typeof GQL_NODE_QUERY)["releases"]> & {
+      mediaItem: MediaItemViaStandardQuery;
+    }
+  > {
     const data = await this.gql.query({
       mediaItems: {
         __args: { where: { releases: { some: { upc: { eq: String(upc) } } } } },
@@ -463,7 +480,7 @@ export class DiscDBClient {
     tmdbId?: string;
     imdbId?: string;
     tvdbId?: string;
-  }) {
+  }): Promise<MediaItemViaStandardQuery> {
     const ors = [];
     if (ids.imdbId) ors.push({ imdb: { eq: ids.imdbId } });
     if (ids.tmdbId) ors.push({ tmdb: { eq: ids.tmdbId } });
@@ -635,4 +652,11 @@ const GQL_NODE_QUERY = {
       },
     },
   },
-} satisfies MediaItemGenqlSelection;
+}; // satisfies MediaItemGenqlSelection;
+
+export type MediaItemViaStandardQuery = FieldsSelection<
+  MediaItem,
+  typeof GQL_NODE_QUERY
+>;
+export type MediaItemVSQRelease = MediaItemViaStandardQuery["releases"][number];
+export type MediaItemVSQDisc = MediaItemVSQRelease["discs"][number];

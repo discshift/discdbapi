@@ -51,18 +51,56 @@ export declare class DiscDBContributionsClient {
         frontImageUrl: true;
         created: true;
     }>(input?: BidirectionalPaginationQuery<UserContributionFilterInput, UserContributionSortInput>, select?: Selection): Promise<{
-        contributions: any;
+        contributions: import("./genql-contributions").UserContribution[] | NonNullable<import("./genql-contributions").FieldsSelection<import("./genql-contributions").UserContribution[] | null, NonNullable<Selection>>>;
         page: {
-            cursor: PageInfo;
-            hasMoreData: PageInfo;
-        };
-        totalCount: any;
+            cursor: string | null;
+            hasMoreData: boolean;
+        } | undefined;
+        totalCount: number;
     }>;
     /**
      * Get a contribution by its encoded ID
      * @param id encoded ID
      */
-    getContribution(id: string): Promise<any>;
+    getContribution(id: string): Promise<import("./genql-contributions").UserContribution | Pick<{
+        id: import("./genql-contributions").Scalars["Int"];
+        userId: import("./genql-contributions").Scalars["String"];
+        created: import("./genql-contributions").Scalars["DateTime"];
+        status: import("./genql-contributions").UserContributionStatus;
+        discs: Pick<{
+            id: import("./genql-contributions").Scalars["Int"];
+            userContribution: import("./genql-contributions").UserContribution;
+            contentHash: import("./genql-contributions").Scalars["String"];
+            format: import("./genql-contributions").Scalars["String"];
+            name: import("./genql-contributions").Scalars["String"];
+            slug: import("./genql-contributions").Scalars["String"];
+            logsUploaded: import("./genql-contributions").Scalars["Boolean"];
+            logUploadError: (import("./genql-contributions").Scalars["String"] | null);
+            index: (import("./genql-contributions").Scalars["Int"] | null);
+            existingDiscPath: (import("./genql-contributions").Scalars["String"] | null);
+            items: import("./genql-contributions").UserContributionDiscItem[];
+            encodedId: import("./genql-contributions").Scalars["EncodedId"];
+            __typename: "UserContributionDisc";
+        }, "id" | "slug" | "name" | "format" | "logsUploaded" | "encodedId" | "existingDiscPath">[];
+        hashItems: import("./genql-contributions").UserContributionDiscHashItem[];
+        mediaType: import("./genql-contributions").Scalars["String"];
+        externalId: import("./genql-contributions").Scalars["String"];
+        externalProvider: import("./genql-contributions").Scalars["String"];
+        releaseDate: import("./genql-contributions").Scalars["DateTime"];
+        asin: import("./genql-contributions").Scalars["String"];
+        upc: import("./genql-contributions").Scalars["String"];
+        frontImageUrl: import("./genql-contributions").Scalars["String"];
+        backImageUrl: (import("./genql-contributions").Scalars["String"] | null);
+        releaseTitle: import("./genql-contributions").Scalars["String"];
+        releaseSlug: (import("./genql-contributions").Scalars["String"] | null);
+        locale: import("./genql-contributions").Scalars["String"];
+        regionCode: import("./genql-contributions").Scalars["String"];
+        title: (import("./genql-contributions").Scalars["String"] | null);
+        year: (import("./genql-contributions").Scalars["String"] | null);
+        titleSlug: import("./genql-contributions").Scalars["String"];
+        encodedId: import("./genql-contributions").Scalars["EncodedId"];
+        __typename: "UserContribution";
+    }, "id" | "title" | "year" | "releaseDate" | "regionCode" | "locale" | "upc" | "asin" | "backImageUrl" | "discs" | "frontImageUrl" | "created" | "status" | "mediaType" | "externalId" | "externalProvider" | "releaseTitle" | "releaseSlug" | "encodedId">>;
     /**
      * Upload an image for a contribution before the contribution is actually
      * created
@@ -153,7 +191,13 @@ export declare class DiscDBContributionsClient {
      * @param discId encoded ID for the disc
      * @returns upload status for the disc's logs
      */
-    getDiscUploadStatus(discId: string): Promise<any>;
+    getDiscUploadStatus(discId: string): Promise<import("./genql-contributions").FieldsSelection<import("./genql-contributions").DiscUploadStatus | null, {
+        logsUploaded: true;
+        logUploadError: true;
+    }> & NonNullable<import("./genql-contributions").FieldsSelection<import("./genql-contributions").DiscUploadStatus | null, {
+        logsUploaded: true;
+        logUploadError: true;
+    }>>>;
     /**
      * Get disc & title information for the disc, as described by a
      * previously-uploaded MakeMKV log file.
@@ -164,7 +208,167 @@ export declare class DiscDBContributionsClient {
      * @param discId encoded ID for the disc
      * @returns parsed logs for the disc, including parent contribution info
      */
-    getDiscLogs(contributionId: string, discId: string): Promise<any>;
+    getDiscLogs(contributionId: string, discId: string): Promise<import("./genql-contributions").FieldsSelection<import("./genql-contributions").DiscLogs | null, {
+        info: {
+            titles: {
+                index: true;
+                chapterCount: true;
+                length: true;
+                displaySize: true;
+                size: true;
+                playlist: true;
+                segmentMap: true;
+                comment: true;
+                javaComment: true;
+                segments: {
+                    type: true;
+                    name: true;
+                    audioType: true;
+                };
+            };
+        };
+        disc: {
+            contentHash: true;
+            format: true;
+            name: true;
+            slug: true;
+            logsUploaded: true;
+            existingDiscPath: true;
+            encodedId: true;
+            items: {
+                description: true;
+                encodedId: true;
+                name: true;
+                source: true;
+                duration: true;
+                size: true;
+                chapterCount: true;
+                segmentCount: true;
+                segmentMap: true;
+                type: true;
+                season: true;
+                episode: true;
+                audioTracks: {
+                    encodedId: true;
+                    index: true;
+                    title: true;
+                    id: true;
+                };
+                chapters: {
+                    encodedId: true;
+                    index: true;
+                    title: true;
+                    id: true;
+                };
+                id: true;
+            };
+            id: true;
+        };
+        contribution: {
+            encodedId: true;
+            mediaType: true;
+            title: true;
+            year: true;
+            releaseTitle: true;
+            discs: {
+                encodedId: true;
+                name: true;
+                items: {
+                    chapterCount: true;
+                    name: true;
+                    chapters: {
+                        encodedId: true;
+                        index: true;
+                        title: true;
+                        id: true;
+                    };
+                    id: true;
+                };
+                id: true;
+            };
+            id: true;
+        };
+    }> & NonNullable<import("./genql-contributions").FieldsSelection<import("./genql-contributions").DiscLogs | null, {
+        info: {
+            titles: {
+                index: true;
+                chapterCount: true;
+                length: true;
+                displaySize: true;
+                size: true;
+                playlist: true;
+                segmentMap: true;
+                comment: true;
+                javaComment: true;
+                segments: {
+                    type: true;
+                    name: true;
+                    audioType: true;
+                };
+            };
+        };
+        disc: {
+            contentHash: true;
+            format: true;
+            name: true;
+            slug: true;
+            logsUploaded: true;
+            existingDiscPath: true;
+            encodedId: true;
+            items: {
+                description: true;
+                encodedId: true;
+                name: true;
+                source: true;
+                duration: true;
+                size: true;
+                chapterCount: true;
+                segmentCount: true;
+                segmentMap: true;
+                type: true;
+                season: true;
+                episode: true;
+                audioTracks: {
+                    encodedId: true;
+                    index: true;
+                    title: true;
+                    id: true;
+                };
+                chapters: {
+                    encodedId: true;
+                    index: true;
+                    title: true;
+                    id: true;
+                };
+                id: true;
+            };
+            id: true;
+        };
+        contribution: {
+            encodedId: true;
+            mediaType: true;
+            title: true;
+            year: true;
+            releaseTitle: true;
+            discs: {
+                encodedId: true;
+                name: true;
+                items: {
+                    chapterCount: true;
+                    name: true;
+                    chapters: {
+                        encodedId: true;
+                        index: true;
+                        title: true;
+                        id: true;
+                    };
+                    id: true;
+                };
+                id: true;
+            };
+            id: true;
+        };
+    }>>>;
     addItemToDisc(contributionId: string, discId: string, input: Omit<AddItemToDiscInput, "contributionId" | "discId">): Promise<WithEncodedId>;
     updateItemOnDisc(contributionId: string, discId: string, itemId: string, input: Omit<EditItemOnDiscInput, "contributionId" | "discId" | "itemId">): Promise<WithEncodedId>;
     deleteItemFromDisc(contributionId: string, discId: string, itemId: string): Promise<void>;
@@ -176,7 +380,19 @@ export declare class DiscDBContributionsClient {
      * @param discIds new order for all disc IDs
      * @returns all discs in the contribution
      */
-    reorderDiscs(contributionId: string, discIds: string[]): Promise<any>;
+    reorderDiscs(contributionId: string, discIds: string[]): Promise<import("./genql-contributions").FieldsSelection<import("./genql-contributions").UserContributionDisc[] | null, {
+        id: true;
+        encodedId: true;
+        index: true;
+        name: true;
+        slug: true;
+    }> & NonNullable<import("./genql-contributions").FieldsSelection<import("./genql-contributions").UserContributionDisc[] | null, {
+        id: true;
+        encodedId: true;
+        index: true;
+        name: true;
+        slug: true;
+    }>>>;
     addAudioTrackToItem(contributionId: string, discId: string, itemId: string, trackIndex: number, trackName: string): Promise<WithEncodedId>;
     addChapterToItem(contributionId: string, discId: string, itemId: string, chapterIndex: number, chapterName: string): Promise<WithEncodedId>;
     /**
@@ -190,9 +406,24 @@ export declare class DiscDBContributionsClient {
      * @returns
      */
     getSeriesEpisodes(contributionId: string): Promise<{
-        name: any;
-        year: any;
-        episodes: any;
+        name: string;
+        year: string;
+        episodes: import("./genql-contributions").SeriesEpisodeNameEntry[] | Pick<{
+            seasonNumber: import("./genql-contributions").Scalars["String"];
+            episodeNumber: import("./genql-contributions").Scalars["String"];
+            episodeName: import("./genql-contributions").Scalars["String"];
+            __typename: "SeriesEpisodeNameEntry";
+        }, "__typename" | "seasonNumber" | "episodeNumber" | "episodeName">[] | (import("./genql-contributions").SeriesEpisodeNameEntry[] & Pick<{
+            seasonNumber: import("./genql-contributions").Scalars["String"];
+            episodeNumber: import("./genql-contributions").Scalars["String"];
+            episodeName: import("./genql-contributions").Scalars["String"];
+            __typename: "SeriesEpisodeNameEntry";
+        }, "__typename" | "seasonNumber" | "episodeNumber" | "episodeName">[]) | (Pick<{
+            seasonNumber: import("./genql-contributions").Scalars["String"];
+            episodeNumber: import("./genql-contributions").Scalars["String"];
+            episodeName: import("./genql-contributions").Scalars["String"];
+            __typename: "SeriesEpisodeNameEntry";
+        }, "__typename" | "seasonNumber" | "episodeNumber" | "episodeName">[] & import("./genql-contributions").SeriesEpisodeNameEntry[]);
     }>;
     /**
      * Find a specific episode of the series associated with a contribution
@@ -206,11 +437,17 @@ export declare class DiscDBContributionsClient {
      * @returns episode details, or null if not found
      */
     findSeriesEpisode(contributionId: string, season: string | number, episode: string | number): Promise<{
-        name: any;
-        season: any;
-        episode: any;
-    }>;
-    generateApiKey(name: string, ownerEmail: string, roles: string[], expiresAt?: Date): Promise<any>;
+        name: string;
+        season: string;
+        episode: string;
+    } | null>;
+    generateApiKey(name: string, ownerEmail: string, roles: string[], expiresAt?: Date): Promise<Pick<{
+        key: import("./genql-contributions").Scalars["String"];
+        keyPrefix: import("./genql-contributions").Scalars["String"];
+        name: import("./genql-contributions").Scalars["String"];
+        ownerEmail: import("./genql-contributions").Scalars["String"];
+        __typename: "GenerateApiKeyPayload";
+    }, "name" | "keyPrefix" | "ownerEmail" | "key">>;
     /**
      * Get a list of API keys.
      *
@@ -218,13 +455,35 @@ export declare class DiscDBContributionsClient {
      * @returns list of API keys as well as page info for pagination
      */
     getApiKeys(input?: BidirectionalPaginationQuery<ApiKeyInfoFilterInput, ApiKeyInfoSortInput>): Promise<{
-        keys: any;
+        keys: Pick<{
+            name: import("./genql-contributions").Scalars["String"];
+            keyPrefix: import("./genql-contributions").Scalars["String"];
+            isActive: import("./genql-contributions").Scalars["Boolean"];
+            logUsage: import("./genql-contributions").Scalars["Boolean"];
+            roles: (import("./genql-contributions").Scalars["String"] | null);
+            ownerEmail: import("./genql-contributions").Scalars["String"];
+            createdAt: import("./genql-contributions").Scalars["DateTime"];
+            expiresAt: (import("./genql-contributions").Scalars["DateTime"] | null);
+            lastUsedAt: (import("./genql-contributions").Scalars["DateTime"] | null);
+            __typename: "ApiKeyInfo";
+        }, "name" | "isActive" | "roles" | "ownerEmail" | "createdAt" | "expiresAt" | "lastUsedAt">[];
         page: {
-            cursor: PageInfo;
-            hasMoreData: PageInfo;
-        };
+            cursor: string | null;
+            hasMoreData: boolean;
+        } | undefined;
     }>;
-    getApiKey(keyPrefix: string): Promise<any>;
+    getApiKey(keyPrefix: string): Promise<Pick<{
+        name: import("./genql-contributions").Scalars["String"];
+        keyPrefix: import("./genql-contributions").Scalars["String"];
+        isActive: import("./genql-contributions").Scalars["Boolean"];
+        logUsage: import("./genql-contributions").Scalars["Boolean"];
+        roles: (import("./genql-contributions").Scalars["String"] | null);
+        ownerEmail: import("./genql-contributions").Scalars["String"];
+        createdAt: import("./genql-contributions").Scalars["DateTime"];
+        expiresAt: (import("./genql-contributions").Scalars["DateTime"] | null);
+        lastUsedAt: (import("./genql-contributions").Scalars["DateTime"] | null);
+        __typename: "ApiKeyInfo";
+    }, "name" | "isActive" | "roles" | "ownerEmail" | "createdAt" | "expiresAt" | "lastUsedAt"> | undefined>;
     /**
      * Get a list of API key usage logs.
      *
@@ -232,33 +491,63 @@ export declare class DiscDBContributionsClient {
      * @returns list of logs as well as pagination info
      */
     getApiKeyUsageLogs(input?: BidirectionalPaginationQuery<ApiKeyUsageLogInfoFilterInput, ApiKeyUsageLogInfoSortInput>): Promise<{
-        logs: any;
+        logs: import("./genql-contributions").ApiKeyUsageLogInfo[];
         page: {
-            cursor: PageInfo;
-            hasMoreData: PageInfo;
-        };
+            cursor: string | null;
+            hasMoreData: boolean;
+        } | undefined;
     }>;
-    revokeApiKey(keyPrefix: string): Promise<any>;
+    revokeApiKey(keyPrefix: string): Promise<import("./genql-contributions").FieldsSelection<import("./genql-contributions").ApiKeyInfo | null, {
+        name: true;
+        ownerEmail: true;
+        roles: true;
+        createdAt: true;
+        expiresAt: true;
+        lastUsedAt: true;
+    }> & NonNullable<import("./genql-contributions").FieldsSelection<import("./genql-contributions").ApiKeyInfo | null, {
+        name: true;
+        ownerEmail: true;
+        roles: true;
+        createdAt: true;
+        expiresAt: true;
+        lastUsedAt: true;
+    }>>>;
     /**
      *
      * @param contributionId encoded contribution ID
      * @param input customize returned results
      */
     getContributionChat(contributionId: string, input?: BidirectionalPaginationQuery<never, UserMessageSortInput>): Promise<{
-        messages: any;
+        messages: import("./genql-contributions").FieldsSelection<import("./genql-contributions").UserMessage[] | null, {
+            contributionId: true;
+            createdAt: true;
+            id: true;
+            isRead: true;
+            message: true;
+            fromUserId: true;
+            toUserId: true;
+            type: true;
+        }>;
         page: {
-            cursor: PageInfo;
-            hasMoreData: PageInfo;
+            cursor: string | null;
+            hasMoreData: boolean;
         };
-        totalCount: any;
+        totalCount: number;
     }>;
     getContributionHistory(contributionId: number, input?: BidirectionalPaginationQuery<never, ContributionHistorySortInput>): Promise<{
-        history: any;
+        history: import("./genql-contributions").FieldsSelection<import("./genql-contributions").ContributionHistory[] | null, {
+            contributionId: true;
+            description: true;
+            id: true;
+            timeStamp: true;
+            type: true;
+            userId: true;
+        }>;
         page: {
-            cursor: PageInfo;
-            hasMoreData: PageInfo;
+            cursor: string | null;
+            hasMoreData: boolean;
         };
-        totalCount: any;
+        totalCount: number;
     }>;
     getContributions<Selection extends UserContributionGenqlSelection = {
         id: true;
@@ -273,12 +562,12 @@ export declare class DiscDBContributionsClient {
         releaseTitle: true;
         releaseSlug: true;
     }>(input?: BidirectionalPaginationQuery<UserContributionFilterInput, UserContributionSortInput>, select?: Selection): Promise<{
-        contributions: any;
+        contributions: import("./genql-contributions").UserContribution[] | NonNullable<import("./genql-contributions").FieldsSelection<import("./genql-contributions").UserContribution[] | null, NonNullable<Selection>>>;
         page: {
-            cursor: PageInfo;
-            hasMoreData: PageInfo;
-        };
-        totalCount: any;
+            cursor: string | null;
+            hasMoreData: boolean;
+        } | undefined;
+        totalCount: number;
     }>;
     /**
      * @returns Whether the client has any unread messages
@@ -299,19 +588,78 @@ export declare class DiscDBContributionsClient {
      * @param type if you are an admin, this may be ADMIN_MESSAGE, but it defaults to USER_MESSAGE
      * @returns the sent message
      */
-    sendMessage(contributionId: string, content: string, type?: UserMessageType): Promise<any>;
+    sendMessage(contributionId: string, content: string, type?: UserMessageType): Promise<import("./genql-contributions").FieldsSelection<import("./genql-contributions").UserMessage | null, {
+        contributionId: boolean;
+        createdAt: boolean;
+        id: boolean;
+        isRead: boolean;
+        message: boolean;
+        fromUserId: boolean;
+        toUserId: boolean;
+        type: boolean;
+    }> & NonNullable<import("./genql-contributions").FieldsSelection<import("./genql-contributions").UserMessage | null, {
+        contributionId: boolean;
+        createdAt: boolean;
+        id: boolean;
+        isRead: boolean;
+        message: boolean;
+        fromUserId: boolean;
+        toUserId: boolean;
+        type: boolean;
+    }>>>;
     /**
      * Get a list of message threads that the client is part of
      * @returns Message threads keyed by contribution ID
      */
-    getMessageThreads(): Promise<any>;
+    getMessageThreads(): Promise<Pick<{
+        contributionId: import("./genql-contributions").Scalars["Int"];
+        encodedContributionId: import("./genql-contributions").Scalars["String"];
+        contributionTitle: import("./genql-contributions").Scalars["String"];
+        mediaTitle: (import("./genql-contributions").Scalars["String"] | null);
+        lastMessagePreview: import("./genql-contributions").Scalars["String"];
+        lastMessageAt: import("./genql-contributions").Scalars["DateTime"];
+        unreadCount: import("./genql-contributions").Scalars["Int"];
+        totalCount: import("./genql-contributions").Scalars["Int"];
+        __typename: "MessageThread";
+    }, "__typename" | "totalCount" | "contributionId" | "encodedContributionId" | "contributionTitle" | "mediaTitle" | "lastMessagePreview" | "lastMessageAt" | "unreadCount">[]>;
     getMyMessages(input?: BidirectionalPaginationQuery<never, UserMessageSortInput>): Promise<{
-        messages: any;
+        messages: Pick<{
+            id: import("./genql-contributions").Scalars["Int"];
+            contributionId: import("./genql-contributions").Scalars["Int"];
+            fromUserId: import("./genql-contributions").Scalars["String"];
+            toUserId: import("./genql-contributions").Scalars["String"];
+            message: import("./genql-contributions").Scalars["String"];
+            isRead: import("./genql-contributions").Scalars["Boolean"];
+            createdAt: import("./genql-contributions").Scalars["DateTime"];
+            type: UserMessageType;
+            __typename: "UserMessage";
+        }, "id" | "type" | "message" | "createdAt" | "contributionId" | "fromUserId" | "toUserId" | "isRead">[];
         page: {
-            cursor: PageInfo;
-            hasMoreData: PageInfo;
-        };
-        totalCount: any;
+            cursor: string | null;
+            hasMoreData: boolean;
+        } | undefined;
+        totalCount: number;
     }>;
-    getAmazonProductMetadata(asin: string): Promise<any>;
+    getAmazonProductMetadata(asin: string): Promise<import("./genql-contributions").AmazonProductMetadata | Pick<{
+        asin: (import("./genql-contributions").Scalars["String"] | null);
+        title: (import("./genql-contributions").Scalars["String"] | null);
+        upc: (import("./genql-contributions").Scalars["String"] | null);
+        frontImageUrl: (import("./genql-contributions").Scalars["String"] | null);
+        backImageUrl: (import("./genql-contributions").Scalars["String"] | null);
+        releaseDate: (import("./genql-contributions").Scalars["DateTime"] | null);
+        numberOfDiscs: (import("./genql-contributions").Scalars["Int"] | null);
+        aspectRatio: (import("./genql-contributions").Scalars["String"] | null);
+        isDiscontinued: (import("./genql-contributions").Scalars["Boolean"] | null);
+        mpaaRating: (import("./genql-contributions").Scalars["String"] | null);
+        modelNumber: (import("./genql-contributions").Scalars["String"] | null);
+        director: (import("./genql-contributions").Scalars["String"] | null);
+        mediaFormat: (import("./genql-contributions").Scalars["String"] | null);
+        actors: (import("./genql-contributions").Scalars["String"] | null);
+        producers: (import("./genql-contributions").Scalars["String"] | null);
+        language: (import("./genql-contributions").Scalars["String"] | null);
+        dubbed: (import("./genql-contributions").Scalars["String"] | null);
+        subtitles: (import("./genql-contributions").Scalars["String"] | null);
+        studio: (import("./genql-contributions").Scalars["String"] | null);
+        __typename: "AmazonProductMetadata";
+    }, "title" | "releaseDate" | "aspectRatio" | "language" | "upc" | "asin" | "backImageUrl" | "__typename" | "frontImageUrl" | "numberOfDiscs" | "isDiscontinued" | "mpaaRating" | "modelNumber" | "director" | "mediaFormat" | "actors" | "producers" | "dubbed" | "subtitles" | "studio">>;
 }

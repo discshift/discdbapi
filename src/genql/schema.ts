@@ -4,112 +4,11 @@
 /* eslint-disable */
 
 export type Scalars = {
-    String: string,
     Boolean: boolean,
-    Int: number,
-    DateTime: any,
     Long: any,
-}
-
-export interface Query {
-    mediaItems: (MediaItemsConnection | null)
-    boxsets: (BoxsetsConnection | null)
-    mediaItemsByGroup: (MediaItemsByGroupConnection | null)
-    __typename: 'Query'
-}
-
-
-/** A connection to a list of items. */
-export interface MediaItemsConnection {
-    /** Information to aid in pagination. */
-    pageInfo: PageInfo
-    /** A list of edges. */
-    edges: (MediaItemsEdge[] | null)
-    /** A flattened list of the nodes. */
-    nodes: (MediaItem[] | null)
-    __typename: 'MediaItemsConnection'
-}
-
-
-/** A connection to a list of items. */
-export interface BoxsetsConnection {
-    /** Information to aid in pagination. */
-    pageInfo: PageInfo
-    /** A list of edges. */
-    edges: (BoxsetsEdge[] | null)
-    /** A flattened list of the nodes. */
-    nodes: (Boxset[] | null)
-    __typename: 'BoxsetsConnection'
-}
-
-
-/** A connection to a list of items. */
-export interface MediaItemsByGroupConnection {
-    /** Information to aid in pagination. */
-    pageInfo: PageInfo
-    /** A list of edges. */
-    edges: (MediaItemsByGroupEdge[] | null)
-    /** A flattened list of the nodes. */
-    nodes: (MediaItem[] | null)
-    __typename: 'MediaItemsByGroupConnection'
-}
-
-export type SortEnumType = 'ASC' | 'DESC'
-
-
-/** Information about pagination in a connection. */
-export interface PageInfo {
-    /** Indicates whether more edges exist following the set defined by the clients arguments. */
-    hasNextPage: Scalars['Boolean']
-    /** Indicates whether more edges exist prior the set defined by the clients arguments. */
-    hasPreviousPage: Scalars['Boolean']
-    /** When paginating backwards, the cursor to continue. */
-    startCursor: (Scalars['String'] | null)
-    /** When paginating forwards, the cursor to continue. */
-    endCursor: (Scalars['String'] | null)
-    __typename: 'PageInfo'
-}
-
-
-/** An edge in a connection. */
-export interface MediaItemsEdge {
-    /** A cursor for use in pagination. */
-    cursor: Scalars['String']
-    /** The item at the end of the edge. */
-    node: MediaItem
-    __typename: 'MediaItemsEdge'
-}
-
-
-/** An edge in a connection. */
-export interface BoxsetsEdge {
-    /** A cursor for use in pagination. */
-    cursor: Scalars['String']
-    /** The item at the end of the edge. */
-    node: Boxset
-    __typename: 'BoxsetsEdge'
-}
-
-
-/** An edge in a connection. */
-export interface MediaItemsByGroupEdge {
-    /** A cursor for use in pagination. */
-    cursor: Scalars['String']
-    /** The item at the end of the edge. */
-    node: MediaItem
-    __typename: 'MediaItemsByGroupEdge'
-}
-
-export interface Boxset {
-    id: Scalars['Int']
-    title: (Scalars['String'] | null)
-    sortTitle: (Scalars['String'] | null)
-    slug: (Scalars['String'] | null)
-    imageUrl: (Scalars['String'] | null)
-    release: (Release | null)
-    releaseId: Scalars['Int']
-    type: Scalars['String']
-    __typename: 'Boxset'
+    Int: number,
+    String: string,
+    DateTime: any,
 }
 
 export interface MediaItem {
@@ -140,6 +39,127 @@ export interface MediaItem {
     __typename: 'MediaItem'
 }
 
+export interface Group {
+    id: Scalars['Int']
+    imdbId: (Scalars['String'] | null)
+    name: (Scalars['String'] | null)
+    slug: (Scalars['String'] | null)
+    imageUrl: (Scalars['String'] | null)
+    mediaItemGroups: MediaItemGroup[]
+    releaseGroups: ReleaseGroup[]
+    __typename: 'Group'
+}
+
+export type SortEnumType = 'ASC' | 'DESC'
+
+
+/** A connection to a list of items. */
+export interface MediaItemsConnection {
+    /** Information to aid in pagination. */
+    pageInfo: PageInfo
+    /** A list of edges. */
+    edges: (MediaItemsEdge[] | null)
+    /** A flattened list of the nodes. */
+    nodes: (MediaItem[] | null)
+    __typename: 'MediaItemsConnection'
+}
+
+export interface Chapter {
+    id: Scalars['Int']
+    index: Scalars['Int']
+    title: (Scalars['String'] | null)
+    __typename: 'Chapter'
+}
+
+
+/** An edge in a connection. */
+export interface MediaItemsEdge {
+    /** A cursor for use in pagination. */
+    cursor: Scalars['String']
+    /** The item at the end of the edge. */
+    node: MediaItem
+    __typename: 'MediaItemsEdge'
+}
+
+
+/** An edge in a connection. */
+export interface BoxsetsEdge {
+    /** A cursor for use in pagination. */
+    cursor: Scalars['String']
+    /** The item at the end of the edge. */
+    node: Boxset
+    __typename: 'BoxsetsEdge'
+}
+
+export interface Contributor {
+    id: Scalars['Int']
+    name: (Scalars['String'] | null)
+    releases: Release[]
+    userId: (Scalars['String'] | null)
+    source: (Scalars['String'] | null)
+    __typename: 'Contributor'
+}
+
+
+/** Information about pagination in a connection. */
+export interface PageInfo {
+    /** Indicates whether more edges exist following the set defined by the clients arguments. */
+    hasNextPage: Scalars['Boolean']
+    /** Indicates whether more edges exist prior the set defined by the clients arguments. */
+    hasPreviousPage: Scalars['Boolean']
+    /** When paginating backwards, the cursor to continue. */
+    startCursor: (Scalars['String'] | null)
+    /** When paginating forwards, the cursor to continue. */
+    endCursor: (Scalars['String'] | null)
+    __typename: 'PageInfo'
+}
+
+export interface Boxset {
+    id: Scalars['Int']
+    title: (Scalars['String'] | null)
+    sortTitle: (Scalars['String'] | null)
+    slug: (Scalars['String'] | null)
+    imageUrl: (Scalars['String'] | null)
+    release: (Release | null)
+    releaseId: Scalars['Int']
+    type: Scalars['String']
+    __typename: 'Boxset'
+}
+
+
+/** An edge in a connection. */
+export interface MediaItemsByGroupEdge {
+    /** A cursor for use in pagination. */
+    cursor: Scalars['String']
+    /** The item at the end of the edge. */
+    node: MediaItem
+    __typename: 'MediaItemsByGroupEdge'
+}
+
+export interface Track {
+    id: Scalars['Int']
+    index: Scalars['Int']
+    name: (Scalars['String'] | null)
+    type: (Scalars['String'] | null)
+    resolution: (Scalars['String'] | null)
+    aspectRatio: (Scalars['String'] | null)
+    audioType: (Scalars['String'] | null)
+    languageCode: (Scalars['String'] | null)
+    language: (Scalars['String'] | null)
+    description: (Scalars['String'] | null)
+    title: (Title | null)
+    __typename: 'Track'
+}
+
+export interface ReleaseGroup {
+    id: Scalars['Int']
+    releaseId: Scalars['Int']
+    groupId: Scalars['Int']
+    release: (Release | null)
+    group: (Group | null)
+    __typename: 'ReleaseGroup'
+}
+
 export interface ExternalIds {
     id: Scalars['Int']
     tmdb: (Scalars['String'] | null)
@@ -147,6 +167,25 @@ export interface ExternalIds {
     tvdb: (Scalars['String'] | null)
     mediaItem: (MediaItem | null)
     __typename: 'ExternalIds'
+}
+
+export interface Query {
+    mediaItems: (MediaItemsConnection | null)
+    boxsets: (BoxsetsConnection | null)
+    mediaItemsByGroup: (MediaItemsByGroupConnection | null)
+    __typename: 'Query'
+}
+
+
+/** A connection to a list of items. */
+export interface MediaItemsByGroupConnection {
+    /** Information to aid in pagination. */
+    pageInfo: PageInfo
+    /** A list of edges. */
+    edges: (MediaItemsByGroupEdge[] | null)
+    /** A flattened list of the nodes. */
+    nodes: (MediaItem[] | null)
+    __typename: 'MediaItemsByGroupConnection'
 }
 
 export interface Release {
@@ -165,64 +204,12 @@ export interface Release {
     dateAdded: Scalars['DateTime']
     fullTitle: Scalars['String']
     type: Scalars['String']
-    discs: Disc[]
+    discs: ReleaseDisc[]
     releaseGroups: ReleaseGroup[]
     mediaItem: (MediaItem | null)
     boxset: (Boxset | null)
     contributors: Contributor[]
     __typename: 'Release'
-}
-
-export interface MediaItemGroup {
-    id: Scalars['Int']
-    mediaItemId: Scalars['Int']
-    groupId: Scalars['Int']
-    role: (Scalars['String'] | null)
-    isFeatured: Scalars['Boolean']
-    mediaItem: (MediaItem | null)
-    group: (Group | null)
-    __typename: 'MediaItemGroup'
-}
-
-export interface Contributor {
-    id: Scalars['Int']
-    name: (Scalars['String'] | null)
-    releases: Release[]
-    userId: (Scalars['String'] | null)
-    source: (Scalars['String'] | null)
-    __typename: 'Contributor'
-}
-
-export interface ReleaseGroup {
-    id: Scalars['Int']
-    releaseId: Scalars['Int']
-    groupId: Scalars['Int']
-    release: (Release | null)
-    group: (Group | null)
-    __typename: 'ReleaseGroup'
-}
-
-export interface Disc {
-    id: Scalars['Int']
-    index: Scalars['Int']
-    slug: (Scalars['String'] | null)
-    name: (Scalars['String'] | null)
-    format: (Scalars['String'] | null)
-    contentHash: (Scalars['String'] | null)
-    titles: Title[]
-    release: (Release | null)
-    __typename: 'Disc'
-}
-
-export interface Group {
-    id: Scalars['Int']
-    imdbId: (Scalars['String'] | null)
-    name: (Scalars['String'] | null)
-    slug: (Scalars['String'] | null)
-    imageUrl: (Scalars['String'] | null)
-    mediaItemGroups: MediaItemGroup[]
-    releaseGroups: ReleaseGroup[]
-    __typename: 'Group'
 }
 
 export interface Title {
@@ -243,22 +230,21 @@ export interface Title {
     season: Scalars['String']
     episode: Scalars['String']
     hasItem: Scalars['Boolean']
+    filename: Scalars['String']
     __typename: 'Title'
 }
 
-export interface Track {
+export interface Disc {
     id: Scalars['Int']
     index: Scalars['Int']
+    slug: (Scalars['String'] | null)
     name: (Scalars['String'] | null)
-    type: (Scalars['String'] | null)
-    resolution: (Scalars['String'] | null)
-    aspectRatio: (Scalars['String'] | null)
-    audioType: (Scalars['String'] | null)
-    languageCode: (Scalars['String'] | null)
-    language: (Scalars['String'] | null)
-    description: (Scalars['String'] | null)
-    title: (Title | null)
-    __typename: 'Track'
+    format: (Scalars['String'] | null)
+    contentHash: (Scalars['String'] | null)
+    titles: Title[]
+    release: (Release | null)
+    releaseDiscs: ReleaseDisc[]
+    __typename: 'Disc'
 }
 
 export interface DiscItemReference {
@@ -273,12 +259,276 @@ export interface DiscItemReference {
     __typename: 'DiscItemReference'
 }
 
-export interface Chapter {
+export interface MediaItemGroup {
     id: Scalars['Int']
-    index: Scalars['Int']
-    title: (Scalars['String'] | null)
-    __typename: 'Chapter'
+    mediaItemId: Scalars['Int']
+    groupId: Scalars['Int']
+    role: (Scalars['String'] | null)
+    isFeatured: Scalars['Boolean']
+    mediaItem: (MediaItem | null)
+    group: (Group | null)
+    __typename: 'MediaItemGroup'
 }
+
+export interface ReleaseDisc {
+    id: Scalars['Int']
+    releaseId: Scalars['Int']
+    release: (Release | null)
+    discId: Scalars['Int']
+    disc: (Disc | null)
+    index: Scalars['Int']
+    slug: (Scalars['String'] | null)
+    name: (Scalars['String'] | null)
+    format: (Scalars['String'] | null)
+    contentHash: (Scalars['String'] | null)
+    titles: Title[]
+    __typename: 'ReleaseDisc'
+}
+
+
+/** A connection to a list of items. */
+export interface BoxsetsConnection {
+    /** Information to aid in pagination. */
+    pageInfo: PageInfo
+    /** A list of edges. */
+    edges: (BoxsetsEdge[] | null)
+    /** A flattened list of the nodes. */
+    nodes: (Boxset[] | null)
+    __typename: 'BoxsetsConnection'
+}
+
+export interface ListFilterInputTypeOfTrackFilterInput {all?: (TrackFilterInput | null),none?: (TrackFilterInput | null),some?: (TrackFilterInput | null),any?: (Scalars['Boolean'] | null)}
+
+export interface MediaItemGenqlSelection{
+    id?: boolean | number
+    title?: boolean | number
+    slug?: boolean | number
+    fullTitle?: boolean | number
+    sortTitle?: boolean | number
+    year?: boolean | number
+    type?: boolean | number
+    imageUrl?: boolean | number
+    externalids?: ExternalIdsGenqlSelection
+    externalIdsId?: boolean | number
+    releases?: (ReleaseGenqlSelection & { __args?: {where?: (ReleaseFilterInput | null), order?: (ReleaseSortInput[] | null)} })
+    mediaItemGroups?: (MediaItemGroupGenqlSelection & { __args?: {where?: (MediaItemGroupFilterInput | null), order?: (MediaItemGroupSortInput[] | null)} })
+    plot?: boolean | number
+    tagline?: boolean | number
+    directors?: boolean | number
+    writers?: boolean | number
+    stars?: boolean | number
+    genres?: boolean | number
+    runtimeMinutes?: boolean | number
+    runtime?: boolean | number
+    contentRating?: boolean | number
+    releaseDate?: boolean | number
+    latestReleaseDate?: boolean | number
+    dateAdded?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface DateTimeOperationFilterInput {eq?: (Scalars['DateTime'] | null),neq?: (Scalars['DateTime'] | null),in?: ((Scalars['DateTime'] | null)[] | null),nin?: ((Scalars['DateTime'] | null)[] | null),gt?: (Scalars['DateTime'] | null),ngt?: (Scalars['DateTime'] | null),gte?: (Scalars['DateTime'] | null),ngte?: (Scalars['DateTime'] | null),lt?: (Scalars['DateTime'] | null),nlt?: (Scalars['DateTime'] | null),lte?: (Scalars['DateTime'] | null),nlte?: (Scalars['DateTime'] | null)}
+
+export interface MediaItemSortInput {id?: (SortEnumType | null),title?: (SortEnumType | null),slug?: (SortEnumType | null),fullTitle?: (SortEnumType | null),sortTitle?: (SortEnumType | null),year?: (SortEnumType | null),type?: (SortEnumType | null),imageUrl?: (SortEnumType | null),externalids?: (ExternalIdsSortInput | null),externalIdsId?: (SortEnumType | null),plot?: (SortEnumType | null),tagline?: (SortEnumType | null),directors?: (SortEnumType | null),writers?: (SortEnumType | null),stars?: (SortEnumType | null),genres?: (SortEnumType | null),runtimeMinutes?: (SortEnumType | null),runtime?: (SortEnumType | null),contentRating?: (SortEnumType | null),releaseDate?: (SortEnumType | null),latestReleaseDate?: (SortEnumType | null),dateAdded?: (SortEnumType | null)}
+
+export interface ReleaseSortInput {id?: (SortEnumType | null),slug?: (SortEnumType | null),title?: (SortEnumType | null),regionCode?: (SortEnumType | null),locale?: (SortEnumType | null),year?: (SortEnumType | null),upc?: (SortEnumType | null),isbn?: (SortEnumType | null),asin?: (SortEnumType | null),imageUrl?: (SortEnumType | null),backImageUrl?: (SortEnumType | null),releaseDate?: (SortEnumType | null),dateAdded?: (SortEnumType | null),fullTitle?: (SortEnumType | null),type?: (SortEnumType | null),mediaItem?: (MediaItemSortInput | null),boxset?: (BoxsetSortInput | null)}
+
+export interface ChapterSortInput {id?: (SortEnumType | null),index?: (SortEnumType | null),title?: (SortEnumType | null)}
+
+export interface ListFilterInputTypeOfReleaseFilterInput {all?: (ReleaseFilterInput | null),none?: (ReleaseFilterInput | null),some?: (ReleaseFilterInput | null),any?: (Scalars['Boolean'] | null)}
+
+export interface ReleaseGroupSortInput {id?: (SortEnumType | null),releaseId?: (SortEnumType | null),groupId?: (SortEnumType | null),release?: (ReleaseSortInput | null),group?: (GroupSortInput | null)}
+
+export interface MediaItemFilterInput {and?: (MediaItemFilterInput[] | null),or?: (MediaItemFilterInput[] | null),id?: (IntOperationFilterInput | null),title?: (StringOperationFilterInput | null),slug?: (StringOperationFilterInput | null),fullTitle?: (StringOperationFilterInput | null),sortTitle?: (StringOperationFilterInput | null),year?: (IntOperationFilterInput | null),type?: (StringOperationFilterInput | null),imageUrl?: (StringOperationFilterInput | null),externalids?: (ExternalIdsFilterInput | null),externalIdsId?: (IntOperationFilterInput | null),releases?: (ListFilterInputTypeOfReleaseFilterInput | null),mediaItemGroups?: (ListFilterInputTypeOfMediaItemGroupFilterInput | null),plot?: (StringOperationFilterInput | null),tagline?: (StringOperationFilterInput | null),directors?: (StringOperationFilterInput | null),writers?: (StringOperationFilterInput | null),stars?: (StringOperationFilterInput | null),genres?: (StringOperationFilterInput | null),runtimeMinutes?: (IntOperationFilterInput | null),runtime?: (StringOperationFilterInput | null),contentRating?: (StringOperationFilterInput | null),releaseDate?: (DateTimeOperationFilterInput | null),latestReleaseDate?: (DateTimeOperationFilterInput | null),dateAdded?: (DateTimeOperationFilterInput | null)}
+
+export interface GroupGenqlSelection{
+    id?: boolean | number
+    imdbId?: boolean | number
+    name?: boolean | number
+    slug?: boolean | number
+    imageUrl?: boolean | number
+    mediaItemGroups?: (MediaItemGroupGenqlSelection & { __args?: {where?: (MediaItemGroupFilterInput | null), order?: (MediaItemGroupSortInput[] | null)} })
+    releaseGroups?: (ReleaseGroupGenqlSelection & { __args?: {where?: (ReleaseGroupFilterInput | null), order?: (ReleaseGroupSortInput[] | null)} })
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface FileNameTemplateInput {itemType: Scalars['String'],template: Scalars['String']}
+
+export interface MediaItemGroupSortInput {id?: (SortEnumType | null),mediaItemId?: (SortEnumType | null),groupId?: (SortEnumType | null),role?: (SortEnumType | null),isFeatured?: (SortEnumType | null),mediaItem?: (MediaItemSortInput | null),group?: (GroupSortInput | null)}
+
+export interface BoxsetFilterInput {and?: (BoxsetFilterInput[] | null),or?: (BoxsetFilterInput[] | null),id?: (IntOperationFilterInput | null),title?: (StringOperationFilterInput | null),sortTitle?: (StringOperationFilterInput | null),slug?: (StringOperationFilterInput | null),imageUrl?: (StringOperationFilterInput | null),release?: (ReleaseFilterInput | null),releaseId?: (IntOperationFilterInput | null),type?: (StringOperationFilterInput | null)}
+
+export interface IntOperationFilterInput {eq?: (Scalars['Int'] | null),neq?: (Scalars['Int'] | null),in?: ((Scalars['Int'] | null)[] | null),nin?: ((Scalars['Int'] | null)[] | null),gt?: (Scalars['Int'] | null),ngt?: (Scalars['Int'] | null),gte?: (Scalars['Int'] | null),ngte?: (Scalars['Int'] | null),lt?: (Scalars['Int'] | null),nlt?: (Scalars['Int'] | null),lte?: (Scalars['Int'] | null),nlte?: (Scalars['Int'] | null)}
+
+
+/** A connection to a list of items. */
+export interface MediaItemsConnectionGenqlSelection{
+    /** Information to aid in pagination. */
+    pageInfo?: PageInfoGenqlSelection
+    /** A list of edges. */
+    edges?: MediaItemsEdgeGenqlSelection
+    /** A flattened list of the nodes. */
+    nodes?: MediaItemGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface ReleaseDiscFilterInput {and?: (ReleaseDiscFilterInput[] | null),or?: (ReleaseDiscFilterInput[] | null),id?: (IntOperationFilterInput | null),releaseId?: (IntOperationFilterInput | null),release?: (ReleaseFilterInput | null),discId?: (IntOperationFilterInput | null),disc?: (DiscFilterInput | null),index?: (IntOperationFilterInput | null),slug?: (StringOperationFilterInput | null),name?: (StringOperationFilterInput | null),titles?: (ListFilterInputTypeOfTitleFilterInput | null),format?: (StringOperationFilterInput | null),contentHash?: (StringOperationFilterInput | null)}
+
+export interface ListFilterInputTypeOfReleaseGroupFilterInput {all?: (ReleaseGroupFilterInput | null),none?: (ReleaseGroupFilterInput | null),some?: (ReleaseGroupFilterInput | null),any?: (Scalars['Boolean'] | null)}
+
+export interface ListFilterInputTypeOfMediaItemGroupFilterInput {all?: (MediaItemGroupFilterInput | null),none?: (MediaItemGroupFilterInput | null),some?: (MediaItemGroupFilterInput | null),any?: (Scalars['Boolean'] | null)}
+
+export interface MediaItemGroupFilterInput {and?: (MediaItemGroupFilterInput[] | null),or?: (MediaItemGroupFilterInput[] | null),id?: (IntOperationFilterInput | null),mediaItemId?: (IntOperationFilterInput | null),groupId?: (IntOperationFilterInput | null),role?: (StringOperationFilterInput | null),isFeatured?: (BooleanOperationFilterInput | null),mediaItem?: (MediaItemFilterInput | null),group?: (GroupFilterInput | null)}
+
+export interface LongOperationFilterInput {eq?: (Scalars['Long'] | null),neq?: (Scalars['Long'] | null),in?: ((Scalars['Long'] | null)[] | null),nin?: ((Scalars['Long'] | null)[] | null),gt?: (Scalars['Long'] | null),ngt?: (Scalars['Long'] | null),gte?: (Scalars['Long'] | null),ngte?: (Scalars['Long'] | null),lt?: (Scalars['Long'] | null),nlt?: (Scalars['Long'] | null),lte?: (Scalars['Long'] | null),nlte?: (Scalars['Long'] | null)}
+
+export interface TrackSortInput {id?: (SortEnumType | null),index?: (SortEnumType | null),name?: (SortEnumType | null),type?: (SortEnumType | null),resolution?: (SortEnumType | null),aspectRatio?: (SortEnumType | null),audioType?: (SortEnumType | null),languageCode?: (SortEnumType | null),language?: (SortEnumType | null),description?: (SortEnumType | null),title?: (TitleSortInput | null)}
+
+export interface ListReleaseDiscFilterTypeFilterInput {all?: (ReleaseDiscFilterInput | null),none?: (ReleaseDiscFilterInput | null),some?: (ReleaseDiscFilterInput | null),any?: (Scalars['Boolean'] | null)}
+
+export interface ChapterGenqlSelection{
+    id?: boolean | number
+    index?: boolean | number
+    title?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface GroupSortInput {id?: (SortEnumType | null),imdbId?: (SortEnumType | null),name?: (SortEnumType | null),slug?: (SortEnumType | null),imageUrl?: (SortEnumType | null)}
+
+export interface BooleanOperationFilterInput {eq?: (Scalars['Boolean'] | null),neq?: (Scalars['Boolean'] | null)}
+
+
+/** An edge in a connection. */
+export interface MediaItemsEdgeGenqlSelection{
+    /** A cursor for use in pagination. */
+    cursor?: boolean | number
+    /** The item at the end of the edge. */
+    node?: MediaItemGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** An edge in a connection. */
+export interface BoxsetsEdgeGenqlSelection{
+    /** A cursor for use in pagination. */
+    cursor?: boolean | number
+    /** The item at the end of the edge. */
+    node?: BoxsetGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface ContributorGenqlSelection{
+    id?: boolean | number
+    name?: boolean | number
+    releases?: ReleaseGenqlSelection
+    userId?: boolean | number
+    source?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface TitleFilterInput {and?: (TitleFilterInput[] | null),or?: (TitleFilterInput[] | null),index?: (IntOperationFilterInput | null),disc?: (DiscFilterInput | null),id?: (IntOperationFilterInput | null),comment?: (StringOperationFilterInput | null),sourceFile?: (StringOperationFilterInput | null),segmentMap?: (StringOperationFilterInput | null),duration?: (StringOperationFilterInput | null),size?: (LongOperationFilterInput | null),displaySize?: (StringOperationFilterInput | null),item?: (DiscItemReferenceFilterInput | null),discItemReferenceId?: (IntOperationFilterInput | null),tracks?: (ListFilterInputTypeOfTrackFilterInput | null),description?: (StringOperationFilterInput | null),itemType?: (StringOperationFilterInput | null),season?: (StringOperationFilterInput | null),episode?: (StringOperationFilterInput | null),hasItem?: (BooleanOperationFilterInput | null)}
+
+
+/** Information about pagination in a connection. */
+export interface PageInfoGenqlSelection{
+    /** Indicates whether more edges exist following the set defined by the clients arguments. */
+    hasNextPage?: boolean | number
+    /** Indicates whether more edges exist prior the set defined by the clients arguments. */
+    hasPreviousPage?: boolean | number
+    /** When paginating backwards, the cursor to continue. */
+    startCursor?: boolean | number
+    /** When paginating forwards, the cursor to continue. */
+    endCursor?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface BoxsetGenqlSelection{
+    id?: boolean | number
+    title?: boolean | number
+    sortTitle?: boolean | number
+    slug?: boolean | number
+    imageUrl?: boolean | number
+    release?: ReleaseGenqlSelection
+    releaseId?: boolean | number
+    type?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface ContributorFilterInput {and?: (ContributorFilterInput[] | null),or?: (ContributorFilterInput[] | null),id?: (IntOperationFilterInput | null),name?: (StringOperationFilterInput | null),releases?: (ListFilterInputTypeOfReleaseFilterInput | null),userId?: (StringOperationFilterInput | null),source?: (StringOperationFilterInput | null)}
+
+export interface ExternalIdsFilterInput {and?: (ExternalIdsFilterInput[] | null),or?: (ExternalIdsFilterInput[] | null),id?: (IntOperationFilterInput | null),tmdb?: (StringOperationFilterInput | null),imdb?: (StringOperationFilterInput | null),tvdb?: (StringOperationFilterInput | null),mediaItem?: (MediaItemFilterInput | null)}
+
+export interface DiscItemReferenceFilterInput {and?: (DiscItemReferenceFilterInput[] | null),or?: (DiscItemReferenceFilterInput[] | null),id?: (IntOperationFilterInput | null),title?: (StringOperationFilterInput | null),type?: (StringOperationFilterInput | null),description?: (StringOperationFilterInput | null),chapters?: (ListFilterInputTypeOfChapterFilterInput | null),season?: (StringOperationFilterInput | null),episode?: (StringOperationFilterInput | null),discItem?: (TitleFilterInput | null)}
+
+export interface TrackFilterInput {and?: (TrackFilterInput[] | null),or?: (TrackFilterInput[] | null),id?: (IntOperationFilterInput | null),index?: (IntOperationFilterInput | null),name?: (StringOperationFilterInput | null),type?: (StringOperationFilterInput | null),resolution?: (StringOperationFilterInput | null),aspectRatio?: (StringOperationFilterInput | null),audioType?: (StringOperationFilterInput | null),languageCode?: (StringOperationFilterInput | null),language?: (StringOperationFilterInput | null),description?: (StringOperationFilterInput | null),title?: (TitleFilterInput | null)}
+
+export interface ListFilterInputTypeOfTitleFilterInput {all?: (TitleFilterInput | null),none?: (TitleFilterInput | null),some?: (TitleFilterInput | null),any?: (Scalars['Boolean'] | null)}
+
+export interface ExternalIdsSortInput {id?: (SortEnumType | null),tmdb?: (SortEnumType | null),imdb?: (SortEnumType | null),tvdb?: (SortEnumType | null),mediaItem?: (MediaItemSortInput | null)}
+
+
+/** An edge in a connection. */
+export interface MediaItemsByGroupEdgeGenqlSelection{
+    /** A cursor for use in pagination. */
+    cursor?: boolean | number
+    /** The item at the end of the edge. */
+    node?: MediaItemGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface BoxsetSortInput {id?: (SortEnumType | null),title?: (SortEnumType | null),sortTitle?: (SortEnumType | null),slug?: (SortEnumType | null),imageUrl?: (SortEnumType | null),release?: (ReleaseSortInput | null),releaseId?: (SortEnumType | null),type?: (SortEnumType | null)}
+
+export interface DiscSortInput {id?: (SortEnumType | null),index?: (SortEnumType | null),slug?: (SortEnumType | null),name?: (SortEnumType | null),format?: (SortEnumType | null),contentHash?: (SortEnumType | null),release?: (ReleaseSortInput | null)}
+
+export interface TrackGenqlSelection{
+    id?: boolean | number
+    index?: boolean | number
+    name?: boolean | number
+    type?: boolean | number
+    resolution?: boolean | number
+    aspectRatio?: boolean | number
+    audioType?: boolean | number
+    languageCode?: boolean | number
+    language?: boolean | number
+    description?: boolean | number
+    title?: TitleGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface ReleaseGroupGenqlSelection{
+    id?: boolean | number
+    releaseId?: boolean | number
+    groupId?: boolean | number
+    release?: (ReleaseGenqlSelection & { __args?: {where?: (ReleaseFilterInput | null), order?: (ReleaseSortInput[] | null)} })
+    group?: (GroupGenqlSelection & { __args?: {where?: (GroupFilterInput | null), order?: (GroupSortInput[] | null)} })
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface ExternalIdsGenqlSelection{
+    id?: boolean | number
+    tmdb?: boolean | number
+    imdb?: boolean | number
+    tvdb?: boolean | number
+    mediaItem?: MediaItemGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface DiscItemReferenceSortInput {id?: (SortEnumType | null),title?: (SortEnumType | null),type?: (SortEnumType | null),description?: (SortEnumType | null),season?: (SortEnumType | null),episode?: (SortEnumType | null),discItem?: (TitleSortInput | null)}
+
+export interface GroupFilterInput {and?: (GroupFilterInput[] | null),or?: (GroupFilterInput[] | null),id?: (IntOperationFilterInput | null),imdbId?: (StringOperationFilterInput | null),name?: (StringOperationFilterInput | null),slug?: (StringOperationFilterInput | null),imageUrl?: (StringOperationFilterInput | null),mediaItemGroups?: (ListFilterInputTypeOfMediaItemGroupFilterInput | null),releaseGroups?: (ListFilterInputTypeOfReleaseGroupFilterInput | null)}
 
 export interface QueryGenqlSelection{
     mediaItems?: (MediaItemsConnectionGenqlSelection & { __args?: {
@@ -312,40 +562,6 @@ export interface QueryGenqlSelection{
     __scalar?: boolean | number
 }
 
-export interface MediaItemFilterInput {and?: (MediaItemFilterInput[] | null),or?: (MediaItemFilterInput[] | null),id?: (IntOperationFilterInput | null),title?: (StringOperationFilterInput | null),slug?: (StringOperationFilterInput | null),fullTitle?: (StringOperationFilterInput | null),sortTitle?: (StringOperationFilterInput | null),year?: (IntOperationFilterInput | null),type?: (StringOperationFilterInput | null),imageUrl?: (StringOperationFilterInput | null),externalids?: (ExternalIdsFilterInput | null),externalIdsId?: (IntOperationFilterInput | null),releases?: (ListFilterInputTypeOfReleaseFilterInput | null),mediaItemGroups?: (ListFilterInputTypeOfMediaItemGroupFilterInput | null),plot?: (StringOperationFilterInput | null),tagline?: (StringOperationFilterInput | null),directors?: (StringOperationFilterInput | null),writers?: (StringOperationFilterInput | null),stars?: (StringOperationFilterInput | null),genres?: (StringOperationFilterInput | null),runtimeMinutes?: (IntOperationFilterInput | null),runtime?: (StringOperationFilterInput | null),contentRating?: (StringOperationFilterInput | null),releaseDate?: (DateTimeOperationFilterInput | null),latestReleaseDate?: (DateTimeOperationFilterInput | null),dateAdded?: (DateTimeOperationFilterInput | null)}
-
-export interface MediaItemSortInput {id?: (SortEnumType | null),title?: (SortEnumType | null),slug?: (SortEnumType | null),fullTitle?: (SortEnumType | null),sortTitle?: (SortEnumType | null),year?: (SortEnumType | null),type?: (SortEnumType | null),imageUrl?: (SortEnumType | null),externalids?: (ExternalIdsSortInput | null),externalIdsId?: (SortEnumType | null),plot?: (SortEnumType | null),tagline?: (SortEnumType | null),directors?: (SortEnumType | null),writers?: (SortEnumType | null),stars?: (SortEnumType | null),genres?: (SortEnumType | null),runtimeMinutes?: (SortEnumType | null),runtime?: (SortEnumType | null),contentRating?: (SortEnumType | null),releaseDate?: (SortEnumType | null),latestReleaseDate?: (SortEnumType | null),dateAdded?: (SortEnumType | null)}
-
-export interface BoxsetFilterInput {and?: (BoxsetFilterInput[] | null),or?: (BoxsetFilterInput[] | null),id?: (IntOperationFilterInput | null),title?: (StringOperationFilterInput | null),sortTitle?: (StringOperationFilterInput | null),slug?: (StringOperationFilterInput | null),imageUrl?: (StringOperationFilterInput | null),release?: (ReleaseFilterInput | null),releaseId?: (IntOperationFilterInput | null),type?: (StringOperationFilterInput | null)}
-
-export interface BoxsetSortInput {id?: (SortEnumType | null),title?: (SortEnumType | null),sortTitle?: (SortEnumType | null),slug?: (SortEnumType | null),imageUrl?: (SortEnumType | null),release?: (ReleaseSortInput | null),releaseId?: (SortEnumType | null),type?: (SortEnumType | null)}
-
-
-/** A connection to a list of items. */
-export interface MediaItemsConnectionGenqlSelection{
-    /** Information to aid in pagination. */
-    pageInfo?: PageInfoGenqlSelection
-    /** A list of edges. */
-    edges?: MediaItemsEdgeGenqlSelection
-    /** A flattened list of the nodes. */
-    nodes?: MediaItemGenqlSelection
-    __typename?: boolean | number
-    __scalar?: boolean | number
-}
-
-
-/** A connection to a list of items. */
-export interface BoxsetsConnectionGenqlSelection{
-    /** Information to aid in pagination. */
-    pageInfo?: PageInfoGenqlSelection
-    /** A list of edges. */
-    edges?: BoxsetsEdgeGenqlSelection
-    /** A flattened list of the nodes. */
-    nodes?: BoxsetGenqlSelection
-    __typename?: boolean | number
-    __scalar?: boolean | number
-}
-
 
 /** A connection to a list of items. */
 export interface MediaItemsByGroupConnectionGenqlSelection{
@@ -359,161 +575,13 @@ export interface MediaItemsByGroupConnectionGenqlSelection{
     __scalar?: boolean | number
 }
 
-export interface IntOperationFilterInput {eq?: (Scalars['Int'] | null),neq?: (Scalars['Int'] | null),in?: ((Scalars['Int'] | null)[] | null),nin?: ((Scalars['Int'] | null)[] | null),gt?: (Scalars['Int'] | null),ngt?: (Scalars['Int'] | null),gte?: (Scalars['Int'] | null),ngte?: (Scalars['Int'] | null),lt?: (Scalars['Int'] | null),nlt?: (Scalars['Int'] | null),lte?: (Scalars['Int'] | null),nlte?: (Scalars['Int'] | null)}
+export interface DiscFilterInput {and?: (DiscFilterInput[] | null),or?: (DiscFilterInput[] | null),id?: (IntOperationFilterInput | null),index?: (IntOperationFilterInput | null),slug?: (StringOperationFilterInput | null),name?: (StringOperationFilterInput | null),format?: (StringOperationFilterInput | null),contentHash?: (StringOperationFilterInput | null),titles?: (ListFilterInputTypeOfTitleFilterInput | null),release?: (ReleaseFilterInput | null),releaseDiscs?: (ListReleaseDiscFilterTypeFilterInput | null)}
 
-export interface StringOperationFilterInput {and?: (StringOperationFilterInput[] | null),or?: (StringOperationFilterInput[] | null),eq?: (Scalars['String'] | null),neq?: (Scalars['String'] | null),contains?: (Scalars['String'] | null),ncontains?: (Scalars['String'] | null),in?: ((Scalars['String'] | null)[] | null),nin?: ((Scalars['String'] | null)[] | null),startsWith?: (Scalars['String'] | null),nstartsWith?: (Scalars['String'] | null),endsWith?: (Scalars['String'] | null),nendsWith?: (Scalars['String'] | null)}
-
-export interface ExternalIdsFilterInput {and?: (ExternalIdsFilterInput[] | null),or?: (ExternalIdsFilterInput[] | null),id?: (IntOperationFilterInput | null),tmdb?: (StringOperationFilterInput | null),imdb?: (StringOperationFilterInput | null),tvdb?: (StringOperationFilterInput | null),mediaItem?: (MediaItemFilterInput | null)}
-
-export interface ListFilterInputTypeOfReleaseFilterInput {all?: (ReleaseFilterInput | null),none?: (ReleaseFilterInput | null),some?: (ReleaseFilterInput | null),any?: (Scalars['Boolean'] | null)}
-
-export interface ListFilterInputTypeOfMediaItemGroupFilterInput {all?: (MediaItemGroupFilterInput | null),none?: (MediaItemGroupFilterInput | null),some?: (MediaItemGroupFilterInput | null),any?: (Scalars['Boolean'] | null)}
-
-export interface DateTimeOperationFilterInput {eq?: (Scalars['DateTime'] | null),neq?: (Scalars['DateTime'] | null),in?: ((Scalars['DateTime'] | null)[] | null),nin?: ((Scalars['DateTime'] | null)[] | null),gt?: (Scalars['DateTime'] | null),ngt?: (Scalars['DateTime'] | null),gte?: (Scalars['DateTime'] | null),ngte?: (Scalars['DateTime'] | null),lt?: (Scalars['DateTime'] | null),nlt?: (Scalars['DateTime'] | null),lte?: (Scalars['DateTime'] | null),nlte?: (Scalars['DateTime'] | null)}
-
-export interface ExternalIdsSortInput {id?: (SortEnumType | null),tmdb?: (SortEnumType | null),imdb?: (SortEnumType | null),tvdb?: (SortEnumType | null),mediaItem?: (MediaItemSortInput | null)}
-
-export interface ReleaseFilterInput {and?: (ReleaseFilterInput[] | null),or?: (ReleaseFilterInput[] | null),id?: (IntOperationFilterInput | null),slug?: (StringOperationFilterInput | null),title?: (StringOperationFilterInput | null),regionCode?: (StringOperationFilterInput | null),locale?: (StringOperationFilterInput | null),year?: (IntOperationFilterInput | null),upc?: (StringOperationFilterInput | null),isbn?: (StringOperationFilterInput | null),asin?: (StringOperationFilterInput | null),imageUrl?: (StringOperationFilterInput | null),backImageUrl?: (StringOperationFilterInput | null),releaseDate?: (DateTimeOperationFilterInput | null),dateAdded?: (DateTimeOperationFilterInput | null),fullTitle?: (StringOperationFilterInput | null),type?: (StringOperationFilterInput | null),discs?: (ListFilterInputTypeOfDiscFilterInput | null),releaseGroups?: (ListFilterInputTypeOfReleaseGroupFilterInput | null),mediaItem?: (MediaItemFilterInput | null),boxset?: (BoxsetFilterInput | null),contributors?: (ListFilterInputTypeOfContributorFilterInput | null)}
-
-export interface ReleaseSortInput {id?: (SortEnumType | null),slug?: (SortEnumType | null),title?: (SortEnumType | null),regionCode?: (SortEnumType | null),locale?: (SortEnumType | null),year?: (SortEnumType | null),upc?: (SortEnumType | null),isbn?: (SortEnumType | null),asin?: (SortEnumType | null),imageUrl?: (SortEnumType | null),backImageUrl?: (SortEnumType | null),releaseDate?: (SortEnumType | null),dateAdded?: (SortEnumType | null),fullTitle?: (SortEnumType | null),type?: (SortEnumType | null),mediaItem?: (MediaItemSortInput | null),boxset?: (BoxsetSortInput | null)}
-
-
-/** Information about pagination in a connection. */
-export interface PageInfoGenqlSelection{
-    /** Indicates whether more edges exist following the set defined by the clients arguments. */
-    hasNextPage?: boolean | number
-    /** Indicates whether more edges exist prior the set defined by the clients arguments. */
-    hasPreviousPage?: boolean | number
-    /** When paginating backwards, the cursor to continue. */
-    startCursor?: boolean | number
-    /** When paginating forwards, the cursor to continue. */
-    endCursor?: boolean | number
-    __typename?: boolean | number
-    __scalar?: boolean | number
-}
-
-
-/** An edge in a connection. */
-export interface MediaItemsEdgeGenqlSelection{
-    /** A cursor for use in pagination. */
-    cursor?: boolean | number
-    /** The item at the end of the edge. */
-    node?: MediaItemGenqlSelection
-    __typename?: boolean | number
-    __scalar?: boolean | number
-}
-
-
-/** An edge in a connection. */
-export interface BoxsetsEdgeGenqlSelection{
-    /** A cursor for use in pagination. */
-    cursor?: boolean | number
-    /** The item at the end of the edge. */
-    node?: BoxsetGenqlSelection
-    __typename?: boolean | number
-    __scalar?: boolean | number
-}
-
-
-/** An edge in a connection. */
-export interface MediaItemsByGroupEdgeGenqlSelection{
-    /** A cursor for use in pagination. */
-    cursor?: boolean | number
-    /** The item at the end of the edge. */
-    node?: MediaItemGenqlSelection
-    __typename?: boolean | number
-    __scalar?: boolean | number
-}
-
-export interface MediaItemGroupFilterInput {and?: (MediaItemGroupFilterInput[] | null),or?: (MediaItemGroupFilterInput[] | null),id?: (IntOperationFilterInput | null),mediaItemId?: (IntOperationFilterInput | null),groupId?: (IntOperationFilterInput | null),role?: (StringOperationFilterInput | null),isFeatured?: (BooleanOperationFilterInput | null),mediaItem?: (MediaItemFilterInput | null),group?: (GroupFilterInput | null)}
-
-export interface ListFilterInputTypeOfDiscFilterInput {all?: (DiscFilterInput | null),none?: (DiscFilterInput | null),some?: (DiscFilterInput | null),any?: (Scalars['Boolean'] | null)}
-
-export interface ListFilterInputTypeOfReleaseGroupFilterInput {all?: (ReleaseGroupFilterInput | null),none?: (ReleaseGroupFilterInput | null),some?: (ReleaseGroupFilterInput | null),any?: (Scalars['Boolean'] | null)}
-
-export interface ListFilterInputTypeOfContributorFilterInput {all?: (ContributorFilterInput | null),none?: (ContributorFilterInput | null),some?: (ContributorFilterInput | null),any?: (Scalars['Boolean'] | null)}
-
-export interface BooleanOperationFilterInput {eq?: (Scalars['Boolean'] | null),neq?: (Scalars['Boolean'] | null)}
-
-export interface GroupFilterInput {and?: (GroupFilterInput[] | null),or?: (GroupFilterInput[] | null),id?: (IntOperationFilterInput | null),imdbId?: (StringOperationFilterInput | null),name?: (StringOperationFilterInput | null),slug?: (StringOperationFilterInput | null),imageUrl?: (StringOperationFilterInput | null),mediaItemGroups?: (ListFilterInputTypeOfMediaItemGroupFilterInput | null),releaseGroups?: (ListFilterInputTypeOfReleaseGroupFilterInput | null)}
-
-export interface DiscFilterInput {and?: (DiscFilterInput[] | null),or?: (DiscFilterInput[] | null),id?: (IntOperationFilterInput | null),index?: (IntOperationFilterInput | null),slug?: (StringOperationFilterInput | null),name?: (StringOperationFilterInput | null),format?: (StringOperationFilterInput | null),contentHash?: (StringOperationFilterInput | null),titles?: (ListFilterInputTypeOfTitleFilterInput | null),release?: (ReleaseFilterInput | null)}
-
-export interface ReleaseGroupFilterInput {and?: (ReleaseGroupFilterInput[] | null),or?: (ReleaseGroupFilterInput[] | null),id?: (IntOperationFilterInput | null),releaseId?: (IntOperationFilterInput | null),groupId?: (IntOperationFilterInput | null),release?: (ReleaseFilterInput | null),group?: (GroupFilterInput | null)}
-
-export interface ContributorFilterInput {and?: (ContributorFilterInput[] | null),or?: (ContributorFilterInput[] | null),id?: (IntOperationFilterInput | null),name?: (StringOperationFilterInput | null),releases?: (ListFilterInputTypeOfReleaseFilterInput | null),userId?: (StringOperationFilterInput | null),source?: (StringOperationFilterInput | null)}
-
-export interface ListFilterInputTypeOfTitleFilterInput {all?: (TitleFilterInput | null),none?: (TitleFilterInput | null),some?: (TitleFilterInput | null),any?: (Scalars['Boolean'] | null)}
-
-export interface TitleFilterInput {and?: (TitleFilterInput[] | null),or?: (TitleFilterInput[] | null),index?: (IntOperationFilterInput | null),disc?: (DiscFilterInput | null),id?: (IntOperationFilterInput | null),comment?: (StringOperationFilterInput | null),sourceFile?: (StringOperationFilterInput | null),segmentMap?: (StringOperationFilterInput | null),duration?: (StringOperationFilterInput | null),size?: (LongOperationFilterInput | null),displaySize?: (StringOperationFilterInput | null),item?: (DiscItemReferenceFilterInput | null),discItemReferenceId?: (IntOperationFilterInput | null),tracks?: (ListFilterInputTypeOfTrackFilterInput | null),description?: (StringOperationFilterInput | null),itemType?: (StringOperationFilterInput | null),season?: (StringOperationFilterInput | null),episode?: (StringOperationFilterInput | null),hasItem?: (BooleanOperationFilterInput | null)}
-
-export interface LongOperationFilterInput {eq?: (Scalars['Long'] | null),neq?: (Scalars['Long'] | null),in?: ((Scalars['Long'] | null)[] | null),nin?: ((Scalars['Long'] | null)[] | null),gt?: (Scalars['Long'] | null),ngt?: (Scalars['Long'] | null),gte?: (Scalars['Long'] | null),ngte?: (Scalars['Long'] | null),lt?: (Scalars['Long'] | null),nlt?: (Scalars['Long'] | null),lte?: (Scalars['Long'] | null),nlte?: (Scalars['Long'] | null)}
-
-export interface DiscItemReferenceFilterInput {and?: (DiscItemReferenceFilterInput[] | null),or?: (DiscItemReferenceFilterInput[] | null),id?: (IntOperationFilterInput | null),title?: (StringOperationFilterInput | null),type?: (StringOperationFilterInput | null),description?: (StringOperationFilterInput | null),chapters?: (ListFilterInputTypeOfChapterFilterInput | null),season?: (StringOperationFilterInput | null),episode?: (StringOperationFilterInput | null),discItem?: (TitleFilterInput | null)}
-
-export interface ListFilterInputTypeOfTrackFilterInput {all?: (TrackFilterInput | null),none?: (TrackFilterInput | null),some?: (TrackFilterInput | null),any?: (Scalars['Boolean'] | null)}
-
-export interface ListFilterInputTypeOfChapterFilterInput {all?: (ChapterFilterInput | null),none?: (ChapterFilterInput | null),some?: (ChapterFilterInput | null),any?: (Scalars['Boolean'] | null)}
-
-export interface TrackFilterInput {and?: (TrackFilterInput[] | null),or?: (TrackFilterInput[] | null),id?: (IntOperationFilterInput | null),index?: (IntOperationFilterInput | null),name?: (StringOperationFilterInput | null),type?: (StringOperationFilterInput | null),resolution?: (StringOperationFilterInput | null),aspectRatio?: (StringOperationFilterInput | null),audioType?: (StringOperationFilterInput | null),languageCode?: (StringOperationFilterInput | null),language?: (StringOperationFilterInput | null),description?: (StringOperationFilterInput | null),title?: (TitleFilterInput | null)}
+export interface TitleSortInput {index?: (SortEnumType | null),disc?: (DiscSortInput | null),id?: (SortEnumType | null),comment?: (SortEnumType | null),sourceFile?: (SortEnumType | null),segmentMap?: (SortEnumType | null),duration?: (SortEnumType | null),size?: (SortEnumType | null),displaySize?: (SortEnumType | null),item?: (DiscItemReferenceSortInput | null),discItemReferenceId?: (SortEnumType | null),description?: (SortEnumType | null),itemType?: (SortEnumType | null),season?: (SortEnumType | null),episode?: (SortEnumType | null),hasItem?: (SortEnumType | null)}
 
 export interface ChapterFilterInput {and?: (ChapterFilterInput[] | null),or?: (ChapterFilterInput[] | null),id?: (IntOperationFilterInput | null),index?: (IntOperationFilterInput | null),title?: (StringOperationFilterInput | null)}
 
-export interface BoxsetGenqlSelection{
-    id?: boolean | number
-    title?: boolean | number
-    sortTitle?: boolean | number
-    slug?: boolean | number
-    imageUrl?: boolean | number
-    release?: ReleaseGenqlSelection
-    releaseId?: boolean | number
-    type?: boolean | number
-    __typename?: boolean | number
-    __scalar?: boolean | number
-}
-
-export interface MediaItemGenqlSelection{
-    id?: boolean | number
-    title?: boolean | number
-    slug?: boolean | number
-    fullTitle?: boolean | number
-    sortTitle?: boolean | number
-    year?: boolean | number
-    type?: boolean | number
-    imageUrl?: boolean | number
-    externalids?: ExternalIdsGenqlSelection
-    externalIdsId?: boolean | number
-    releases?: (ReleaseGenqlSelection & { __args?: {where?: (ReleaseFilterInput | null), order?: (ReleaseSortInput[] | null)} })
-    mediaItemGroups?: (MediaItemGroupGenqlSelection & { __args?: {where?: (MediaItemGroupFilterInput | null), order?: (MediaItemGroupSortInput[] | null)} })
-    plot?: boolean | number
-    tagline?: boolean | number
-    directors?: boolean | number
-    writers?: boolean | number
-    stars?: boolean | number
-    genres?: boolean | number
-    runtimeMinutes?: boolean | number
-    runtime?: boolean | number
-    contentRating?: boolean | number
-    releaseDate?: boolean | number
-    latestReleaseDate?: boolean | number
-    dateAdded?: boolean | number
-    __typename?: boolean | number
-    __scalar?: boolean | number
-}
-
-export interface MediaItemGroupSortInput {id?: (SortEnumType | null),mediaItemId?: (SortEnumType | null),groupId?: (SortEnumType | null),role?: (SortEnumType | null),isFeatured?: (SortEnumType | null),mediaItem?: (MediaItemSortInput | null),group?: (GroupSortInput | null)}
-
-export interface GroupSortInput {id?: (SortEnumType | null),imdbId?: (SortEnumType | null),name?: (SortEnumType | null),slug?: (SortEnumType | null),imageUrl?: (SortEnumType | null)}
-
-export interface ExternalIdsGenqlSelection{
-    id?: boolean | number
-    tmdb?: boolean | number
-    imdb?: boolean | number
-    tvdb?: boolean | number
-    mediaItem?: MediaItemGenqlSelection
-    __typename?: boolean | number
-    __scalar?: boolean | number
-}
+export interface ReleaseDiscSortInput {id?: (SortEnumType | null),releaseId?: (SortEnumType | null),release?: (ReleaseSortInput | null),discId?: (SortEnumType | null),disc?: (DiscSortInput | null),index?: (SortEnumType | null),slug?: (SortEnumType | null),name?: (SortEnumType | null),format?: (SortEnumType | null),contentHash?: (SortEnumType | null)}
 
 export interface ReleaseGenqlSelection{
     id?: boolean | number
@@ -531,7 +599,7 @@ export interface ReleaseGenqlSelection{
     dateAdded?: boolean | number
     fullTitle?: boolean | number
     type?: boolean | number
-    discs?: (DiscGenqlSelection & { __args?: {where?: (DiscFilterInput | null), order?: (DiscSortInput[] | null)} })
+    discs?: (ReleaseDiscGenqlSelection & { __args?: {where?: (ReleaseDiscFilterInput | null), order?: (ReleaseDiscSortInput[] | null)} })
     releaseGroups?: (ReleaseGroupGenqlSelection & { __args?: {where?: (ReleaseGroupFilterInput | null), order?: (ReleaseGroupSortInput[] | null)} })
     mediaItem?: MediaItemGenqlSelection
     boxset?: BoxsetGenqlSelection
@@ -540,70 +608,7 @@ export interface ReleaseGenqlSelection{
     __scalar?: boolean | number
 }
 
-export interface MediaItemGroupGenqlSelection{
-    id?: boolean | number
-    mediaItemId?: boolean | number
-    groupId?: boolean | number
-    role?: boolean | number
-    isFeatured?: boolean | number
-    mediaItem?: (MediaItemGenqlSelection & { __args?: {where?: (MediaItemFilterInput | null), order?: (MediaItemSortInput[] | null)} })
-    group?: (GroupGenqlSelection & { __args?: {where?: (GroupFilterInput | null), order?: (GroupSortInput[] | null)} })
-    __typename?: boolean | number
-    __scalar?: boolean | number
-}
-
-export interface DiscSortInput {id?: (SortEnumType | null),index?: (SortEnumType | null),slug?: (SortEnumType | null),name?: (SortEnumType | null),format?: (SortEnumType | null),contentHash?: (SortEnumType | null),release?: (ReleaseSortInput | null)}
-
-export interface ReleaseGroupSortInput {id?: (SortEnumType | null),releaseId?: (SortEnumType | null),groupId?: (SortEnumType | null),release?: (ReleaseSortInput | null),group?: (GroupSortInput | null)}
-
-export interface ContributorGenqlSelection{
-    id?: boolean | number
-    name?: boolean | number
-    releases?: ReleaseGenqlSelection
-    userId?: boolean | number
-    source?: boolean | number
-    __typename?: boolean | number
-    __scalar?: boolean | number
-}
-
-export interface ReleaseGroupGenqlSelection{
-    id?: boolean | number
-    releaseId?: boolean | number
-    groupId?: boolean | number
-    release?: (ReleaseGenqlSelection & { __args?: {where?: (ReleaseFilterInput | null), order?: (ReleaseSortInput[] | null)} })
-    group?: (GroupGenqlSelection & { __args?: {where?: (GroupFilterInput | null), order?: (GroupSortInput[] | null)} })
-    __typename?: boolean | number
-    __scalar?: boolean | number
-}
-
-export interface DiscGenqlSelection{
-    id?: boolean | number
-    index?: boolean | number
-    slug?: boolean | number
-    name?: boolean | number
-    format?: boolean | number
-    contentHash?: boolean | number
-    titles?: (TitleGenqlSelection & { __args?: {where?: (TitleFilterInput | null), order?: (TitleSortInput[] | null)} })
-    release?: ReleaseGenqlSelection
-    __typename?: boolean | number
-    __scalar?: boolean | number
-}
-
-export interface GroupGenqlSelection{
-    id?: boolean | number
-    imdbId?: boolean | number
-    name?: boolean | number
-    slug?: boolean | number
-    imageUrl?: boolean | number
-    mediaItemGroups?: (MediaItemGroupGenqlSelection & { __args?: {where?: (MediaItemGroupFilterInput | null), order?: (MediaItemGroupSortInput[] | null)} })
-    releaseGroups?: (ReleaseGroupGenqlSelection & { __args?: {where?: (ReleaseGroupFilterInput | null), order?: (ReleaseGroupSortInput[] | null)} })
-    __typename?: boolean | number
-    __scalar?: boolean | number
-}
-
-export interface TitleSortInput {index?: (SortEnumType | null),disc?: (DiscSortInput | null),id?: (SortEnumType | null),comment?: (SortEnumType | null),sourceFile?: (SortEnumType | null),segmentMap?: (SortEnumType | null),duration?: (SortEnumType | null),size?: (SortEnumType | null),displaySize?: (SortEnumType | null),item?: (DiscItemReferenceSortInput | null),discItemReferenceId?: (SortEnumType | null),description?: (SortEnumType | null),itemType?: (SortEnumType | null),season?: (SortEnumType | null),episode?: (SortEnumType | null),hasItem?: (SortEnumType | null)}
-
-export interface DiscItemReferenceSortInput {id?: (SortEnumType | null),title?: (SortEnumType | null),type?: (SortEnumType | null),description?: (SortEnumType | null),season?: (SortEnumType | null),episode?: (SortEnumType | null),discItem?: (TitleSortInput | null)}
+export interface StringOperationFilterInput {and?: (StringOperationFilterInput[] | null),or?: (StringOperationFilterInput[] | null),eq?: (Scalars['String'] | null),neq?: (Scalars['String'] | null),contains?: (Scalars['String'] | null),ncontains?: (Scalars['String'] | null),in?: ((Scalars['String'] | null)[] | null),nin?: ((Scalars['String'] | null)[] | null),startsWith?: (Scalars['String'] | null),nstartsWith?: (Scalars['String'] | null),endsWith?: (Scalars['String'] | null),nendsWith?: (Scalars['String'] | null)}
 
 export interface TitleGenqlSelection{
     index?: boolean | number
@@ -623,27 +628,28 @@ export interface TitleGenqlSelection{
     season?: boolean | number
     episode?: boolean | number
     hasItem?: boolean | number
+    filename?: { __args: {templates?: (FileNameTemplateInput[] | null)} } | boolean | number
     __typename?: boolean | number
     __scalar?: boolean | number
 }
 
-export interface TrackSortInput {id?: (SortEnumType | null),index?: (SortEnumType | null),name?: (SortEnumType | null),type?: (SortEnumType | null),resolution?: (SortEnumType | null),aspectRatio?: (SortEnumType | null),audioType?: (SortEnumType | null),languageCode?: (SortEnumType | null),language?: (SortEnumType | null),description?: (SortEnumType | null),title?: (TitleSortInput | null)}
+export interface ReleaseGroupFilterInput {and?: (ReleaseGroupFilterInput[] | null),or?: (ReleaseGroupFilterInput[] | null),id?: (IntOperationFilterInput | null),releaseId?: (IntOperationFilterInput | null),groupId?: (IntOperationFilterInput | null),release?: (ReleaseFilterInput | null),group?: (GroupFilterInput | null)}
 
-export interface TrackGenqlSelection{
+export interface DiscGenqlSelection{
     id?: boolean | number
     index?: boolean | number
+    slug?: boolean | number
     name?: boolean | number
-    type?: boolean | number
-    resolution?: boolean | number
-    aspectRatio?: boolean | number
-    audioType?: boolean | number
-    languageCode?: boolean | number
-    language?: boolean | number
-    description?: boolean | number
-    title?: TitleGenqlSelection
+    format?: boolean | number
+    contentHash?: boolean | number
+    titles?: (TitleGenqlSelection & { __args?: {where?: (TitleFilterInput | null), order?: (TitleSortInput[] | null)} })
+    release?: ReleaseGenqlSelection
+    releaseDiscs?: ReleaseDiscGenqlSelection
     __typename?: boolean | number
     __scalar?: boolean | number
 }
+
+export interface ReleaseFilterInput {and?: (ReleaseFilterInput[] | null),or?: (ReleaseFilterInput[] | null),id?: (IntOperationFilterInput | null),slug?: (StringOperationFilterInput | null),title?: (StringOperationFilterInput | null),regionCode?: (StringOperationFilterInput | null),locale?: (StringOperationFilterInput | null),year?: (IntOperationFilterInput | null),upc?: (StringOperationFilterInput | null),isbn?: (StringOperationFilterInput | null),asin?: (StringOperationFilterInput | null),imageUrl?: (StringOperationFilterInput | null),backImageUrl?: (StringOperationFilterInput | null),releaseDate?: (DateTimeOperationFilterInput | null),dateAdded?: (DateTimeOperationFilterInput | null),fullTitle?: (StringOperationFilterInput | null),type?: (StringOperationFilterInput | null),discs?: (ListReleaseDiscFilterTypeFilterInput | null),releaseGroups?: (ListFilterInputTypeOfReleaseGroupFilterInput | null),mediaItem?: (MediaItemFilterInput | null),boxset?: (BoxsetFilterInput | null),contributors?: (ListFilterInputTypeOfContributorFilterInput | null)}
 
 export interface DiscItemReferenceGenqlSelection{
     id?: boolean | number
@@ -658,21 +664,64 @@ export interface DiscItemReferenceGenqlSelection{
     __scalar?: boolean | number
 }
 
-export interface ChapterSortInput {id?: (SortEnumType | null),index?: (SortEnumType | null),title?: (SortEnumType | null)}
+export interface ListFilterInputTypeOfChapterFilterInput {all?: (ChapterFilterInput | null),none?: (ChapterFilterInput | null),some?: (ChapterFilterInput | null),any?: (Scalars['Boolean'] | null)}
 
-export interface ChapterGenqlSelection{
+export interface ListFilterInputTypeOfContributorFilterInput {all?: (ContributorFilterInput | null),none?: (ContributorFilterInput | null),some?: (ContributorFilterInput | null),any?: (Scalars['Boolean'] | null)}
+
+export interface MediaItemGroupGenqlSelection{
     id?: boolean | number
+    mediaItemId?: boolean | number
+    groupId?: boolean | number
+    role?: boolean | number
+    isFeatured?: boolean | number
+    mediaItem?: (MediaItemGenqlSelection & { __args?: {where?: (MediaItemFilterInput | null), order?: (MediaItemSortInput[] | null)} })
+    group?: (GroupGenqlSelection & { __args?: {where?: (GroupFilterInput | null), order?: (GroupSortInput[] | null)} })
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface ReleaseDiscGenqlSelection{
+    id?: boolean | number
+    releaseId?: boolean | number
+    release?: ReleaseGenqlSelection
+    discId?: boolean | number
+    disc?: DiscGenqlSelection
     index?: boolean | number
-    title?: boolean | number
+    slug?: boolean | number
+    name?: boolean | number
+    format?: boolean | number
+    contentHash?: boolean | number
+    titles?: (TitleGenqlSelection & { __args?: {where?: (TitleFilterInput | null), order?: (TitleSortInput[] | null)} })
     __typename?: boolean | number
     __scalar?: boolean | number
 }
 
 
-    const Query_possibleTypes: string[] = ['Query']
-    export const isQuery = (obj?: { __typename?: any } | null): obj is Query => {
-      if (!obj?.__typename) throw new Error('__typename is missing in "isQuery"')
-      return Query_possibleTypes.includes(obj.__typename)
+/** A connection to a list of items. */
+export interface BoxsetsConnectionGenqlSelection{
+    /** Information to aid in pagination. */
+    pageInfo?: PageInfoGenqlSelection
+    /** A list of edges. */
+    edges?: BoxsetsEdgeGenqlSelection
+    /** A flattened list of the nodes. */
+    nodes?: BoxsetGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+    const MediaItem_possibleTypes: string[] = ['MediaItem']
+    export const isMediaItem = (obj?: { __typename?: any } | null): obj is MediaItem => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMediaItem"')
+      return MediaItem_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const Group_possibleTypes: string[] = ['Group']
+    export const isGroup = (obj?: { __typename?: any } | null): obj is Group => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isGroup"')
+      return Group_possibleTypes.includes(obj.__typename)
     }
     
 
@@ -685,26 +734,10 @@ export interface ChapterGenqlSelection{
     
 
 
-    const BoxsetsConnection_possibleTypes: string[] = ['BoxsetsConnection']
-    export const isBoxsetsConnection = (obj?: { __typename?: any } | null): obj is BoxsetsConnection => {
-      if (!obj?.__typename) throw new Error('__typename is missing in "isBoxsetsConnection"')
-      return BoxsetsConnection_possibleTypes.includes(obj.__typename)
-    }
-    
-
-
-    const MediaItemsByGroupConnection_possibleTypes: string[] = ['MediaItemsByGroupConnection']
-    export const isMediaItemsByGroupConnection = (obj?: { __typename?: any } | null): obj is MediaItemsByGroupConnection => {
-      if (!obj?.__typename) throw new Error('__typename is missing in "isMediaItemsByGroupConnection"')
-      return MediaItemsByGroupConnection_possibleTypes.includes(obj.__typename)
-    }
-    
-
-
-    const PageInfo_possibleTypes: string[] = ['PageInfo']
-    export const isPageInfo = (obj?: { __typename?: any } | null): obj is PageInfo => {
-      if (!obj?.__typename) throw new Error('__typename is missing in "isPageInfo"')
-      return PageInfo_possibleTypes.includes(obj.__typename)
+    const Chapter_possibleTypes: string[] = ['Chapter']
+    export const isChapter = (obj?: { __typename?: any } | null): obj is Chapter => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isChapter"')
+      return Chapter_possibleTypes.includes(obj.__typename)
     }
     
 
@@ -725,10 +758,18 @@ export interface ChapterGenqlSelection{
     
 
 
-    const MediaItemsByGroupEdge_possibleTypes: string[] = ['MediaItemsByGroupEdge']
-    export const isMediaItemsByGroupEdge = (obj?: { __typename?: any } | null): obj is MediaItemsByGroupEdge => {
-      if (!obj?.__typename) throw new Error('__typename is missing in "isMediaItemsByGroupEdge"')
-      return MediaItemsByGroupEdge_possibleTypes.includes(obj.__typename)
+    const Contributor_possibleTypes: string[] = ['Contributor']
+    export const isContributor = (obj?: { __typename?: any } | null): obj is Contributor => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isContributor"')
+      return Contributor_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const PageInfo_possibleTypes: string[] = ['PageInfo']
+    export const isPageInfo = (obj?: { __typename?: any } | null): obj is PageInfo => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isPageInfo"')
+      return PageInfo_possibleTypes.includes(obj.__typename)
     }
     
 
@@ -741,74 +782,10 @@ export interface ChapterGenqlSelection{
     
 
 
-    const MediaItem_possibleTypes: string[] = ['MediaItem']
-    export const isMediaItem = (obj?: { __typename?: any } | null): obj is MediaItem => {
-      if (!obj?.__typename) throw new Error('__typename is missing in "isMediaItem"')
-      return MediaItem_possibleTypes.includes(obj.__typename)
-    }
-    
-
-
-    const ExternalIds_possibleTypes: string[] = ['ExternalIds']
-    export const isExternalIds = (obj?: { __typename?: any } | null): obj is ExternalIds => {
-      if (!obj?.__typename) throw new Error('__typename is missing in "isExternalIds"')
-      return ExternalIds_possibleTypes.includes(obj.__typename)
-    }
-    
-
-
-    const Release_possibleTypes: string[] = ['Release']
-    export const isRelease = (obj?: { __typename?: any } | null): obj is Release => {
-      if (!obj?.__typename) throw new Error('__typename is missing in "isRelease"')
-      return Release_possibleTypes.includes(obj.__typename)
-    }
-    
-
-
-    const MediaItemGroup_possibleTypes: string[] = ['MediaItemGroup']
-    export const isMediaItemGroup = (obj?: { __typename?: any } | null): obj is MediaItemGroup => {
-      if (!obj?.__typename) throw new Error('__typename is missing in "isMediaItemGroup"')
-      return MediaItemGroup_possibleTypes.includes(obj.__typename)
-    }
-    
-
-
-    const Contributor_possibleTypes: string[] = ['Contributor']
-    export const isContributor = (obj?: { __typename?: any } | null): obj is Contributor => {
-      if (!obj?.__typename) throw new Error('__typename is missing in "isContributor"')
-      return Contributor_possibleTypes.includes(obj.__typename)
-    }
-    
-
-
-    const ReleaseGroup_possibleTypes: string[] = ['ReleaseGroup']
-    export const isReleaseGroup = (obj?: { __typename?: any } | null): obj is ReleaseGroup => {
-      if (!obj?.__typename) throw new Error('__typename is missing in "isReleaseGroup"')
-      return ReleaseGroup_possibleTypes.includes(obj.__typename)
-    }
-    
-
-
-    const Disc_possibleTypes: string[] = ['Disc']
-    export const isDisc = (obj?: { __typename?: any } | null): obj is Disc => {
-      if (!obj?.__typename) throw new Error('__typename is missing in "isDisc"')
-      return Disc_possibleTypes.includes(obj.__typename)
-    }
-    
-
-
-    const Group_possibleTypes: string[] = ['Group']
-    export const isGroup = (obj?: { __typename?: any } | null): obj is Group => {
-      if (!obj?.__typename) throw new Error('__typename is missing in "isGroup"')
-      return Group_possibleTypes.includes(obj.__typename)
-    }
-    
-
-
-    const Title_possibleTypes: string[] = ['Title']
-    export const isTitle = (obj?: { __typename?: any } | null): obj is Title => {
-      if (!obj?.__typename) throw new Error('__typename is missing in "isTitle"')
-      return Title_possibleTypes.includes(obj.__typename)
+    const MediaItemsByGroupEdge_possibleTypes: string[] = ['MediaItemsByGroupEdge']
+    export const isMediaItemsByGroupEdge = (obj?: { __typename?: any } | null): obj is MediaItemsByGroupEdge => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMediaItemsByGroupEdge"')
+      return MediaItemsByGroupEdge_possibleTypes.includes(obj.__typename)
     }
     
 
@@ -821,6 +798,62 @@ export interface ChapterGenqlSelection{
     
 
 
+    const ReleaseGroup_possibleTypes: string[] = ['ReleaseGroup']
+    export const isReleaseGroup = (obj?: { __typename?: any } | null): obj is ReleaseGroup => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isReleaseGroup"')
+      return ReleaseGroup_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const ExternalIds_possibleTypes: string[] = ['ExternalIds']
+    export const isExternalIds = (obj?: { __typename?: any } | null): obj is ExternalIds => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isExternalIds"')
+      return ExternalIds_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const Query_possibleTypes: string[] = ['Query']
+    export const isQuery = (obj?: { __typename?: any } | null): obj is Query => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isQuery"')
+      return Query_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const MediaItemsByGroupConnection_possibleTypes: string[] = ['MediaItemsByGroupConnection']
+    export const isMediaItemsByGroupConnection = (obj?: { __typename?: any } | null): obj is MediaItemsByGroupConnection => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMediaItemsByGroupConnection"')
+      return MediaItemsByGroupConnection_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const Release_possibleTypes: string[] = ['Release']
+    export const isRelease = (obj?: { __typename?: any } | null): obj is Release => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isRelease"')
+      return Release_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const Title_possibleTypes: string[] = ['Title']
+    export const isTitle = (obj?: { __typename?: any } | null): obj is Title => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isTitle"')
+      return Title_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const Disc_possibleTypes: string[] = ['Disc']
+    export const isDisc = (obj?: { __typename?: any } | null): obj is Disc => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isDisc"')
+      return Disc_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
     const DiscItemReference_possibleTypes: string[] = ['DiscItemReference']
     export const isDiscItemReference = (obj?: { __typename?: any } | null): obj is DiscItemReference => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isDiscItemReference"')
@@ -829,10 +862,26 @@ export interface ChapterGenqlSelection{
     
 
 
-    const Chapter_possibleTypes: string[] = ['Chapter']
-    export const isChapter = (obj?: { __typename?: any } | null): obj is Chapter => {
-      if (!obj?.__typename) throw new Error('__typename is missing in "isChapter"')
-      return Chapter_possibleTypes.includes(obj.__typename)
+    const MediaItemGroup_possibleTypes: string[] = ['MediaItemGroup']
+    export const isMediaItemGroup = (obj?: { __typename?: any } | null): obj is MediaItemGroup => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMediaItemGroup"')
+      return MediaItemGroup_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const ReleaseDisc_possibleTypes: string[] = ['ReleaseDisc']
+    export const isReleaseDisc = (obj?: { __typename?: any } | null): obj is ReleaseDisc => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isReleaseDisc"')
+      return ReleaseDisc_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const BoxsetsConnection_possibleTypes: string[] = ['BoxsetsConnection']
+    export const isBoxsetsConnection = (obj?: { __typename?: any } | null): obj is BoxsetsConnection => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isBoxsetsConnection"')
+      return BoxsetsConnection_possibleTypes.includes(obj.__typename)
     }
     
 
