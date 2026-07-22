@@ -634,6 +634,9 @@ export default {
             "contentHash": [
                 57
             ],
+            "globalDiscId": [
+                57
+            ],
             "__typename": [
                 50
             ]
@@ -1223,6 +1226,9 @@ export default {
             "contentHash": [
                 12
             ],
+            "globalDiscId": [
+                12
+            ],
             "release": [
                 4
             ],
@@ -1510,6 +1516,9 @@ export default {
             "contentHash": [
                 57
             ],
+            "globalDiscId": [
+                57
+            ],
             "titles": [
                 37
             ],
@@ -1625,6 +1634,9 @@ export default {
                 12
             ],
             "contentHash": [
+                12
+            ],
+            "globalDiscId": [
                 12
             ],
             "__typename": [
@@ -1875,6 +1887,9 @@ export default {
             "contentHash": [
                 50
             ],
+            "globalDiscId": [
+                50
+            ],
             "titles": [
                 58,
                 {
@@ -2113,6 +2128,9 @@ export default {
                 50
             ],
             "contentHash": [
+                50
+            ],
+            "globalDiscId": [
                 50
             ],
             "titles": [

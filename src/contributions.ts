@@ -13,11 +13,14 @@ import {
   type ApiKeyInfoSortInput,
   type ApiKeyUsageLogInfoFilterInput,
   type ApiKeyUsageLogInfoSortInput,
+  type AttachDiscIdResult,
+  type AttachGlobalDiscIdInput,
   type ContributionHistorySortInput,
   type ContributionMutationRequestInput,
   createClient,
   type EditItemOnDiscInput,
   enumUserMessageType,
+  type FieldsSelection,
   type Client as GQLClient,
   type UpdateContributionInput,
   type UserContributionFilterInput,
@@ -502,6 +505,90 @@ export class DiscDBContributionsClient {
       throw Error("Server did not return a hash");
     }
     return data.hashDisc.discHash.hash;
+  }
+
+  /**
+   * Submit a new global ID to a disc that is without one. This is different
+   * from the {@link hash}. To calculate a global disc ID:
+   *
+   * - DVD: use libdvdread/{@link https://github.com/beandog/dvd_info | dvd_info}
+   * - BD: hash the raw bytes of AACS/Unit_Key_RO.inf as SHA1, then convert to hex. see discman/io/hash#computeAacsDiscId
+   *
+   * @param input details by which to identify the disc.
+   *   for most discs, `mediaItemSlug` + `releaseSlug` + `discSlug` is sufficient.
+   *   for `files`, list the relevant media files (see {@link hash}).
+   * @returns the result, which may not be successful; check `outcome` (`APPLIED`).
+   */
+  async attachGlobalDiscId(
+    input: Omit<AttachGlobalDiscIdInput, "files"> & {
+      files: (FileHashInfo | File)[];
+    },
+  ): Promise<
+    FieldsSelection<
+      AttachDiscIdResult,
+      {
+        outcome: true;
+        contentHash: true;
+        mediaItemSlug: true;
+        boxsetSlug: true;
+        mediaItemType: true;
+        releaseSlug: true;
+        discSlug: true;
+        discIndex: true;
+        globalDiscId: true;
+        existingGlobalDiscId: true;
+        matchedDifferentDisc: true;
+      }
+    >
+  > {
+    const data = await this.gql.mutation({
+      __name: "AttachGlobalDiscId",
+      attachGlobalDiscId: {
+        __args: {
+          input: {
+            mediaItemSlug: null,
+            boxsetSlug: null,
+            releaseSlug: null,
+            discSlug: null,
+            discIndex: null,
+            ...input,
+            files: input.files.map((file, i) =>
+              file instanceof File
+                ? {
+                    index: i + 1,
+                    name: file.name,
+                    size: file.size,
+                    creationTime: new Date(file.lastModified).toISOString(),
+                  }
+                : {
+                    index: file.index,
+                    name: file.name,
+                    size: file.size,
+                    creationTime: new Date(file.created).toISOString(),
+                  },
+            ),
+          } satisfies AttachGlobalDiscIdInput,
+        },
+        attachDiscIdResult: {
+          outcome: true,
+          contentHash: true,
+          mediaItemSlug: true,
+          boxsetSlug: true,
+          mediaItemType: true,
+          releaseSlug: true,
+          discSlug: true,
+          discIndex: true,
+          globalDiscId: true,
+          existingGlobalDiscId: true,
+          matchedDifferentDisc: true,
+        },
+        errors: { on_Error: { message: true } },
+      },
+    });
+    if (!mutationHasData(data.attachGlobalDiscId, "attachDiscIdResult")) {
+      throw Error("Server did not return a result");
+    }
+    return data.attachGlobalDiscId.attachDiscIdResult;
   }
 
   /**

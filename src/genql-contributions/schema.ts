@@ -16,7 +16,7 @@ export type Scalars = {
     UUID: any,
 }
 
-export type Error = (ApiKeyNotFoundError | AuthenticationError | ContributionNotFoundError | CouldNotParseLogsError | DiscItemNotFoundError | DiscNotFoundError | ExternalDataNotFoundError | ExternalDataSerializationError | FieldRequiredError | InvalidContributionStatusError | InvalidIdError | InvalidOwnershipError | LogsNotFoundError) & { __isUnion?: true }
+export type Error = (ApiKeyNotFoundError | AuthenticationError | BoxsetNotFoundError | ContributionAlreadyInBoxsetError | ContributionNotFoundError | CouldNotParseLogsError | DiscItemNotFoundError | DiscNotFoundError | ExistingDiscAlreadyInBoxsetError | ExternalDataNotFoundError | ExternalDataSerializationError | FieldRequiredError | InvalidBoxsetStatusError | InvalidContributionStatusError | InvalidDiscPathError | InvalidIdError | InvalidOwnershipError | LogsNotFoundError | MismatchedReleaseSlugError) & { __isUnion?: true }
 
 export interface AddAudioTrackToItemPayload {
     userContributionAudioTrack: (UserContributionAudioTrack | null)
@@ -30,10 +30,28 @@ export interface AddChapterToItemPayload {
     __typename: 'AddChapterToItemPayload'
 }
 
+export interface AddDiscToBoxsetPayload {
+    userContributionBoxset: (UserContributionBoxset | null)
+    errors: (AddDiscToBoxsetError[] | null)
+    __typename: 'AddDiscToBoxsetPayload'
+}
+
+export interface AddExistingDiscToBoxsetPayload {
+    userContributionBoxset: (UserContributionBoxset | null)
+    errors: (AddExistingDiscToBoxsetError[] | null)
+    __typename: 'AddExistingDiscToBoxsetPayload'
+}
+
 export interface AddItemToDiscPayload {
     userContributionDiscItem: (UserContributionDiscItem | null)
     errors: (AddItemToDiscError[] | null)
     __typename: 'AddItemToDiscPayload'
+}
+
+export interface AddSubtitleTrackToItemPayload {
+    userContributionSubtitleTrack: (UserContributionSubtitleTrack | null)
+    errors: (AddSubtitleTrackToItemError[] | null)
+    __typename: 'AddSubtitleTrackToItemPayload'
 }
 
 export interface AmazonProductMetadata {
@@ -132,9 +150,88 @@ export interface ApiKeysEdge {
     __typename: 'ApiKeysEdge'
 }
 
+export interface AttachDiscIdResult {
+    outcome: AttachDiscIdOutcome
+    contentHash: Scalars['String']
+    mediaItemSlug: (Scalars['String'] | null)
+    boxsetSlug: (Scalars['String'] | null)
+    mediaItemType: (Scalars['String'] | null)
+    releaseSlug: (Scalars['String'] | null)
+    discSlug: (Scalars['String'] | null)
+    discIndex: (Scalars['Int'] | null)
+    globalDiscId: (Scalars['String'] | null)
+    existingGlobalDiscId: (Scalars['String'] | null)
+    matchedDifferentDisc: Scalars['Boolean']
+    __typename: 'AttachDiscIdResult'
+}
+
+export interface AttachGlobalDiscIdPayload {
+    attachDiscIdResult: (AttachDiscIdResult | null)
+    errors: (AttachGlobalDiscIdError[] | null)
+    __typename: 'AttachGlobalDiscIdPayload'
+}
+
 export interface AuthenticationError {
     message: Scalars['String']
     __typename: 'AuthenticationError'
+}
+
+
+/** A connection to a list of items. */
+export interface BoxsetChatConnection {
+    /** Information to aid in pagination. */
+    pageInfo: PageInfo
+    /** A list of edges. */
+    edges: (BoxsetChatEdge[] | null)
+    /** A flattened list of the nodes. */
+    nodes: (UserMessage[] | null)
+    /** Identifies the total count of items in the connection. */
+    totalCount: Scalars['Int']
+    __typename: 'BoxsetChatConnection'
+}
+
+
+/** An edge in a connection. */
+export interface BoxsetChatEdge {
+    /** A cursor for use in pagination. */
+    cursor: Scalars['String']
+    /** The item at the end of the edge. */
+    node: UserMessage
+    __typename: 'BoxsetChatEdge'
+}
+
+
+/** A connection to a list of items. */
+export interface BoxsetContributionsConnection {
+    /** Information to aid in pagination. */
+    pageInfo: PageInfo
+    /** A list of edges. */
+    edges: (BoxsetContributionsEdge[] | null)
+    /** A flattened list of the nodes. */
+    nodes: (UserContributionBoxset[] | null)
+    /** Identifies the total count of items in the connection. */
+    totalCount: Scalars['Int']
+    __typename: 'BoxsetContributionsConnection'
+}
+
+
+/** An edge in a connection. */
+export interface BoxsetContributionsEdge {
+    /** A cursor for use in pagination. */
+    cursor: Scalars['String']
+    /** The item at the end of the edge. */
+    node: UserContributionBoxset
+    __typename: 'BoxsetContributionsEdge'
+}
+
+export interface BoxsetNotFoundError {
+    message: Scalars['String']
+    __typename: 'BoxsetNotFoundError'
+}
+
+export interface ContributionAlreadyInBoxsetError {
+    message: Scalars['String']
+    __typename: 'ContributionAlreadyInBoxsetError'
 }
 
 
@@ -198,12 +295,21 @@ export interface ContributionHistoryEdge {
 export interface ContributionMutations {
     addAudioTrackToItem: AddAudioTrackToItemPayload
     addChapterToItem: AddChapterToItemPayload
+    addDiscToBoxset: AddDiscToBoxsetPayload
+    addExistingDiscToBoxset: AddExistingDiscToBoxsetPayload
     addItemToDisc: AddItemToDiscPayload
+    addSubtitleTrackToItem: AddSubtitleTrackToItemPayload
+    attachGlobalDiscId: AttachGlobalDiscIdPayload
+    createBoxset: CreateBoxsetPayload
     createContribution: CreateContributionPayload
     createDisc: CreateDiscPayload
+    deleteBoxset: DeleteBoxsetPayload
     deleteContribution: DeleteContributionPayload
+    deleteDiscFromContribution: DeleteDiscFromContributionPayload
     deleteItemFromDisc: DeleteItemFromDiscPayload
     editItemOnDisc: EditItemOnDiscPayload
+    setFileNameTemplate: SetFileNameTemplatePayload
+    deleteFileNameTemplate: DeleteFileNameTemplatePayload
     generateApiKey: GenerateApiKeyPayload
     discLogs: DiscLogsPayload
     discUploadStatus: DiscUploadStatusPayload
@@ -212,10 +318,17 @@ export interface ContributionMutations {
     externalDataForContribution: ExternalDataForContributionPayload
     hashDisc: HashDiscPayload
     markMessagesAsRead: MarkMessagesAsReadPayload
+    markBoxsetMessagesAsRead: MarkBoxsetMessagesAsReadPayload
+    removeBoxsetMember: RemoveBoxsetMemberPayload
+    removeDiscFromBoxset: RemoveDiscFromBoxsetPayload
+    reorderBoxsetMembers: ReorderBoxsetMembersPayload
     reorderDiscs: ReorderDiscsPayload
     revokeApiKey: RevokeApiKeyPayload
     sendAdminMessage: SendAdminMessagePayload
     sendUserMessage: SendUserMessagePayload
+    sendAdminBoxsetMessage: SendAdminBoxsetMessagePayload
+    sendBoxsetUserMessage: SendBoxsetUserMessagePayload
+    updateBoxset: UpdateBoxsetPayload
     updateContribution: UpdateContributionPayload
     updateDisc: UpdateDiscPayload
     __typename: 'ContributionMutations'
@@ -231,12 +344,16 @@ export interface ContributionQuery {
     myContributions: (MyContributionsConnection | null)
     contributionHistory: (ContributionHistoryConnection | null)
     contributionChat: (ContributionChatConnection | null)
+    boxsetChat: (BoxsetChatConnection | null)
     hasUnreadMessages: Scalars['Boolean']
     myMessages: (MyMessagesConnection | null)
     messageThreads: MessageThread[]
+    boxsetContributions: (BoxsetContributionsConnection | null)
+    myBoxsets: (MyBoxsetsConnection | null)
     amazonProductMetadata: (AmazonProductMetadata | null)
     apiKeys: (ApiKeysConnection | null)
     apiKeyUsageLogs: (ApiKeyUsageLogsConnection | null)
+    myFileNameTemplates: UserFileNameTemplate[]
     __typename: 'ContributionQuery'
 }
 
@@ -269,6 +386,12 @@ export interface CouldNotParseLogsError {
     __typename: 'CouldNotParseLogsError'
 }
 
+export interface CreateBoxsetPayload {
+    userContributionBoxset: (UserContributionBoxset | null)
+    errors: (CreateBoxsetError[] | null)
+    __typename: 'CreateBoxsetPayload'
+}
+
 export interface CreateContributionPayload {
     userContribution: (UserContribution | null)
     errors: (CreateContributionError[] | null)
@@ -281,10 +404,28 @@ export interface CreateDiscPayload {
     __typename: 'CreateDiscPayload'
 }
 
+export interface DeleteBoxsetPayload {
+    userContributionBoxset: (UserContributionBoxset | null)
+    errors: (DeleteBoxsetError[] | null)
+    __typename: 'DeleteBoxsetPayload'
+}
+
 export interface DeleteContributionPayload {
     userContribution: (UserContribution | null)
     errors: (DeleteContributionError[] | null)
     __typename: 'DeleteContributionPayload'
+}
+
+export interface DeleteDiscFromContributionPayload {
+    userContributionDisc: (UserContributionDisc | null)
+    errors: (DeleteDiscFromContributionError[] | null)
+    __typename: 'DeleteDiscFromContributionPayload'
+}
+
+export interface DeleteFileNameTemplatePayload {
+    boolean: (Scalars['Boolean'] | null)
+    errors: (DeleteFileNameTemplateError[] | null)
+    __typename: 'DeleteFileNameTemplatePayload'
 }
 
 export interface DeleteItemFromDiscPayload {
@@ -355,6 +496,11 @@ export interface EpisodeNamesPayload {
     __typename: 'EpisodeNamesPayload'
 }
 
+export interface ExistingDiscAlreadyInBoxsetError {
+    message: Scalars['String']
+    __typename: 'ExistingDiscAlreadyInBoxsetError'
+}
+
 export interface ExternalDataForContributionPayload {
     externalMetadata: (ExternalMetadata | null)
     errors: (ExternalDataForContributionError[] | null)
@@ -415,9 +561,19 @@ export interface HashInfoLogLine {
     __typename: 'HashInfoLogLine'
 }
 
+export interface InvalidBoxsetStatusError {
+    message: Scalars['String']
+    __typename: 'InvalidBoxsetStatusError'
+}
+
 export interface InvalidContributionStatusError {
     message: Scalars['String']
     __typename: 'InvalidContributionStatusError'
+}
+
+export interface InvalidDiscPathError {
+    message: Scalars['String']
+    __typename: 'InvalidDiscPathError'
 }
 
 export interface InvalidIdError {
@@ -435,6 +591,12 @@ export interface LogsNotFoundError {
     __typename: 'LogsNotFoundError'
 }
 
+export interface MarkBoxsetMessagesAsReadPayload {
+    boolean: (Scalars['Boolean'] | null)
+    errors: (MarkBoxsetMessagesAsReadError[] | null)
+    __typename: 'MarkBoxsetMessagesAsReadPayload'
+}
+
 export interface MarkMessagesAsReadPayload {
     boolean: (Scalars['Boolean'] | null)
     errors: (MarkMessagesAsReadError[] | null)
@@ -450,7 +612,40 @@ export interface MessageThread {
     lastMessageAt: Scalars['DateTime']
     unreadCount: Scalars['Int']
     totalCount: Scalars['Int']
+    isBoxset: Scalars['Boolean']
     __typename: 'MessageThread'
+}
+
+export interface MismatchedReleaseSlugError {
+    message: Scalars['String']
+    boxsetSlug: Scalars['String']
+    offendingReleaseSlug: Scalars['String']
+    contributionTitle: Scalars['String']
+    __typename: 'MismatchedReleaseSlugError'
+}
+
+
+/** A connection to a list of items. */
+export interface MyBoxsetsConnection {
+    /** Information to aid in pagination. */
+    pageInfo: PageInfo
+    /** A list of edges. */
+    edges: (MyBoxsetsEdge[] | null)
+    /** A flattened list of the nodes. */
+    nodes: (UserContributionBoxset[] | null)
+    /** Identifies the total count of items in the connection. */
+    totalCount: Scalars['Int']
+    __typename: 'MyBoxsetsConnection'
+}
+
+
+/** An edge in a connection. */
+export interface MyBoxsetsEdge {
+    /** A cursor for use in pagination. */
+    cursor: Scalars['String']
+    /** The item at the end of the edge. */
+    node: UserContributionBoxset
+    __typename: 'MyBoxsetsEdge'
 }
 
 
@@ -515,6 +710,24 @@ export interface PageInfo {
     __typename: 'PageInfo'
 }
 
+export interface RemoveBoxsetMemberPayload {
+    userContributionBoxset: (UserContributionBoxset | null)
+    errors: (RemoveBoxsetMemberError[] | null)
+    __typename: 'RemoveBoxsetMemberPayload'
+}
+
+export interface RemoveDiscFromBoxsetPayload {
+    userContributionBoxset: (UserContributionBoxset | null)
+    errors: (RemoveDiscFromBoxsetError[] | null)
+    __typename: 'RemoveDiscFromBoxsetPayload'
+}
+
+export interface ReorderBoxsetMembersPayload {
+    userContributionBoxset: (UserContributionBoxset | null)
+    errors: (ReorderBoxsetMembersError[] | null)
+    __typename: 'ReorderBoxsetMembersPayload'
+}
+
 export interface ReorderDiscsPayload {
     userContributionDisc: (UserContributionDisc[] | null)
     errors: (ReorderDiscsError[] | null)
@@ -539,10 +752,22 @@ export interface Segment {
     __typename: 'Segment'
 }
 
+export interface SendAdminBoxsetMessagePayload {
+    userMessage: (UserMessage | null)
+    errors: (SendAdminBoxsetMessageError[] | null)
+    __typename: 'SendAdminBoxsetMessagePayload'
+}
+
 export interface SendAdminMessagePayload {
     userMessage: (UserMessage | null)
     errors: (SendAdminMessageError[] | null)
     __typename: 'SendAdminMessagePayload'
+}
+
+export interface SendBoxsetUserMessagePayload {
+    userMessage: (UserMessage | null)
+    errors: (SendBoxsetUserMessageError[] | null)
+    __typename: 'SendBoxsetUserMessagePayload'
 }
 
 export interface SendUserMessagePayload {
@@ -566,6 +791,12 @@ export interface SeriesEpisodeNames {
     __typename: 'SeriesEpisodeNames'
 }
 
+export interface SetFileNameTemplatePayload {
+    userFileNameTemplate: (UserFileNameTemplate | null)
+    errors: (SetFileNameTemplateError[] | null)
+    __typename: 'SetFileNameTemplatePayload'
+}
+
 export interface Title {
     index: Scalars['Int']
     chapterCount: Scalars['Int']
@@ -579,6 +810,12 @@ export interface Title {
     segments: Segment[]
     lengthAsTimeSpan: Scalars['TimeSpan']
     __typename: 'Title'
+}
+
+export interface UpdateBoxsetPayload {
+    userContributionBoxset: (UserContributionBoxset | null)
+    errors: (UpdateBoxsetError[] | null)
+    __typename: 'UpdateBoxsetPayload'
 }
 
 export interface UpdateContributionPayload {
@@ -598,6 +835,8 @@ export interface UserContribution {
     userId: Scalars['String']
     created: Scalars['DateTime']
     status: UserContributionStatus
+    boxsetId: (Scalars['Int'] | null)
+    boxset: (UserContributionBoxset | null)
     discs: UserContributionDisc[]
     hashItems: UserContributionDiscHashItem[]
     mediaType: Scalars['String']
@@ -628,6 +867,37 @@ export interface UserContributionAudioTrack {
     __typename: 'UserContributionAudioTrack'
 }
 
+export interface UserContributionBoxset {
+    id: Scalars['Int']
+    userId: Scalars['String']
+    created: Scalars['DateTime']
+    status: UserContributionStatus
+    title: Scalars['String']
+    sortTitle: (Scalars['String'] | null)
+    slug: Scalars['String']
+    frontImageUrl: (Scalars['String'] | null)
+    backImageUrl: (Scalars['String'] | null)
+    asin: (Scalars['String'] | null)
+    upc: (Scalars['String'] | null)
+    releaseDate: (Scalars['DateTime'] | null)
+    locale: (Scalars['String'] | null)
+    regionCode: (Scalars['String'] | null)
+    members: UserContributionBoxsetMember[]
+    encodedId: Scalars['EncodedId']
+    __typename: 'UserContributionBoxset'
+}
+
+export interface UserContributionBoxsetMember {
+    id: Scalars['Int']
+    boxset: UserContributionBoxset
+    disc: (UserContributionDisc | null)
+    sortOrder: Scalars['Int']
+    existingDiscPath: (Scalars['String'] | null)
+    existingDiscName: (Scalars['String'] | null)
+    existingDiscFormat: (Scalars['String'] | null)
+    __typename: 'UserContributionBoxsetMember'
+}
+
 export interface UserContributionChapter {
     id: Scalars['Int']
     index: Scalars['Int']
@@ -641,6 +911,7 @@ export interface UserContributionDisc {
     id: Scalars['Int']
     userContribution: UserContribution
     contentHash: Scalars['String']
+    globalDiscId: (Scalars['String'] | null)
     format: Scalars['String']
     name: Scalars['String']
     slug: Scalars['String']
@@ -681,13 +952,36 @@ export interface UserContributionDiscItem {
     episode: (Scalars['String'] | null)
     chapters: UserContributionChapter[]
     audioTracks: UserContributionAudioTrack[]
+    subtitleTracks: UserContributionSubtitleTrack[]
     encodedId: Scalars['EncodedId']
+    filename: Scalars['String']
     __typename: 'UserContributionDiscItem'
+}
+
+export interface UserContributionSubtitleTrack {
+    id: Scalars['Int']
+    index: Scalars['Int']
+    title: Scalars['String']
+    item: UserContributionDiscItem
+    encodedId: Scalars['EncodedId']
+    __typename: 'UserContributionSubtitleTrack'
+}
+
+export interface UserFileNameTemplate {
+    id: Scalars['Int']
+    userId: Scalars['String']
+    itemType: Scalars['String']
+    template: Scalars['String']
+    updatedAt: Scalars['DateTime']
+    __typename: 'UserFileNameTemplate'
 }
 
 export interface UserMessage {
     id: Scalars['Int']
-    contributionId: Scalars['Int']
+    contributionId: (Scalars['Int'] | null)
+    boxsetId: (Scalars['Int'] | null)
+    contribution: (UserContribution | null)
+    boxset: (UserContributionBoxset | null)
     fromUserId: Scalars['String']
     toUserId: Scalars['String']
     message: Scalars['String']
@@ -701,13 +995,29 @@ export type AddAudioTrackToItemError = (ContributionNotFoundError | DiscNotFound
 
 export type AddChapterToItemError = (ContributionNotFoundError | DiscNotFoundError | DiscItemNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError) & { __isUnion?: true }
 
+export type AddDiscToBoxsetError = (AuthenticationError | BoxsetNotFoundError | DiscNotFoundError | ContributionAlreadyInBoxsetError | InvalidIdError | InvalidOwnershipError | InvalidBoxsetStatusError | MismatchedReleaseSlugError) & { __isUnion?: true }
+
+export type AddExistingDiscToBoxsetError = (AuthenticationError | BoxsetNotFoundError | InvalidIdError | InvalidOwnershipError | InvalidDiscPathError | ExistingDiscAlreadyInBoxsetError | InvalidBoxsetStatusError | MismatchedReleaseSlugError) & { __isUnion?: true }
+
 export type AddItemToDiscError = (ContributionNotFoundError | DiscNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError) & { __isUnion?: true }
 
-export type CreateContributionError = (AuthenticationError) & { __isUnion?: true }
+export type AddSubtitleTrackToItemError = (ContributionNotFoundError | DiscNotFoundError | DiscItemNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError) & { __isUnion?: true }
 
-export type CreateDiscError = (ContributionNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError) & { __isUnion?: true }
+export type AttachGlobalDiscIdError = (AuthenticationError) & { __isUnion?: true }
+
+export type CreateBoxsetError = (AuthenticationError) & { __isUnion?: true }
+
+export type CreateContributionError = (AuthenticationError | BoxsetNotFoundError | InvalidIdError | InvalidOwnershipError | InvalidBoxsetStatusError) & { __isUnion?: true }
+
+export type CreateDiscError = (ContributionNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError | InvalidDiscPathError) & { __isUnion?: true }
+
+export type DeleteBoxsetError = (AuthenticationError | BoxsetNotFoundError | InvalidIdError | InvalidOwnershipError | InvalidBoxsetStatusError) & { __isUnion?: true }
 
 export type DeleteContributionError = (ContributionNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError | InvalidContributionStatusError) & { __isUnion?: true }
+
+export type DeleteDiscFromContributionError = (ContributionNotFoundError | DiscNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError | InvalidContributionStatusError) & { __isUnion?: true }
+
+export type DeleteFileNameTemplateError = (AuthenticationError) & { __isUnion?: true }
 
 export type DeleteItemFromDiscError = (ContributionNotFoundError | DiscNotFoundError | DiscItemNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError) & { __isUnion?: true }
 
@@ -725,15 +1035,31 @@ export type ExternalDataForContributionError = (ContributionNotFoundError | Exte
 
 export type HashDiscError = (ContributionNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError) & { __isUnion?: true }
 
+export type MarkBoxsetMessagesAsReadError = (AuthenticationError) & { __isUnion?: true }
+
 export type MarkMessagesAsReadError = (AuthenticationError) & { __isUnion?: true }
+
+export type RemoveBoxsetMemberError = (AuthenticationError | BoxsetNotFoundError | InvalidIdError | InvalidOwnershipError | InvalidBoxsetStatusError) & { __isUnion?: true }
+
+export type RemoveDiscFromBoxsetError = (AuthenticationError | BoxsetNotFoundError | DiscNotFoundError | InvalidIdError | InvalidOwnershipError | InvalidBoxsetStatusError) & { __isUnion?: true }
+
+export type ReorderBoxsetMembersError = (AuthenticationError | BoxsetNotFoundError | InvalidIdError | InvalidOwnershipError | InvalidBoxsetStatusError) & { __isUnion?: true }
 
 export type ReorderDiscsError = (ContributionNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError) & { __isUnion?: true }
 
 export type RevokeApiKeyError = (ApiKeyNotFoundError) & { __isUnion?: true }
 
+export type SendAdminBoxsetMessageError = (BoxsetNotFoundError | AuthenticationError | InvalidIdError) & { __isUnion?: true }
+
 export type SendAdminMessageError = (ContributionNotFoundError | AuthenticationError) & { __isUnion?: true }
 
+export type SendBoxsetUserMessageError = (BoxsetNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError) & { __isUnion?: true }
+
 export type SendUserMessageError = (ContributionNotFoundError | AuthenticationError | InvalidOwnershipError) & { __isUnion?: true }
+
+export type SetFileNameTemplateError = (AuthenticationError) & { __isUnion?: true }
+
+export type UpdateBoxsetError = (AuthenticationError | BoxsetNotFoundError | InvalidIdError | InvalidOwnershipError) & { __isUnion?: true }
 
 export type UpdateContributionError = (ContributionNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError | InvalidContributionStatusError) & { __isUnion?: true }
 
@@ -742,6 +1068,8 @@ export type UpdateDiscError = (ContributionNotFoundError | DiscNotFoundError | A
 
 /** Defines when a policy shall be executed. */
 export type ApplyPolicy = 'BEFORE_RESOLVER' | 'AFTER_RESOLVER' | 'VALIDATION'
+
+export type AttachDiscIdOutcome = 'APPLIED' | 'ALREADY_RECORDED' | 'CONFLICT' | 'NOT_FOUND' | 'MISMATCH'
 
 export type ContributionHistoryType = 'CREATED' | 'STATUS_CHANGED' | 'DELETED' | 'ADMIN_MESSAGE' | 'USER_MESSAGE'
 
@@ -758,17 +1086,23 @@ export interface ErrorGenqlSelection{
     message?: boolean | number
     on_ApiKeyNotFoundError?: ApiKeyNotFoundErrorGenqlSelection
     on_AuthenticationError?: AuthenticationErrorGenqlSelection
+    on_BoxsetNotFoundError?: BoxsetNotFoundErrorGenqlSelection
+    on_ContributionAlreadyInBoxsetError?: ContributionAlreadyInBoxsetErrorGenqlSelection
     on_ContributionNotFoundError?: ContributionNotFoundErrorGenqlSelection
     on_CouldNotParseLogsError?: CouldNotParseLogsErrorGenqlSelection
     on_DiscItemNotFoundError?: DiscItemNotFoundErrorGenqlSelection
     on_DiscNotFoundError?: DiscNotFoundErrorGenqlSelection
+    on_ExistingDiscAlreadyInBoxsetError?: ExistingDiscAlreadyInBoxsetErrorGenqlSelection
     on_ExternalDataNotFoundError?: ExternalDataNotFoundErrorGenqlSelection
     on_ExternalDataSerializationError?: ExternalDataSerializationErrorGenqlSelection
     on_FieldRequiredError?: FieldRequiredErrorGenqlSelection
+    on_InvalidBoxsetStatusError?: InvalidBoxsetStatusErrorGenqlSelection
     on_InvalidContributionStatusError?: InvalidContributionStatusErrorGenqlSelection
+    on_InvalidDiscPathError?: InvalidDiscPathErrorGenqlSelection
     on_InvalidIdError?: InvalidIdErrorGenqlSelection
     on_InvalidOwnershipError?: InvalidOwnershipErrorGenqlSelection
     on_LogsNotFoundError?: LogsNotFoundErrorGenqlSelection
+    on_MismatchedReleaseSlugError?: MismatchedReleaseSlugErrorGenqlSelection
     __typename?: boolean | number
     __scalar?: boolean | number
 }
@@ -787,9 +1121,30 @@ export interface AddChapterToItemPayloadGenqlSelection{
     __scalar?: boolean | number
 }
 
+export interface AddDiscToBoxsetPayloadGenqlSelection{
+    userContributionBoxset?: UserContributionBoxsetGenqlSelection
+    errors?: AddDiscToBoxsetErrorGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface AddExistingDiscToBoxsetPayloadGenqlSelection{
+    userContributionBoxset?: UserContributionBoxsetGenqlSelection
+    errors?: AddExistingDiscToBoxsetErrorGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
 export interface AddItemToDiscPayloadGenqlSelection{
     userContributionDiscItem?: UserContributionDiscItemGenqlSelection
     errors?: AddItemToDiscErrorGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface AddSubtitleTrackToItemPayloadGenqlSelection{
+    userContributionSubtitleTrack?: UserContributionSubtitleTrackGenqlSelection
+    errors?: AddSubtitleTrackToItemErrorGenqlSelection
     __typename?: boolean | number
     __scalar?: boolean | number
 }
@@ -898,7 +1253,94 @@ export interface ApiKeysEdgeGenqlSelection{
     __scalar?: boolean | number
 }
 
+export interface AttachDiscIdResultGenqlSelection{
+    outcome?: boolean | number
+    contentHash?: boolean | number
+    mediaItemSlug?: boolean | number
+    boxsetSlug?: boolean | number
+    mediaItemType?: boolean | number
+    releaseSlug?: boolean | number
+    discSlug?: boolean | number
+    discIndex?: boolean | number
+    globalDiscId?: boolean | number
+    existingGlobalDiscId?: boolean | number
+    matchedDifferentDisc?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface AttachGlobalDiscIdPayloadGenqlSelection{
+    attachDiscIdResult?: AttachDiscIdResultGenqlSelection
+    errors?: AttachGlobalDiscIdErrorGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
 export interface AuthenticationErrorGenqlSelection{
+    message?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** A connection to a list of items. */
+export interface BoxsetChatConnectionGenqlSelection{
+    /** Information to aid in pagination. */
+    pageInfo?: PageInfoGenqlSelection
+    /** A list of edges. */
+    edges?: BoxsetChatEdgeGenqlSelection
+    /** A flattened list of the nodes. */
+    nodes?: UserMessageGenqlSelection
+    /** Identifies the total count of items in the connection. */
+    totalCount?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** An edge in a connection. */
+export interface BoxsetChatEdgeGenqlSelection{
+    /** A cursor for use in pagination. */
+    cursor?: boolean | number
+    /** The item at the end of the edge. */
+    node?: UserMessageGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** A connection to a list of items. */
+export interface BoxsetContributionsConnectionGenqlSelection{
+    /** Information to aid in pagination. */
+    pageInfo?: PageInfoGenqlSelection
+    /** A list of edges. */
+    edges?: BoxsetContributionsEdgeGenqlSelection
+    /** A flattened list of the nodes. */
+    nodes?: UserContributionBoxsetGenqlSelection
+    /** Identifies the total count of items in the connection. */
+    totalCount?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** An edge in a connection. */
+export interface BoxsetContributionsEdgeGenqlSelection{
+    /** A cursor for use in pagination. */
+    cursor?: boolean | number
+    /** The item at the end of the edge. */
+    node?: UserContributionBoxsetGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface BoxsetNotFoundErrorGenqlSelection{
+    message?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface ContributionAlreadyInBoxsetErrorGenqlSelection{
     message?: boolean | number
     __typename?: boolean | number
     __scalar?: boolean | number
@@ -970,12 +1412,21 @@ export interface ContributionHistoryEdgeGenqlSelection{
 export interface ContributionMutationsGenqlSelection{
     addAudioTrackToItem?: (AddAudioTrackToItemPayloadGenqlSelection & { __args: {input: AddAudioTrackToItemInput} })
     addChapterToItem?: (AddChapterToItemPayloadGenqlSelection & { __args: {input: AddChapterToItemInput} })
+    addDiscToBoxset?: (AddDiscToBoxsetPayloadGenqlSelection & { __args: {input: AddDiscToBoxsetInput} })
+    addExistingDiscToBoxset?: (AddExistingDiscToBoxsetPayloadGenqlSelection & { __args: {input: AddExistingDiscToBoxsetInput} })
     addItemToDisc?: (AddItemToDiscPayloadGenqlSelection & { __args: {input: AddItemToDiscInput} })
+    addSubtitleTrackToItem?: (AddSubtitleTrackToItemPayloadGenqlSelection & { __args: {input: AddSubtitleTrackToItemInput} })
+    attachGlobalDiscId?: (AttachGlobalDiscIdPayloadGenqlSelection & { __args: {input: AttachGlobalDiscIdInput} })
+    createBoxset?: (CreateBoxsetPayloadGenqlSelection & { __args: {input: CreateBoxsetInput} })
     createContribution?: (CreateContributionPayloadGenqlSelection & { __args: {input: CreateContributionInput} })
     createDisc?: (CreateDiscPayloadGenqlSelection & { __args: {input: CreateDiscInput} })
+    deleteBoxset?: (DeleteBoxsetPayloadGenqlSelection & { __args: {input: DeleteBoxsetInput} })
     deleteContribution?: (DeleteContributionPayloadGenqlSelection & { __args: {input: DeleteContributionInput} })
+    deleteDiscFromContribution?: (DeleteDiscFromContributionPayloadGenqlSelection & { __args: {input: DeleteDiscFromContributionInput} })
     deleteItemFromDisc?: (DeleteItemFromDiscPayloadGenqlSelection & { __args: {input: DeleteItemFromDiscInput} })
     editItemOnDisc?: (EditItemOnDiscPayloadGenqlSelection & { __args: {input: EditItemOnDiscInput} })
+    setFileNameTemplate?: (SetFileNameTemplatePayloadGenqlSelection & { __args: {input: SetFileNameTemplateInput} })
+    deleteFileNameTemplate?: (DeleteFileNameTemplatePayloadGenqlSelection & { __args: {input: DeleteFileNameTemplateInput} })
     generateApiKey?: (GenerateApiKeyPayloadGenqlSelection & { __args: {input: GenerateApiKeyInput} })
     discLogs?: (DiscLogsPayloadGenqlSelection & { __args: {input: DiscLogsInput} })
     discUploadStatus?: (DiscUploadStatusPayloadGenqlSelection & { __args: {input: DiscUploadStatusInput} })
@@ -984,10 +1435,17 @@ export interface ContributionMutationsGenqlSelection{
     externalDataForContribution?: (ExternalDataForContributionPayloadGenqlSelection & { __args: {input: ExternalDataForContributionInput} })
     hashDisc?: (HashDiscPayloadGenqlSelection & { __args: {input: HashDiscInput} })
     markMessagesAsRead?: (MarkMessagesAsReadPayloadGenqlSelection & { __args: {input: MarkMessagesAsReadInput} })
+    markBoxsetMessagesAsRead?: (MarkBoxsetMessagesAsReadPayloadGenqlSelection & { __args: {input: MarkBoxsetMessagesAsReadInput} })
+    removeBoxsetMember?: (RemoveBoxsetMemberPayloadGenqlSelection & { __args: {input: RemoveBoxsetMemberInput} })
+    removeDiscFromBoxset?: (RemoveDiscFromBoxsetPayloadGenqlSelection & { __args: {input: RemoveDiscFromBoxsetInput} })
+    reorderBoxsetMembers?: (ReorderBoxsetMembersPayloadGenqlSelection & { __args: {input: ReorderBoxsetMembersInput} })
     reorderDiscs?: (ReorderDiscsPayloadGenqlSelection & { __args: {input: ReorderDiscsInput} })
     revokeApiKey?: (RevokeApiKeyPayloadGenqlSelection & { __args: {input: RevokeApiKeyInput} })
     sendAdminMessage?: (SendAdminMessagePayloadGenqlSelection & { __args: {input: SendAdminMessageInput} })
     sendUserMessage?: (SendUserMessagePayloadGenqlSelection & { __args: {input: SendUserMessageInput} })
+    sendAdminBoxsetMessage?: (SendAdminBoxsetMessagePayloadGenqlSelection & { __args: {input: SendAdminBoxsetMessageInput} })
+    sendBoxsetUserMessage?: (SendBoxsetUserMessagePayloadGenqlSelection & { __args: {input: SendBoxsetUserMessageInput} })
+    updateBoxset?: (UpdateBoxsetPayloadGenqlSelection & { __args: {input: UpdateBoxsetInput} })
     updateContribution?: (UpdateContributionPayloadGenqlSelection & { __args: {input: UpdateContributionInput} })
     updateDisc?: (UpdateDiscPayloadGenqlSelection & { __args: {input: UpdateDiscInput} })
     __typename?: boolean | number
@@ -1037,6 +1495,15 @@ export interface ContributionQueryGenqlSelection{
     last?: (Scalars['Int'] | null), 
     /** Returns the elements in the list that come before the specified cursor. */
     before?: (Scalars['String'] | null), order?: (UserMessageSortInput[] | null)} })
+    boxsetChat?: (BoxsetChatConnectionGenqlSelection & { __args: {boxsetId: Scalars['String'], 
+    /** Returns the first _n_ elements from the list. */
+    first?: (Scalars['Int'] | null), 
+    /** Returns the elements in the list that come after the specified cursor. */
+    after?: (Scalars['String'] | null), 
+    /** Returns the last _n_ elements from the list. */
+    last?: (Scalars['Int'] | null), 
+    /** Returns the elements in the list that come before the specified cursor. */
+    before?: (Scalars['String'] | null), order?: (UserMessageSortInput[] | null)} })
     hasUnreadMessages?: boolean | number
     myMessages?: (MyMessagesConnectionGenqlSelection & { __args?: {
     /** Returns the first _n_ elements from the list. */
@@ -1048,6 +1515,24 @@ export interface ContributionQueryGenqlSelection{
     /** Returns the elements in the list that come before the specified cursor. */
     before?: (Scalars['String'] | null), order?: (UserMessageSortInput[] | null)} })
     messageThreads?: MessageThreadGenqlSelection
+    boxsetContributions?: (BoxsetContributionsConnectionGenqlSelection & { __args?: {
+    /** Returns the first _n_ elements from the list. */
+    first?: (Scalars['Int'] | null), 
+    /** Returns the elements in the list that come after the specified cursor. */
+    after?: (Scalars['String'] | null), 
+    /** Returns the last _n_ elements from the list. */
+    last?: (Scalars['Int'] | null), 
+    /** Returns the elements in the list that come before the specified cursor. */
+    before?: (Scalars['String'] | null), where?: (UserContributionBoxsetFilterInput | null), order?: (UserContributionBoxsetSortInput[] | null)} })
+    myBoxsets?: (MyBoxsetsConnectionGenqlSelection & { __args?: {
+    /** Returns the first _n_ elements from the list. */
+    first?: (Scalars['Int'] | null), 
+    /** Returns the elements in the list that come after the specified cursor. */
+    after?: (Scalars['String'] | null), 
+    /** Returns the last _n_ elements from the list. */
+    last?: (Scalars['Int'] | null), 
+    /** Returns the elements in the list that come before the specified cursor. */
+    before?: (Scalars['String'] | null), where?: (UserContributionBoxsetFilterInput | null), order?: (UserContributionBoxsetSortInput[] | null)} })
     amazonProductMetadata?: (AmazonProductMetadataGenqlSelection & { __args: {asin: Scalars['String']} })
     apiKeys?: (ApiKeysConnectionGenqlSelection & { __args?: {
     /** Returns the first _n_ elements from the list. */
@@ -1067,6 +1552,7 @@ export interface ContributionQueryGenqlSelection{
     last?: (Scalars['Int'] | null), 
     /** Returns the elements in the list that come before the specified cursor. */
     before?: (Scalars['String'] | null), where?: (ApiKeyUsageLogInfoFilterInput | null), order?: (ApiKeyUsageLogInfoSortInput[] | null)} })
+    myFileNameTemplates?: UserFileNameTemplateGenqlSelection
     __typename?: boolean | number
     __scalar?: boolean | number
 }
@@ -1103,6 +1589,13 @@ export interface CouldNotParseLogsErrorGenqlSelection{
     __scalar?: boolean | number
 }
 
+export interface CreateBoxsetPayloadGenqlSelection{
+    userContributionBoxset?: UserContributionBoxsetGenqlSelection
+    errors?: CreateBoxsetErrorGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
 export interface CreateContributionPayloadGenqlSelection{
     userContribution?: UserContributionGenqlSelection
     errors?: CreateContributionErrorGenqlSelection
@@ -1117,9 +1610,30 @@ export interface CreateDiscPayloadGenqlSelection{
     __scalar?: boolean | number
 }
 
+export interface DeleteBoxsetPayloadGenqlSelection{
+    userContributionBoxset?: UserContributionBoxsetGenqlSelection
+    errors?: DeleteBoxsetErrorGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
 export interface DeleteContributionPayloadGenqlSelection{
     userContribution?: UserContributionGenqlSelection
     errors?: DeleteContributionErrorGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface DeleteDiscFromContributionPayloadGenqlSelection{
+    userContributionDisc?: UserContributionDiscGenqlSelection
+    errors?: DeleteDiscFromContributionErrorGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface DeleteFileNameTemplatePayloadGenqlSelection{
+    boolean?: boolean | number
+    errors?: DeleteFileNameTemplateErrorGenqlSelection
     __typename?: boolean | number
     __scalar?: boolean | number
 }
@@ -1203,6 +1717,12 @@ export interface EpisodeNamesPayloadGenqlSelection{
     __scalar?: boolean | number
 }
 
+export interface ExistingDiscAlreadyInBoxsetErrorGenqlSelection{
+    message?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
 export interface ExternalDataForContributionPayloadGenqlSelection{
     externalMetadata?: ExternalMetadataGenqlSelection
     errors?: ExternalDataForContributionErrorGenqlSelection
@@ -1272,7 +1792,19 @@ export interface HashInfoLogLineGenqlSelection{
     __scalar?: boolean | number
 }
 
+export interface InvalidBoxsetStatusErrorGenqlSelection{
+    message?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
 export interface InvalidContributionStatusErrorGenqlSelection{
+    message?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface InvalidDiscPathErrorGenqlSelection{
     message?: boolean | number
     __typename?: boolean | number
     __scalar?: boolean | number
@@ -1296,6 +1828,13 @@ export interface LogsNotFoundErrorGenqlSelection{
     __scalar?: boolean | number
 }
 
+export interface MarkBoxsetMessagesAsReadPayloadGenqlSelection{
+    boolean?: boolean | number
+    errors?: MarkBoxsetMessagesAsReadErrorGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
 export interface MarkMessagesAsReadPayloadGenqlSelection{
     boolean?: boolean | number
     errors?: MarkMessagesAsReadErrorGenqlSelection
@@ -1312,6 +1851,42 @@ export interface MessageThreadGenqlSelection{
     lastMessageAt?: boolean | number
     unreadCount?: boolean | number
     totalCount?: boolean | number
+    isBoxset?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface MismatchedReleaseSlugErrorGenqlSelection{
+    message?: boolean | number
+    boxsetSlug?: boolean | number
+    offendingReleaseSlug?: boolean | number
+    contributionTitle?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** A connection to a list of items. */
+export interface MyBoxsetsConnectionGenqlSelection{
+    /** Information to aid in pagination. */
+    pageInfo?: PageInfoGenqlSelection
+    /** A list of edges. */
+    edges?: MyBoxsetsEdgeGenqlSelection
+    /** A flattened list of the nodes. */
+    nodes?: UserContributionBoxsetGenqlSelection
+    /** Identifies the total count of items in the connection. */
+    totalCount?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+
+/** An edge in a connection. */
+export interface MyBoxsetsEdgeGenqlSelection{
+    /** A cursor for use in pagination. */
+    cursor?: boolean | number
+    /** The item at the end of the edge. */
+    node?: UserContributionBoxsetGenqlSelection
     __typename?: boolean | number
     __scalar?: boolean | number
 }
@@ -1383,6 +1958,27 @@ export interface PageInfoGenqlSelection{
     __scalar?: boolean | number
 }
 
+export interface RemoveBoxsetMemberPayloadGenqlSelection{
+    userContributionBoxset?: UserContributionBoxsetGenqlSelection
+    errors?: RemoveBoxsetMemberErrorGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface RemoveDiscFromBoxsetPayloadGenqlSelection{
+    userContributionBoxset?: UserContributionBoxsetGenqlSelection
+    errors?: RemoveDiscFromBoxsetErrorGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface ReorderBoxsetMembersPayloadGenqlSelection{
+    userContributionBoxset?: UserContributionBoxsetGenqlSelection
+    errors?: ReorderBoxsetMembersErrorGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
 export interface ReorderDiscsPayloadGenqlSelection{
     userContributionDisc?: UserContributionDiscGenqlSelection
     errors?: ReorderDiscsErrorGenqlSelection
@@ -1410,9 +2006,23 @@ export interface SegmentGenqlSelection{
     __scalar?: boolean | number
 }
 
+export interface SendAdminBoxsetMessagePayloadGenqlSelection{
+    userMessage?: UserMessageGenqlSelection
+    errors?: SendAdminBoxsetMessageErrorGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
 export interface SendAdminMessagePayloadGenqlSelection{
     userMessage?: UserMessageGenqlSelection
     errors?: SendAdminMessageErrorGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface SendBoxsetUserMessagePayloadGenqlSelection{
+    userMessage?: UserMessageGenqlSelection
+    errors?: SendBoxsetUserMessageErrorGenqlSelection
     __typename?: boolean | number
     __scalar?: boolean | number
 }
@@ -1441,6 +2051,13 @@ export interface SeriesEpisodeNamesGenqlSelection{
     __scalar?: boolean | number
 }
 
+export interface SetFileNameTemplatePayloadGenqlSelection{
+    userFileNameTemplate?: UserFileNameTemplateGenqlSelection
+    errors?: SetFileNameTemplateErrorGenqlSelection
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
 export interface TitleGenqlSelection{
     index?: boolean | number
     chapterCount?: boolean | number
@@ -1453,6 +2070,13 @@ export interface TitleGenqlSelection{
     javaComment?: boolean | number
     segments?: SegmentGenqlSelection
     lengthAsTimeSpan?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface UpdateBoxsetPayloadGenqlSelection{
+    userContributionBoxset?: UserContributionBoxsetGenqlSelection
+    errors?: UpdateBoxsetErrorGenqlSelection
     __typename?: boolean | number
     __scalar?: boolean | number
 }
@@ -1476,6 +2100,8 @@ export interface UserContributionGenqlSelection{
     userId?: boolean | number
     created?: boolean | number
     status?: boolean | number
+    boxsetId?: boolean | number
+    boxset?: UserContributionBoxsetGenqlSelection
     discs?: (UserContributionDiscGenqlSelection & { __args?: {where?: (UserContributionDiscFilterInput | null), order?: (UserContributionDiscSortInput[] | null)} })
     hashItems?: (UserContributionDiscHashItemGenqlSelection & { __args?: {where?: (UserContributionDiscHashItemFilterInput | null), order?: (UserContributionDiscHashItemSortInput[] | null)} })
     mediaType?: boolean | number
@@ -1508,6 +2134,39 @@ export interface UserContributionAudioTrackGenqlSelection{
     __scalar?: boolean | number
 }
 
+export interface UserContributionBoxsetGenqlSelection{
+    id?: boolean | number
+    userId?: boolean | number
+    created?: boolean | number
+    status?: boolean | number
+    title?: boolean | number
+    sortTitle?: boolean | number
+    slug?: boolean | number
+    frontImageUrl?: boolean | number
+    backImageUrl?: boolean | number
+    asin?: boolean | number
+    upc?: boolean | number
+    releaseDate?: boolean | number
+    locale?: boolean | number
+    regionCode?: boolean | number
+    members?: (UserContributionBoxsetMemberGenqlSelection & { __args?: {where?: (UserContributionBoxsetMemberFilterInput | null), order?: (UserContributionBoxsetMemberSortInput[] | null)} })
+    encodedId?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface UserContributionBoxsetMemberGenqlSelection{
+    id?: boolean | number
+    boxset?: UserContributionBoxsetGenqlSelection
+    disc?: UserContributionDiscGenqlSelection
+    sortOrder?: boolean | number
+    existingDiscPath?: boolean | number
+    existingDiscName?: boolean | number
+    existingDiscFormat?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
 export interface UserContributionChapterGenqlSelection{
     id?: boolean | number
     index?: boolean | number
@@ -1522,6 +2181,7 @@ export interface UserContributionDiscGenqlSelection{
     id?: boolean | number
     userContribution?: UserContributionGenqlSelection
     contentHash?: boolean | number
+    globalDiscId?: boolean | number
     format?: boolean | number
     name?: boolean | number
     slug?: boolean | number
@@ -1564,7 +2224,29 @@ export interface UserContributionDiscItemGenqlSelection{
     episode?: boolean | number
     chapters?: (UserContributionChapterGenqlSelection & { __args?: {where?: (UserContributionChapterFilterInput | null), order?: (UserContributionChapterSortInput[] | null)} })
     audioTracks?: (UserContributionAudioTrackGenqlSelection & { __args?: {where?: (UserContributionAudioTrackFilterInput | null), order?: (UserContributionAudioTrackSortInput[] | null)} })
+    subtitleTracks?: (UserContributionSubtitleTrackGenqlSelection & { __args?: {where?: (UserContributionSubtitleTrackFilterInput | null), order?: (UserContributionSubtitleTrackSortInput[] | null)} })
     encodedId?: boolean | number
+    filename?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface UserContributionSubtitleTrackGenqlSelection{
+    id?: boolean | number
+    index?: boolean | number
+    title?: boolean | number
+    item?: UserContributionDiscItemGenqlSelection
+    encodedId?: boolean | number
+    __typename?: boolean | number
+    __scalar?: boolean | number
+}
+
+export interface UserFileNameTemplateGenqlSelection{
+    id?: boolean | number
+    userId?: boolean | number
+    itemType?: boolean | number
+    template?: boolean | number
+    updatedAt?: boolean | number
     __typename?: boolean | number
     __scalar?: boolean | number
 }
@@ -1572,6 +2254,9 @@ export interface UserContributionDiscItemGenqlSelection{
 export interface UserMessageGenqlSelection{
     id?: boolean | number
     contributionId?: boolean | number
+    boxsetId?: boolean | number
+    contribution?: UserContributionGenqlSelection
+    boxset?: UserContributionBoxsetGenqlSelection
     fromUserId?: boolean | number
     toUserId?: boolean | number
     message?: boolean | number
@@ -1604,6 +2289,32 @@ export interface AddChapterToItemErrorGenqlSelection{
     __typename?: boolean | number
 }
 
+export interface AddDiscToBoxsetErrorGenqlSelection{
+    on_AuthenticationError?:AuthenticationErrorGenqlSelection,
+    on_BoxsetNotFoundError?:BoxsetNotFoundErrorGenqlSelection,
+    on_DiscNotFoundError?:DiscNotFoundErrorGenqlSelection,
+    on_ContributionAlreadyInBoxsetError?:ContributionAlreadyInBoxsetErrorGenqlSelection,
+    on_InvalidIdError?:InvalidIdErrorGenqlSelection,
+    on_InvalidOwnershipError?:InvalidOwnershipErrorGenqlSelection,
+    on_InvalidBoxsetStatusError?:InvalidBoxsetStatusErrorGenqlSelection,
+    on_MismatchedReleaseSlugError?:MismatchedReleaseSlugErrorGenqlSelection,
+    on_Error?: ErrorGenqlSelection,
+    __typename?: boolean | number
+}
+
+export interface AddExistingDiscToBoxsetErrorGenqlSelection{
+    on_AuthenticationError?:AuthenticationErrorGenqlSelection,
+    on_BoxsetNotFoundError?:BoxsetNotFoundErrorGenqlSelection,
+    on_InvalidIdError?:InvalidIdErrorGenqlSelection,
+    on_InvalidOwnershipError?:InvalidOwnershipErrorGenqlSelection,
+    on_InvalidDiscPathError?:InvalidDiscPathErrorGenqlSelection,
+    on_ExistingDiscAlreadyInBoxsetError?:ExistingDiscAlreadyInBoxsetErrorGenqlSelection,
+    on_InvalidBoxsetStatusError?:InvalidBoxsetStatusErrorGenqlSelection,
+    on_MismatchedReleaseSlugError?:MismatchedReleaseSlugErrorGenqlSelection,
+    on_Error?: ErrorGenqlSelection,
+    __typename?: boolean | number
+}
+
 export interface AddItemToDiscErrorGenqlSelection{
     on_ContributionNotFoundError?:ContributionNotFoundErrorGenqlSelection,
     on_DiscNotFoundError?:DiscNotFoundErrorGenqlSelection,
@@ -1614,8 +2325,35 @@ export interface AddItemToDiscErrorGenqlSelection{
     __typename?: boolean | number
 }
 
+export interface AddSubtitleTrackToItemErrorGenqlSelection{
+    on_ContributionNotFoundError?:ContributionNotFoundErrorGenqlSelection,
+    on_DiscNotFoundError?:DiscNotFoundErrorGenqlSelection,
+    on_DiscItemNotFoundError?:DiscItemNotFoundErrorGenqlSelection,
+    on_AuthenticationError?:AuthenticationErrorGenqlSelection,
+    on_InvalidIdError?:InvalidIdErrorGenqlSelection,
+    on_InvalidOwnershipError?:InvalidOwnershipErrorGenqlSelection,
+    on_Error?: ErrorGenqlSelection,
+    __typename?: boolean | number
+}
+
+export interface AttachGlobalDiscIdErrorGenqlSelection{
+    on_AuthenticationError?:AuthenticationErrorGenqlSelection,
+    on_Error?: ErrorGenqlSelection,
+    __typename?: boolean | number
+}
+
+export interface CreateBoxsetErrorGenqlSelection{
+    on_AuthenticationError?:AuthenticationErrorGenqlSelection,
+    on_Error?: ErrorGenqlSelection,
+    __typename?: boolean | number
+}
+
 export interface CreateContributionErrorGenqlSelection{
     on_AuthenticationError?:AuthenticationErrorGenqlSelection,
+    on_BoxsetNotFoundError?:BoxsetNotFoundErrorGenqlSelection,
+    on_InvalidIdError?:InvalidIdErrorGenqlSelection,
+    on_InvalidOwnershipError?:InvalidOwnershipErrorGenqlSelection,
+    on_InvalidBoxsetStatusError?:InvalidBoxsetStatusErrorGenqlSelection,
     on_Error?: ErrorGenqlSelection,
     __typename?: boolean | number
 }
@@ -1625,6 +2363,17 @@ export interface CreateDiscErrorGenqlSelection{
     on_AuthenticationError?:AuthenticationErrorGenqlSelection,
     on_InvalidIdError?:InvalidIdErrorGenqlSelection,
     on_InvalidOwnershipError?:InvalidOwnershipErrorGenqlSelection,
+    on_InvalidDiscPathError?:InvalidDiscPathErrorGenqlSelection,
+    on_Error?: ErrorGenqlSelection,
+    __typename?: boolean | number
+}
+
+export interface DeleteBoxsetErrorGenqlSelection{
+    on_AuthenticationError?:AuthenticationErrorGenqlSelection,
+    on_BoxsetNotFoundError?:BoxsetNotFoundErrorGenqlSelection,
+    on_InvalidIdError?:InvalidIdErrorGenqlSelection,
+    on_InvalidOwnershipError?:InvalidOwnershipErrorGenqlSelection,
+    on_InvalidBoxsetStatusError?:InvalidBoxsetStatusErrorGenqlSelection,
     on_Error?: ErrorGenqlSelection,
     __typename?: boolean | number
 }
@@ -1635,6 +2384,23 @@ export interface DeleteContributionErrorGenqlSelection{
     on_InvalidIdError?:InvalidIdErrorGenqlSelection,
     on_InvalidOwnershipError?:InvalidOwnershipErrorGenqlSelection,
     on_InvalidContributionStatusError?:InvalidContributionStatusErrorGenqlSelection,
+    on_Error?: ErrorGenqlSelection,
+    __typename?: boolean | number
+}
+
+export interface DeleteDiscFromContributionErrorGenqlSelection{
+    on_ContributionNotFoundError?:ContributionNotFoundErrorGenqlSelection,
+    on_DiscNotFoundError?:DiscNotFoundErrorGenqlSelection,
+    on_AuthenticationError?:AuthenticationErrorGenqlSelection,
+    on_InvalidIdError?:InvalidIdErrorGenqlSelection,
+    on_InvalidOwnershipError?:InvalidOwnershipErrorGenqlSelection,
+    on_InvalidContributionStatusError?:InvalidContributionStatusErrorGenqlSelection,
+    on_Error?: ErrorGenqlSelection,
+    __typename?: boolean | number
+}
+
+export interface DeleteFileNameTemplateErrorGenqlSelection{
+    on_AuthenticationError?:AuthenticationErrorGenqlSelection,
     on_Error?: ErrorGenqlSelection,
     __typename?: boolean | number
 }
@@ -1718,8 +2484,45 @@ export interface HashDiscErrorGenqlSelection{
     __typename?: boolean | number
 }
 
+export interface MarkBoxsetMessagesAsReadErrorGenqlSelection{
+    on_AuthenticationError?:AuthenticationErrorGenqlSelection,
+    on_Error?: ErrorGenqlSelection,
+    __typename?: boolean | number
+}
+
 export interface MarkMessagesAsReadErrorGenqlSelection{
     on_AuthenticationError?:AuthenticationErrorGenqlSelection,
+    on_Error?: ErrorGenqlSelection,
+    __typename?: boolean | number
+}
+
+export interface RemoveBoxsetMemberErrorGenqlSelection{
+    on_AuthenticationError?:AuthenticationErrorGenqlSelection,
+    on_BoxsetNotFoundError?:BoxsetNotFoundErrorGenqlSelection,
+    on_InvalidIdError?:InvalidIdErrorGenqlSelection,
+    on_InvalidOwnershipError?:InvalidOwnershipErrorGenqlSelection,
+    on_InvalidBoxsetStatusError?:InvalidBoxsetStatusErrorGenqlSelection,
+    on_Error?: ErrorGenqlSelection,
+    __typename?: boolean | number
+}
+
+export interface RemoveDiscFromBoxsetErrorGenqlSelection{
+    on_AuthenticationError?:AuthenticationErrorGenqlSelection,
+    on_BoxsetNotFoundError?:BoxsetNotFoundErrorGenqlSelection,
+    on_DiscNotFoundError?:DiscNotFoundErrorGenqlSelection,
+    on_InvalidIdError?:InvalidIdErrorGenqlSelection,
+    on_InvalidOwnershipError?:InvalidOwnershipErrorGenqlSelection,
+    on_InvalidBoxsetStatusError?:InvalidBoxsetStatusErrorGenqlSelection,
+    on_Error?: ErrorGenqlSelection,
+    __typename?: boolean | number
+}
+
+export interface ReorderBoxsetMembersErrorGenqlSelection{
+    on_AuthenticationError?:AuthenticationErrorGenqlSelection,
+    on_BoxsetNotFoundError?:BoxsetNotFoundErrorGenqlSelection,
+    on_InvalidIdError?:InvalidIdErrorGenqlSelection,
+    on_InvalidOwnershipError?:InvalidOwnershipErrorGenqlSelection,
+    on_InvalidBoxsetStatusError?:InvalidBoxsetStatusErrorGenqlSelection,
     on_Error?: ErrorGenqlSelection,
     __typename?: boolean | number
 }
@@ -1739,6 +2542,14 @@ export interface RevokeApiKeyErrorGenqlSelection{
     __typename?: boolean | number
 }
 
+export interface SendAdminBoxsetMessageErrorGenqlSelection{
+    on_BoxsetNotFoundError?:BoxsetNotFoundErrorGenqlSelection,
+    on_AuthenticationError?:AuthenticationErrorGenqlSelection,
+    on_InvalidIdError?:InvalidIdErrorGenqlSelection,
+    on_Error?: ErrorGenqlSelection,
+    __typename?: boolean | number
+}
+
 export interface SendAdminMessageErrorGenqlSelection{
     on_ContributionNotFoundError?:ContributionNotFoundErrorGenqlSelection,
     on_AuthenticationError?:AuthenticationErrorGenqlSelection,
@@ -1746,9 +2557,33 @@ export interface SendAdminMessageErrorGenqlSelection{
     __typename?: boolean | number
 }
 
+export interface SendBoxsetUserMessageErrorGenqlSelection{
+    on_BoxsetNotFoundError?:BoxsetNotFoundErrorGenqlSelection,
+    on_AuthenticationError?:AuthenticationErrorGenqlSelection,
+    on_InvalidIdError?:InvalidIdErrorGenqlSelection,
+    on_InvalidOwnershipError?:InvalidOwnershipErrorGenqlSelection,
+    on_Error?: ErrorGenqlSelection,
+    __typename?: boolean | number
+}
+
 export interface SendUserMessageErrorGenqlSelection{
     on_ContributionNotFoundError?:ContributionNotFoundErrorGenqlSelection,
     on_AuthenticationError?:AuthenticationErrorGenqlSelection,
+    on_InvalidOwnershipError?:InvalidOwnershipErrorGenqlSelection,
+    on_Error?: ErrorGenqlSelection,
+    __typename?: boolean | number
+}
+
+export interface SetFileNameTemplateErrorGenqlSelection{
+    on_AuthenticationError?:AuthenticationErrorGenqlSelection,
+    on_Error?: ErrorGenqlSelection,
+    __typename?: boolean | number
+}
+
+export interface UpdateBoxsetErrorGenqlSelection{
+    on_AuthenticationError?:AuthenticationErrorGenqlSelection,
+    on_BoxsetNotFoundError?:BoxsetNotFoundErrorGenqlSelection,
+    on_InvalidIdError?:InvalidIdErrorGenqlSelection,
     on_InvalidOwnershipError?:InvalidOwnershipErrorGenqlSelection,
     on_Error?: ErrorGenqlSelection,
     __typename?: boolean | number
@@ -1778,7 +2613,13 @@ export interface AddAudioTrackToItemInput {contributionId: Scalars['String'],dis
 
 export interface AddChapterToItemInput {contributionId: Scalars['String'],discId: Scalars['String'],itemId: Scalars['String'],chapterIndex: Scalars['Int'],chapterName: Scalars['String']}
 
+export interface AddDiscToBoxsetInput {boxsetId: Scalars['String'],discId: Scalars['String']}
+
+export interface AddExistingDiscToBoxsetInput {boxsetId: Scalars['String'],existingDiscPath: Scalars['String'],discName: Scalars['String'],discFormat: Scalars['String']}
+
 export interface AddItemToDiscInput {contributionId: Scalars['String'],discId: Scalars['String'],name: Scalars['String'],source: Scalars['String'],duration: Scalars['String'],size: Scalars['String'],chapterCount: Scalars['Int'],segmentCount: Scalars['Int'],segmentMap: Scalars['String'],type: Scalars['String'],description?: (Scalars['String'] | null),season?: (Scalars['String'] | null),episode?: (Scalars['String'] | null)}
+
+export interface AddSubtitleTrackToItemInput {contributionId: Scalars['String'],discId: Scalars['String'],itemId: Scalars['String'],trackIndex: Scalars['Int'],trackName: Scalars['String']}
 
 export interface ApiKeyInfoFilterInput {and?: (ApiKeyInfoFilterInput[] | null),or?: (ApiKeyInfoFilterInput[] | null),name?: (StringOperationFilterInput | null),keyPrefix?: (StringOperationFilterInput | null),isActive?: (BooleanOperationFilterInput | null),logUsage?: (BooleanOperationFilterInput | null),roles?: (StringOperationFilterInput | null),ownerEmail?: (StringOperationFilterInput | null),createdAt?: (DateTimeOperationFilterInput | null),expiresAt?: (DateTimeOperationFilterInput | null),lastUsedAt?: (DateTimeOperationFilterInput | null)}
 
@@ -1788,19 +2629,31 @@ export interface ApiKeyUsageLogInfoFilterInput {and?: (ApiKeyUsageLogInfoFilterI
 
 export interface ApiKeyUsageLogInfoSortInput {apiKeyPrefix?: (SortEnumType | null),apiKeyName?: (SortEnumType | null),timestamp?: (SortEnumType | null),operationName?: (SortEnumType | null),fieldCost?: (SortEnumType | null),typeCost?: (SortEnumType | null),durationMs?: (SortEnumType | null)}
 
+export interface AttachGlobalDiscIdInput {files: FileHashInfoInput[],globalDiscId: Scalars['String'],mediaItemSlug?: (Scalars['String'] | null),boxsetSlug?: (Scalars['String'] | null),releaseSlug?: (Scalars['String'] | null),discSlug?: (Scalars['String'] | null),discIndex?: (Scalars['Int'] | null)}
+
 export interface BooleanOperationFilterInput {eq?: (Scalars['Boolean'] | null),neq?: (Scalars['Boolean'] | null)}
+
+export interface BoxsetMutationRequestInput {title: Scalars['String'],sortTitle?: (Scalars['String'] | null),slug: Scalars['String'],frontImageUrl?: (Scalars['String'] | null),backImageUrl?: (Scalars['String'] | null),asin?: (Scalars['String'] | null),upc?: (Scalars['String'] | null),releaseDate?: (Scalars['DateTime'] | null),locale?: (Scalars['String'] | null),regionCode?: (Scalars['String'] | null)}
 
 export interface ContributionHistorySortInput {id?: (SortEnumType | null),contributionId?: (SortEnumType | null),timeStamp?: (SortEnumType | null),description?: (SortEnumType | null),userId?: (SortEnumType | null),type?: (SortEnumType | null)}
 
-export interface ContributionMutationRequestInput {mediaType: Scalars['String'],externalId: Scalars['String'],externalProvider: Scalars['String'],releaseDate: Scalars['DateTime'],asin: Scalars['String'],upc: Scalars['String'],frontImageUrl: Scalars['String'],backImageUrl?: (Scalars['String'] | null),releaseTitle: Scalars['String'],releaseSlug: Scalars['String'],regionCode: Scalars['String'],locale: Scalars['String'],title: Scalars['String'],year: Scalars['String'],storageId: Scalars['UUID'],status: UserContributionStatus}
+export interface ContributionMutationRequestInput {mediaType: Scalars['String'],externalId: Scalars['String'],externalProvider: Scalars['String'],releaseDate: Scalars['DateTime'],asin: Scalars['String'],upc: Scalars['String'],frontImageUrl: Scalars['String'],backImageUrl?: (Scalars['String'] | null),releaseTitle: Scalars['String'],releaseSlug: Scalars['String'],regionCode: Scalars['String'],locale: Scalars['String'],title: Scalars['String'],year: Scalars['String'],storageId: Scalars['UUID'],status: UserContributionStatus,boxsetId?: (Scalars['String'] | null)}
+
+export interface CreateBoxsetInput {input: BoxsetMutationRequestInput}
 
 export interface CreateContributionInput {input: ContributionMutationRequestInput}
 
-export interface CreateDiscInput {contributionId: Scalars['String'],contentHash: Scalars['String'],format: Scalars['String'],name: Scalars['String'],slug: Scalars['String'],existingDiscPath?: (Scalars['String'] | null)}
+export interface CreateDiscInput {contributionId: Scalars['String'],contentHash: Scalars['String'],format: Scalars['String'],name: Scalars['String'],slug: Scalars['String'],existingDiscPath?: (Scalars['String'] | null),globalDiscId?: (Scalars['String'] | null)}
 
 export interface DateTimeOperationFilterInput {eq?: (Scalars['DateTime'] | null),neq?: (Scalars['DateTime'] | null),in?: ((Scalars['DateTime'] | null)[] | null),nin?: ((Scalars['DateTime'] | null)[] | null),gt?: (Scalars['DateTime'] | null),ngt?: (Scalars['DateTime'] | null),gte?: (Scalars['DateTime'] | null),ngte?: (Scalars['DateTime'] | null),lt?: (Scalars['DateTime'] | null),nlt?: (Scalars['DateTime'] | null),lte?: (Scalars['DateTime'] | null),nlte?: (Scalars['DateTime'] | null)}
 
+export interface DeleteBoxsetInput {boxsetId: Scalars['String']}
+
 export interface DeleteContributionInput {contributionId: Scalars['String']}
+
+export interface DeleteDiscFromContributionInput {contributionId: Scalars['String'],discId: Scalars['String']}
+
+export interface DeleteFileNameTemplateInput {itemType: Scalars['String']}
 
 export interface DeleteItemFromDiscInput {contributionId: Scalars['String'],discId: Scalars['String'],itemId: Scalars['String']}
 
@@ -1838,19 +2691,39 @@ export interface ListEncodedIdFilterTypeOfUserContributionDiscHashItemFilterInpu
 
 export interface ListEncodedIdFilterTypeOfUserContributionDiscItemFilterInput {all?: (UserContributionDiscItemFilterInput | null),none?: (UserContributionDiscItemFilterInput | null),some?: (UserContributionDiscItemFilterInput | null),any?: (Scalars['Boolean'] | null)}
 
+export interface ListEncodedIdFilterTypeOfUserContributionSubtitleTrackFilterInput {all?: (UserContributionSubtitleTrackFilterInput | null),none?: (UserContributionSubtitleTrackFilterInput | null),some?: (UserContributionSubtitleTrackFilterInput | null),any?: (Scalars['Boolean'] | null)}
+
+export interface ListFilterInputTypeOfUserContributionBoxsetMemberFilterInput {all?: (UserContributionBoxsetMemberFilterInput | null),none?: (UserContributionBoxsetMemberFilterInput | null),some?: (UserContributionBoxsetMemberFilterInput | null),any?: (Scalars['Boolean'] | null)}
+
 export interface LongOperationFilterInput {eq?: (Scalars['Long'] | null),neq?: (Scalars['Long'] | null),in?: ((Scalars['Long'] | null)[] | null),nin?: ((Scalars['Long'] | null)[] | null),gt?: (Scalars['Long'] | null),ngt?: (Scalars['Long'] | null),gte?: (Scalars['Long'] | null),ngte?: (Scalars['Long'] | null),lt?: (Scalars['Long'] | null),nlt?: (Scalars['Long'] | null),lte?: (Scalars['Long'] | null),nlte?: (Scalars['Long'] | null)}
 
+export interface MarkBoxsetMessagesAsReadInput {boxsetId: Scalars['String']}
+
 export interface MarkMessagesAsReadInput {contributionId: Scalars['String']}
+
+export interface RemoveBoxsetMemberInput {boxsetId: Scalars['String'],memberId: Scalars['Int']}
+
+export interface RemoveDiscFromBoxsetInput {boxsetId: Scalars['String'],discId: Scalars['String']}
+
+export interface ReorderBoxsetMembersInput {boxsetId: Scalars['String'],memberIds: Scalars['Int'][]}
 
 export interface ReorderDiscsInput {contributionId: Scalars['String'],discIds: Scalars['String'][]}
 
 export interface RevokeApiKeyInput {keyPrefix: Scalars['String']}
 
+export interface SendAdminBoxsetMessageInput {boxsetId: Scalars['String'],message: Scalars['String']}
+
 export interface SendAdminMessageInput {contributionId: Scalars['String'],message: Scalars['String']}
+
+export interface SendBoxsetUserMessageInput {boxsetId: Scalars['String'],message: Scalars['String']}
 
 export interface SendUserMessageInput {contributionId: Scalars['String'],message: Scalars['String']}
 
+export interface SetFileNameTemplateInput {itemType: Scalars['String'],template: Scalars['String']}
+
 export interface StringOperationFilterInput {and?: (StringOperationFilterInput[] | null),or?: (StringOperationFilterInput[] | null),eq?: (Scalars['String'] | null),neq?: (Scalars['String'] | null),contains?: (Scalars['String'] | null),ncontains?: (Scalars['String'] | null),in?: ((Scalars['String'] | null)[] | null),nin?: ((Scalars['String'] | null)[] | null),startsWith?: (Scalars['String'] | null),nstartsWith?: (Scalars['String'] | null),endsWith?: (Scalars['String'] | null),nendsWith?: (Scalars['String'] | null)}
+
+export interface UpdateBoxsetInput {boxsetId: Scalars['String'],input: BoxsetMutationRequestInput}
 
 export interface UpdateContributionInput {contributionId: Scalars['String'],asin: Scalars['String'],upc: Scalars['String'],releaseDate: Scalars['DateTime'],releaseTitle: Scalars['String'],releaseSlug: Scalars['String'],locale: Scalars['String'],regionCode: Scalars['String'],frontImageUrl?: (Scalars['String'] | null),backImageUrl?: (Scalars['String'] | null),deleteBackImage: Scalars['Boolean']}
 
@@ -1860,35 +2733,47 @@ export interface UserContributionAudioTrackFilterInput {and?: (UserContributionA
 
 export interface UserContributionAudioTrackSortInput {id?: (SortEnumType | null),index?: (SortEnumType | null),title?: (SortEnumType | null),item?: (UserContributionDiscItemSortInput | null)}
 
+export interface UserContributionBoxsetFilterInput {and?: (UserContributionBoxsetFilterInput[] | null),or?: (UserContributionBoxsetFilterInput[] | null),encodedId?: (EncodedIdOperationFilterInput | null),userId?: (StringOperationFilterInput | null),created?: (DateTimeOperationFilterInput | null),status?: (UserContributionStatusOperationFilterInput | null),title?: (StringOperationFilterInput | null),sortTitle?: (StringOperationFilterInput | null),slug?: (StringOperationFilterInput | null),frontImageUrl?: (StringOperationFilterInput | null),backImageUrl?: (StringOperationFilterInput | null),asin?: (StringOperationFilterInput | null),upc?: (StringOperationFilterInput | null),releaseDate?: (DateTimeOperationFilterInput | null),locale?: (StringOperationFilterInput | null),regionCode?: (StringOperationFilterInput | null),members?: (ListFilterInputTypeOfUserContributionBoxsetMemberFilterInput | null)}
+
+export interface UserContributionBoxsetMemberFilterInput {and?: (UserContributionBoxsetMemberFilterInput[] | null),or?: (UserContributionBoxsetMemberFilterInput[] | null),id?: (IntOperationFilterInput | null),boxset?: (UserContributionBoxsetFilterInput | null),disc?: (UserContributionDiscFilterInput | null),sortOrder?: (IntOperationFilterInput | null),existingDiscPath?: (StringOperationFilterInput | null),existingDiscName?: (StringOperationFilterInput | null),existingDiscFormat?: (StringOperationFilterInput | null)}
+
+export interface UserContributionBoxsetMemberSortInput {id?: (SortEnumType | null),boxset?: (UserContributionBoxsetSortInput | null),disc?: (UserContributionDiscSortInput | null),sortOrder?: (SortEnumType | null),existingDiscPath?: (SortEnumType | null),existingDiscName?: (SortEnumType | null),existingDiscFormat?: (SortEnumType | null)}
+
+export interface UserContributionBoxsetSortInput {id?: (SortEnumType | null),userId?: (SortEnumType | null),created?: (SortEnumType | null),status?: (SortEnumType | null),title?: (SortEnumType | null),sortTitle?: (SortEnumType | null),slug?: (SortEnumType | null),frontImageUrl?: (SortEnumType | null),backImageUrl?: (SortEnumType | null),asin?: (SortEnumType | null),upc?: (SortEnumType | null),releaseDate?: (SortEnumType | null),locale?: (SortEnumType | null),regionCode?: (SortEnumType | null)}
+
 export interface UserContributionChapterFilterInput {and?: (UserContributionChapterFilterInput[] | null),or?: (UserContributionChapterFilterInput[] | null),encodedId?: (EncodedIdOperationFilterInput | null),index?: (IntOperationFilterInput | null),title?: (StringOperationFilterInput | null),item?: (UserContributionDiscItemFilterInput | null)}
 
 export interface UserContributionChapterSortInput {id?: (SortEnumType | null),index?: (SortEnumType | null),title?: (SortEnumType | null),item?: (UserContributionDiscItemSortInput | null)}
 
-export interface UserContributionDiscFilterInput {and?: (UserContributionDiscFilterInput[] | null),or?: (UserContributionDiscFilterInput[] | null),encodedId?: (EncodedIdOperationFilterInput | null),userContribution?: (UserContributionFilterInput | null),contentHash?: (StringOperationFilterInput | null),format?: (StringOperationFilterInput | null),name?: (StringOperationFilterInput | null),slug?: (StringOperationFilterInput | null),logsUploaded?: (BooleanOperationFilterInput | null),logUploadError?: (StringOperationFilterInput | null),index?: (IntOperationFilterInput | null),existingDiscPath?: (StringOperationFilterInput | null),items?: (ListEncodedIdFilterTypeOfUserContributionDiscItemFilterInput | null)}
+export interface UserContributionDiscFilterInput {and?: (UserContributionDiscFilterInput[] | null),or?: (UserContributionDiscFilterInput[] | null),encodedId?: (EncodedIdOperationFilterInput | null),userContribution?: (UserContributionFilterInput | null),contentHash?: (StringOperationFilterInput | null),globalDiscId?: (StringOperationFilterInput | null),format?: (StringOperationFilterInput | null),name?: (StringOperationFilterInput | null),slug?: (StringOperationFilterInput | null),logsUploaded?: (BooleanOperationFilterInput | null),logUploadError?: (StringOperationFilterInput | null),index?: (IntOperationFilterInput | null),existingDiscPath?: (StringOperationFilterInput | null),items?: (ListEncodedIdFilterTypeOfUserContributionDiscItemFilterInput | null)}
 
 export interface UserContributionDiscHashItemFilterInput {and?: (UserContributionDiscHashItemFilterInput[] | null),or?: (UserContributionDiscHashItemFilterInput[] | null),encodedId?: (EncodedIdOperationFilterInput | null),userContribution?: (UserContributionFilterInput | null),discHash?: (StringOperationFilterInput | null),index?: (IntOperationFilterInput | null),name?: (StringOperationFilterInput | null),creationTime?: (DateTimeOperationFilterInput | null),size?: (LongOperationFilterInput | null)}
 
 export interface UserContributionDiscHashItemSortInput {id?: (SortEnumType | null),userContribution?: (UserContributionSortInput | null),discHash?: (SortEnumType | null),index?: (SortEnumType | null),name?: (SortEnumType | null),creationTime?: (SortEnumType | null),size?: (SortEnumType | null)}
 
-export interface UserContributionDiscItemFilterInput {and?: (UserContributionDiscItemFilterInput[] | null),or?: (UserContributionDiscItemFilterInput[] | null),encodedId?: (EncodedIdOperationFilterInput | null),disc?: (UserContributionDiscFilterInput | null),name?: (StringOperationFilterInput | null),source?: (StringOperationFilterInput | null),duration?: (StringOperationFilterInput | null),size?: (StringOperationFilterInput | null),chapterCount?: (IntOperationFilterInput | null),segmentCount?: (IntOperationFilterInput | null),segmentMap?: (StringOperationFilterInput | null),type?: (StringOperationFilterInput | null),description?: (StringOperationFilterInput | null),season?: (StringOperationFilterInput | null),episode?: (StringOperationFilterInput | null),chapters?: (ListEncodedIdFilterTypeOfUserContributionChapterFilterInput | null),audioTracks?: (ListEncodedIdFilterTypeOfUserContributionAudioTrackFilterInput | null)}
+export interface UserContributionDiscItemFilterInput {and?: (UserContributionDiscItemFilterInput[] | null),or?: (UserContributionDiscItemFilterInput[] | null),encodedId?: (EncodedIdOperationFilterInput | null),disc?: (UserContributionDiscFilterInput | null),name?: (StringOperationFilterInput | null),source?: (StringOperationFilterInput | null),duration?: (StringOperationFilterInput | null),size?: (StringOperationFilterInput | null),chapterCount?: (IntOperationFilterInput | null),segmentCount?: (IntOperationFilterInput | null),segmentMap?: (StringOperationFilterInput | null),type?: (StringOperationFilterInput | null),description?: (StringOperationFilterInput | null),season?: (StringOperationFilterInput | null),episode?: (StringOperationFilterInput | null),chapters?: (ListEncodedIdFilterTypeOfUserContributionChapterFilterInput | null),audioTracks?: (ListEncodedIdFilterTypeOfUserContributionAudioTrackFilterInput | null),subtitleTracks?: (ListEncodedIdFilterTypeOfUserContributionSubtitleTrackFilterInput | null)}
 
 export interface UserContributionDiscItemSortInput {id?: (SortEnumType | null),disc?: (UserContributionDiscSortInput | null),name?: (SortEnumType | null),source?: (SortEnumType | null),duration?: (SortEnumType | null),size?: (SortEnumType | null),chapterCount?: (SortEnumType | null),segmentCount?: (SortEnumType | null),segmentMap?: (SortEnumType | null),type?: (SortEnumType | null),description?: (SortEnumType | null),season?: (SortEnumType | null),episode?: (SortEnumType | null)}
 
-export interface UserContributionDiscSortInput {id?: (SortEnumType | null),userContribution?: (UserContributionSortInput | null),contentHash?: (SortEnumType | null),format?: (SortEnumType | null),name?: (SortEnumType | null),slug?: (SortEnumType | null),logsUploaded?: (SortEnumType | null),logUploadError?: (SortEnumType | null),index?: (SortEnumType | null),existingDiscPath?: (SortEnumType | null)}
+export interface UserContributionDiscSortInput {id?: (SortEnumType | null),userContribution?: (UserContributionSortInput | null),contentHash?: (SortEnumType | null),globalDiscId?: (SortEnumType | null),format?: (SortEnumType | null),name?: (SortEnumType | null),slug?: (SortEnumType | null),logsUploaded?: (SortEnumType | null),logUploadError?: (SortEnumType | null),index?: (SortEnumType | null),existingDiscPath?: (SortEnumType | null)}
 
-export interface UserContributionFilterInput {and?: (UserContributionFilterInput[] | null),or?: (UserContributionFilterInput[] | null),encodedId?: (EncodedIdOperationFilterInput | null),userId?: (StringOperationFilterInput | null),created?: (DateTimeOperationFilterInput | null),status?: (UserContributionStatusOperationFilterInput | null),discs?: (ListEncodedIdFilterTypeOfUserContributionDiscFilterInput | null),hashItems?: (ListEncodedIdFilterTypeOfUserContributionDiscHashItemFilterInput | null),mediaType?: (StringOperationFilterInput | null),externalId?: (StringOperationFilterInput | null),externalProvider?: (StringOperationFilterInput | null),releaseDate?: (DateTimeOperationFilterInput | null),asin?: (StringOperationFilterInput | null),upc?: (StringOperationFilterInput | null),frontImageUrl?: (StringOperationFilterInput | null),backImageUrl?: (StringOperationFilterInput | null),releaseTitle?: (StringOperationFilterInput | null),releaseSlug?: (StringOperationFilterInput | null),locale?: (StringOperationFilterInput | null),regionCode?: (StringOperationFilterInput | null),title?: (StringOperationFilterInput | null),year?: (StringOperationFilterInput | null),titleSlug?: (StringOperationFilterInput | null)}
+export interface UserContributionFilterInput {and?: (UserContributionFilterInput[] | null),or?: (UserContributionFilterInput[] | null),encodedId?: (EncodedIdOperationFilterInput | null),userId?: (StringOperationFilterInput | null),created?: (DateTimeOperationFilterInput | null),status?: (UserContributionStatusOperationFilterInput | null),boxsetId?: (IntOperationFilterInput | null),boxset?: (UserContributionBoxsetFilterInput | null),discs?: (ListEncodedIdFilterTypeOfUserContributionDiscFilterInput | null),hashItems?: (ListEncodedIdFilterTypeOfUserContributionDiscHashItemFilterInput | null),mediaType?: (StringOperationFilterInput | null),externalId?: (StringOperationFilterInput | null),externalProvider?: (StringOperationFilterInput | null),releaseDate?: (DateTimeOperationFilterInput | null),asin?: (StringOperationFilterInput | null),upc?: (StringOperationFilterInput | null),frontImageUrl?: (StringOperationFilterInput | null),backImageUrl?: (StringOperationFilterInput | null),releaseTitle?: (StringOperationFilterInput | null),releaseSlug?: (StringOperationFilterInput | null),locale?: (StringOperationFilterInput | null),regionCode?: (StringOperationFilterInput | null),title?: (StringOperationFilterInput | null),year?: (StringOperationFilterInput | null),titleSlug?: (StringOperationFilterInput | null)}
 
-export interface UserContributionSortInput {id?: (SortEnumType | null),userId?: (SortEnumType | null),created?: (SortEnumType | null),status?: (SortEnumType | null),mediaType?: (SortEnumType | null),externalId?: (SortEnumType | null),externalProvider?: (SortEnumType | null),releaseDate?: (SortEnumType | null),asin?: (SortEnumType | null),upc?: (SortEnumType | null),frontImageUrl?: (SortEnumType | null),backImageUrl?: (SortEnumType | null),releaseTitle?: (SortEnumType | null),releaseSlug?: (SortEnumType | null),locale?: (SortEnumType | null),regionCode?: (SortEnumType | null),title?: (SortEnumType | null),year?: (SortEnumType | null),titleSlug?: (SortEnumType | null)}
+export interface UserContributionSortInput {id?: (SortEnumType | null),userId?: (SortEnumType | null),created?: (SortEnumType | null),status?: (SortEnumType | null),boxsetId?: (SortEnumType | null),boxset?: (UserContributionBoxsetSortInput | null),mediaType?: (SortEnumType | null),externalId?: (SortEnumType | null),externalProvider?: (SortEnumType | null),releaseDate?: (SortEnumType | null),asin?: (SortEnumType | null),upc?: (SortEnumType | null),frontImageUrl?: (SortEnumType | null),backImageUrl?: (SortEnumType | null),releaseTitle?: (SortEnumType | null),releaseSlug?: (SortEnumType | null),locale?: (SortEnumType | null),regionCode?: (SortEnumType | null),title?: (SortEnumType | null),year?: (SortEnumType | null),titleSlug?: (SortEnumType | null)}
 
 export interface UserContributionStatusOperationFilterInput {eq?: (UserContributionStatus | null),neq?: (UserContributionStatus | null),in?: (UserContributionStatus[] | null),nin?: (UserContributionStatus[] | null)}
 
-export interface UserMessageSortInput {id?: (SortEnumType | null),contributionId?: (SortEnumType | null),fromUserId?: (SortEnumType | null),toUserId?: (SortEnumType | null),message?: (SortEnumType | null),isRead?: (SortEnumType | null),createdAt?: (SortEnumType | null),type?: (SortEnumType | null)}
+export interface UserContributionSubtitleTrackFilterInput {and?: (UserContributionSubtitleTrackFilterInput[] | null),or?: (UserContributionSubtitleTrackFilterInput[] | null),encodedId?: (EncodedIdOperationFilterInput | null),index?: (IntOperationFilterInput | null),title?: (StringOperationFilterInput | null),item?: (UserContributionDiscItemFilterInput | null)}
+
+export interface UserContributionSubtitleTrackSortInput {id?: (SortEnumType | null),index?: (SortEnumType | null),title?: (SortEnumType | null),item?: (UserContributionDiscItemSortInput | null)}
+
+export interface UserMessageSortInput {id?: (SortEnumType | null),contributionId?: (SortEnumType | null),boxsetId?: (SortEnumType | null),contribution?: (UserContributionSortInput | null),boxset?: (UserContributionBoxsetSortInput | null),fromUserId?: (SortEnumType | null),toUserId?: (SortEnumType | null),message?: (SortEnumType | null),isRead?: (SortEnumType | null),createdAt?: (SortEnumType | null),type?: (SortEnumType | null)}
 
 export type QueryGenqlSelection = ContributionQueryGenqlSelection
 export type MutationGenqlSelection = ContributionMutationsGenqlSelection
 
 
-    const Error_possibleTypes: string[] = ['ApiKeyNotFoundError','AuthenticationError','ContributionNotFoundError','CouldNotParseLogsError','DiscItemNotFoundError','DiscNotFoundError','ExternalDataNotFoundError','ExternalDataSerializationError','FieldRequiredError','InvalidContributionStatusError','InvalidIdError','InvalidOwnershipError','LogsNotFoundError']
+    const Error_possibleTypes: string[] = ['ApiKeyNotFoundError','AuthenticationError','BoxsetNotFoundError','ContributionAlreadyInBoxsetError','ContributionNotFoundError','CouldNotParseLogsError','DiscItemNotFoundError','DiscNotFoundError','ExistingDiscAlreadyInBoxsetError','ExternalDataNotFoundError','ExternalDataSerializationError','FieldRequiredError','InvalidBoxsetStatusError','InvalidContributionStatusError','InvalidDiscPathError','InvalidIdError','InvalidOwnershipError','LogsNotFoundError','MismatchedReleaseSlugError']
     export const isError = (obj?: { __typename?: any } | null): obj is Error => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isError"')
       return Error_possibleTypes.includes(obj.__typename)
@@ -1912,10 +2797,34 @@ export type MutationGenqlSelection = ContributionMutationsGenqlSelection
     
 
 
+    const AddDiscToBoxsetPayload_possibleTypes: string[] = ['AddDiscToBoxsetPayload']
+    export const isAddDiscToBoxsetPayload = (obj?: { __typename?: any } | null): obj is AddDiscToBoxsetPayload => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isAddDiscToBoxsetPayload"')
+      return AddDiscToBoxsetPayload_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const AddExistingDiscToBoxsetPayload_possibleTypes: string[] = ['AddExistingDiscToBoxsetPayload']
+    export const isAddExistingDiscToBoxsetPayload = (obj?: { __typename?: any } | null): obj is AddExistingDiscToBoxsetPayload => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isAddExistingDiscToBoxsetPayload"')
+      return AddExistingDiscToBoxsetPayload_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
     const AddItemToDiscPayload_possibleTypes: string[] = ['AddItemToDiscPayload']
     export const isAddItemToDiscPayload = (obj?: { __typename?: any } | null): obj is AddItemToDiscPayload => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isAddItemToDiscPayload"')
       return AddItemToDiscPayload_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const AddSubtitleTrackToItemPayload_possibleTypes: string[] = ['AddSubtitleTrackToItemPayload']
+    export const isAddSubtitleTrackToItemPayload = (obj?: { __typename?: any } | null): obj is AddSubtitleTrackToItemPayload => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isAddSubtitleTrackToItemPayload"')
+      return AddSubtitleTrackToItemPayload_possibleTypes.includes(obj.__typename)
     }
     
 
@@ -1984,10 +2893,74 @@ export type MutationGenqlSelection = ContributionMutationsGenqlSelection
     
 
 
+    const AttachDiscIdResult_possibleTypes: string[] = ['AttachDiscIdResult']
+    export const isAttachDiscIdResult = (obj?: { __typename?: any } | null): obj is AttachDiscIdResult => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isAttachDiscIdResult"')
+      return AttachDiscIdResult_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const AttachGlobalDiscIdPayload_possibleTypes: string[] = ['AttachGlobalDiscIdPayload']
+    export const isAttachGlobalDiscIdPayload = (obj?: { __typename?: any } | null): obj is AttachGlobalDiscIdPayload => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isAttachGlobalDiscIdPayload"')
+      return AttachGlobalDiscIdPayload_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
     const AuthenticationError_possibleTypes: string[] = ['AuthenticationError']
     export const isAuthenticationError = (obj?: { __typename?: any } | null): obj is AuthenticationError => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isAuthenticationError"')
       return AuthenticationError_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const BoxsetChatConnection_possibleTypes: string[] = ['BoxsetChatConnection']
+    export const isBoxsetChatConnection = (obj?: { __typename?: any } | null): obj is BoxsetChatConnection => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isBoxsetChatConnection"')
+      return BoxsetChatConnection_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const BoxsetChatEdge_possibleTypes: string[] = ['BoxsetChatEdge']
+    export const isBoxsetChatEdge = (obj?: { __typename?: any } | null): obj is BoxsetChatEdge => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isBoxsetChatEdge"')
+      return BoxsetChatEdge_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const BoxsetContributionsConnection_possibleTypes: string[] = ['BoxsetContributionsConnection']
+    export const isBoxsetContributionsConnection = (obj?: { __typename?: any } | null): obj is BoxsetContributionsConnection => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isBoxsetContributionsConnection"')
+      return BoxsetContributionsConnection_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const BoxsetContributionsEdge_possibleTypes: string[] = ['BoxsetContributionsEdge']
+    export const isBoxsetContributionsEdge = (obj?: { __typename?: any } | null): obj is BoxsetContributionsEdge => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isBoxsetContributionsEdge"')
+      return BoxsetContributionsEdge_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const BoxsetNotFoundError_possibleTypes: string[] = ['BoxsetNotFoundError']
+    export const isBoxsetNotFoundError = (obj?: { __typename?: any } | null): obj is BoxsetNotFoundError => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isBoxsetNotFoundError"')
+      return BoxsetNotFoundError_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const ContributionAlreadyInBoxsetError_possibleTypes: string[] = ['ContributionAlreadyInBoxsetError']
+    export const isContributionAlreadyInBoxsetError = (obj?: { __typename?: any } | null): obj is ContributionAlreadyInBoxsetError => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isContributionAlreadyInBoxsetError"')
+      return ContributionAlreadyInBoxsetError_possibleTypes.includes(obj.__typename)
     }
     
 
@@ -2080,6 +3053,14 @@ export type MutationGenqlSelection = ContributionMutationsGenqlSelection
     
 
 
+    const CreateBoxsetPayload_possibleTypes: string[] = ['CreateBoxsetPayload']
+    export const isCreateBoxsetPayload = (obj?: { __typename?: any } | null): obj is CreateBoxsetPayload => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isCreateBoxsetPayload"')
+      return CreateBoxsetPayload_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
     const CreateContributionPayload_possibleTypes: string[] = ['CreateContributionPayload']
     export const isCreateContributionPayload = (obj?: { __typename?: any } | null): obj is CreateContributionPayload => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isCreateContributionPayload"')
@@ -2096,10 +3077,34 @@ export type MutationGenqlSelection = ContributionMutationsGenqlSelection
     
 
 
+    const DeleteBoxsetPayload_possibleTypes: string[] = ['DeleteBoxsetPayload']
+    export const isDeleteBoxsetPayload = (obj?: { __typename?: any } | null): obj is DeleteBoxsetPayload => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isDeleteBoxsetPayload"')
+      return DeleteBoxsetPayload_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
     const DeleteContributionPayload_possibleTypes: string[] = ['DeleteContributionPayload']
     export const isDeleteContributionPayload = (obj?: { __typename?: any } | null): obj is DeleteContributionPayload => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isDeleteContributionPayload"')
       return DeleteContributionPayload_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const DeleteDiscFromContributionPayload_possibleTypes: string[] = ['DeleteDiscFromContributionPayload']
+    export const isDeleteDiscFromContributionPayload = (obj?: { __typename?: any } | null): obj is DeleteDiscFromContributionPayload => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isDeleteDiscFromContributionPayload"')
+      return DeleteDiscFromContributionPayload_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const DeleteFileNameTemplatePayload_possibleTypes: string[] = ['DeleteFileNameTemplatePayload']
+    export const isDeleteFileNameTemplatePayload = (obj?: { __typename?: any } | null): obj is DeleteFileNameTemplatePayload => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isDeleteFileNameTemplatePayload"')
+      return DeleteFileNameTemplatePayload_possibleTypes.includes(obj.__typename)
     }
     
 
@@ -2192,6 +3197,14 @@ export type MutationGenqlSelection = ContributionMutationsGenqlSelection
     
 
 
+    const ExistingDiscAlreadyInBoxsetError_possibleTypes: string[] = ['ExistingDiscAlreadyInBoxsetError']
+    export const isExistingDiscAlreadyInBoxsetError = (obj?: { __typename?: any } | null): obj is ExistingDiscAlreadyInBoxsetError => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isExistingDiscAlreadyInBoxsetError"')
+      return ExistingDiscAlreadyInBoxsetError_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
     const ExternalDataForContributionPayload_possibleTypes: string[] = ['ExternalDataForContributionPayload']
     export const isExternalDataForContributionPayload = (obj?: { __typename?: any } | null): obj is ExternalDataForContributionPayload => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isExternalDataForContributionPayload"')
@@ -2264,10 +3277,26 @@ export type MutationGenqlSelection = ContributionMutationsGenqlSelection
     
 
 
+    const InvalidBoxsetStatusError_possibleTypes: string[] = ['InvalidBoxsetStatusError']
+    export const isInvalidBoxsetStatusError = (obj?: { __typename?: any } | null): obj is InvalidBoxsetStatusError => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isInvalidBoxsetStatusError"')
+      return InvalidBoxsetStatusError_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
     const InvalidContributionStatusError_possibleTypes: string[] = ['InvalidContributionStatusError']
     export const isInvalidContributionStatusError = (obj?: { __typename?: any } | null): obj is InvalidContributionStatusError => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isInvalidContributionStatusError"')
       return InvalidContributionStatusError_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const InvalidDiscPathError_possibleTypes: string[] = ['InvalidDiscPathError']
+    export const isInvalidDiscPathError = (obj?: { __typename?: any } | null): obj is InvalidDiscPathError => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isInvalidDiscPathError"')
+      return InvalidDiscPathError_possibleTypes.includes(obj.__typename)
     }
     
 
@@ -2296,6 +3325,14 @@ export type MutationGenqlSelection = ContributionMutationsGenqlSelection
     
 
 
+    const MarkBoxsetMessagesAsReadPayload_possibleTypes: string[] = ['MarkBoxsetMessagesAsReadPayload']
+    export const isMarkBoxsetMessagesAsReadPayload = (obj?: { __typename?: any } | null): obj is MarkBoxsetMessagesAsReadPayload => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMarkBoxsetMessagesAsReadPayload"')
+      return MarkBoxsetMessagesAsReadPayload_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
     const MarkMessagesAsReadPayload_possibleTypes: string[] = ['MarkMessagesAsReadPayload']
     export const isMarkMessagesAsReadPayload = (obj?: { __typename?: any } | null): obj is MarkMessagesAsReadPayload => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isMarkMessagesAsReadPayload"')
@@ -2308,6 +3345,30 @@ export type MutationGenqlSelection = ContributionMutationsGenqlSelection
     export const isMessageThread = (obj?: { __typename?: any } | null): obj is MessageThread => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isMessageThread"')
       return MessageThread_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const MismatchedReleaseSlugError_possibleTypes: string[] = ['MismatchedReleaseSlugError']
+    export const isMismatchedReleaseSlugError = (obj?: { __typename?: any } | null): obj is MismatchedReleaseSlugError => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMismatchedReleaseSlugError"')
+      return MismatchedReleaseSlugError_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const MyBoxsetsConnection_possibleTypes: string[] = ['MyBoxsetsConnection']
+    export const isMyBoxsetsConnection = (obj?: { __typename?: any } | null): obj is MyBoxsetsConnection => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMyBoxsetsConnection"')
+      return MyBoxsetsConnection_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const MyBoxsetsEdge_possibleTypes: string[] = ['MyBoxsetsEdge']
+    export const isMyBoxsetsEdge = (obj?: { __typename?: any } | null): obj is MyBoxsetsEdge => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMyBoxsetsEdge"')
+      return MyBoxsetsEdge_possibleTypes.includes(obj.__typename)
     }
     
 
@@ -2352,6 +3413,30 @@ export type MutationGenqlSelection = ContributionMutationsGenqlSelection
     
 
 
+    const RemoveBoxsetMemberPayload_possibleTypes: string[] = ['RemoveBoxsetMemberPayload']
+    export const isRemoveBoxsetMemberPayload = (obj?: { __typename?: any } | null): obj is RemoveBoxsetMemberPayload => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isRemoveBoxsetMemberPayload"')
+      return RemoveBoxsetMemberPayload_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const RemoveDiscFromBoxsetPayload_possibleTypes: string[] = ['RemoveDiscFromBoxsetPayload']
+    export const isRemoveDiscFromBoxsetPayload = (obj?: { __typename?: any } | null): obj is RemoveDiscFromBoxsetPayload => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isRemoveDiscFromBoxsetPayload"')
+      return RemoveDiscFromBoxsetPayload_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const ReorderBoxsetMembersPayload_possibleTypes: string[] = ['ReorderBoxsetMembersPayload']
+    export const isReorderBoxsetMembersPayload = (obj?: { __typename?: any } | null): obj is ReorderBoxsetMembersPayload => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isReorderBoxsetMembersPayload"')
+      return ReorderBoxsetMembersPayload_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
     const ReorderDiscsPayload_possibleTypes: string[] = ['ReorderDiscsPayload']
     export const isReorderDiscsPayload = (obj?: { __typename?: any } | null): obj is ReorderDiscsPayload => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isReorderDiscsPayload"')
@@ -2376,10 +3461,26 @@ export type MutationGenqlSelection = ContributionMutationsGenqlSelection
     
 
 
+    const SendAdminBoxsetMessagePayload_possibleTypes: string[] = ['SendAdminBoxsetMessagePayload']
+    export const isSendAdminBoxsetMessagePayload = (obj?: { __typename?: any } | null): obj is SendAdminBoxsetMessagePayload => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isSendAdminBoxsetMessagePayload"')
+      return SendAdminBoxsetMessagePayload_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
     const SendAdminMessagePayload_possibleTypes: string[] = ['SendAdminMessagePayload']
     export const isSendAdminMessagePayload = (obj?: { __typename?: any } | null): obj is SendAdminMessagePayload => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isSendAdminMessagePayload"')
       return SendAdminMessagePayload_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const SendBoxsetUserMessagePayload_possibleTypes: string[] = ['SendBoxsetUserMessagePayload']
+    export const isSendBoxsetUserMessagePayload = (obj?: { __typename?: any } | null): obj is SendBoxsetUserMessagePayload => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isSendBoxsetUserMessagePayload"')
+      return SendBoxsetUserMessagePayload_possibleTypes.includes(obj.__typename)
     }
     
 
@@ -2408,10 +3509,26 @@ export type MutationGenqlSelection = ContributionMutationsGenqlSelection
     
 
 
+    const SetFileNameTemplatePayload_possibleTypes: string[] = ['SetFileNameTemplatePayload']
+    export const isSetFileNameTemplatePayload = (obj?: { __typename?: any } | null): obj is SetFileNameTemplatePayload => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isSetFileNameTemplatePayload"')
+      return SetFileNameTemplatePayload_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
     const Title_possibleTypes: string[] = ['Title']
     export const isTitle = (obj?: { __typename?: any } | null): obj is Title => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isTitle"')
       return Title_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const UpdateBoxsetPayload_possibleTypes: string[] = ['UpdateBoxsetPayload']
+    export const isUpdateBoxsetPayload = (obj?: { __typename?: any } | null): obj is UpdateBoxsetPayload => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isUpdateBoxsetPayload"')
+      return UpdateBoxsetPayload_possibleTypes.includes(obj.__typename)
     }
     
 
@@ -2448,6 +3565,22 @@ export type MutationGenqlSelection = ContributionMutationsGenqlSelection
     
 
 
+    const UserContributionBoxset_possibleTypes: string[] = ['UserContributionBoxset']
+    export const isUserContributionBoxset = (obj?: { __typename?: any } | null): obj is UserContributionBoxset => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isUserContributionBoxset"')
+      return UserContributionBoxset_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const UserContributionBoxsetMember_possibleTypes: string[] = ['UserContributionBoxsetMember']
+    export const isUserContributionBoxsetMember = (obj?: { __typename?: any } | null): obj is UserContributionBoxsetMember => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isUserContributionBoxsetMember"')
+      return UserContributionBoxsetMember_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
     const UserContributionChapter_possibleTypes: string[] = ['UserContributionChapter']
     export const isUserContributionChapter = (obj?: { __typename?: any } | null): obj is UserContributionChapter => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isUserContributionChapter"')
@@ -2480,6 +3613,22 @@ export type MutationGenqlSelection = ContributionMutationsGenqlSelection
     
 
 
+    const UserContributionSubtitleTrack_possibleTypes: string[] = ['UserContributionSubtitleTrack']
+    export const isUserContributionSubtitleTrack = (obj?: { __typename?: any } | null): obj is UserContributionSubtitleTrack => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isUserContributionSubtitleTrack"')
+      return UserContributionSubtitleTrack_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const UserFileNameTemplate_possibleTypes: string[] = ['UserFileNameTemplate']
+    export const isUserFileNameTemplate = (obj?: { __typename?: any } | null): obj is UserFileNameTemplate => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isUserFileNameTemplate"')
+      return UserFileNameTemplate_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
     const UserMessage_possibleTypes: string[] = ['UserMessage']
     export const isUserMessage = (obj?: { __typename?: any } | null): obj is UserMessage => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isUserMessage"')
@@ -2504,6 +3653,22 @@ export type MutationGenqlSelection = ContributionMutationsGenqlSelection
     
 
 
+    const AddDiscToBoxsetError_possibleTypes: string[] = ['AuthenticationError','BoxsetNotFoundError','DiscNotFoundError','ContributionAlreadyInBoxsetError','InvalidIdError','InvalidOwnershipError','InvalidBoxsetStatusError','MismatchedReleaseSlugError']
+    export const isAddDiscToBoxsetError = (obj?: { __typename?: any } | null): obj is AddDiscToBoxsetError => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isAddDiscToBoxsetError"')
+      return AddDiscToBoxsetError_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const AddExistingDiscToBoxsetError_possibleTypes: string[] = ['AuthenticationError','BoxsetNotFoundError','InvalidIdError','InvalidOwnershipError','InvalidDiscPathError','ExistingDiscAlreadyInBoxsetError','InvalidBoxsetStatusError','MismatchedReleaseSlugError']
+    export const isAddExistingDiscToBoxsetError = (obj?: { __typename?: any } | null): obj is AddExistingDiscToBoxsetError => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isAddExistingDiscToBoxsetError"')
+      return AddExistingDiscToBoxsetError_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
     const AddItemToDiscError_possibleTypes: string[] = ['ContributionNotFoundError','DiscNotFoundError','AuthenticationError','InvalidIdError','InvalidOwnershipError']
     export const isAddItemToDiscError = (obj?: { __typename?: any } | null): obj is AddItemToDiscError => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isAddItemToDiscError"')
@@ -2512,7 +3677,31 @@ export type MutationGenqlSelection = ContributionMutationsGenqlSelection
     
 
 
-    const CreateContributionError_possibleTypes: string[] = ['AuthenticationError']
+    const AddSubtitleTrackToItemError_possibleTypes: string[] = ['ContributionNotFoundError','DiscNotFoundError','DiscItemNotFoundError','AuthenticationError','InvalidIdError','InvalidOwnershipError']
+    export const isAddSubtitleTrackToItemError = (obj?: { __typename?: any } | null): obj is AddSubtitleTrackToItemError => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isAddSubtitleTrackToItemError"')
+      return AddSubtitleTrackToItemError_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const AttachGlobalDiscIdError_possibleTypes: string[] = ['AuthenticationError']
+    export const isAttachGlobalDiscIdError = (obj?: { __typename?: any } | null): obj is AttachGlobalDiscIdError => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isAttachGlobalDiscIdError"')
+      return AttachGlobalDiscIdError_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const CreateBoxsetError_possibleTypes: string[] = ['AuthenticationError']
+    export const isCreateBoxsetError = (obj?: { __typename?: any } | null): obj is CreateBoxsetError => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isCreateBoxsetError"')
+      return CreateBoxsetError_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const CreateContributionError_possibleTypes: string[] = ['AuthenticationError','BoxsetNotFoundError','InvalidIdError','InvalidOwnershipError','InvalidBoxsetStatusError']
     export const isCreateContributionError = (obj?: { __typename?: any } | null): obj is CreateContributionError => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isCreateContributionError"')
       return CreateContributionError_possibleTypes.includes(obj.__typename)
@@ -2520,10 +3709,18 @@ export type MutationGenqlSelection = ContributionMutationsGenqlSelection
     
 
 
-    const CreateDiscError_possibleTypes: string[] = ['ContributionNotFoundError','AuthenticationError','InvalidIdError','InvalidOwnershipError']
+    const CreateDiscError_possibleTypes: string[] = ['ContributionNotFoundError','AuthenticationError','InvalidIdError','InvalidOwnershipError','InvalidDiscPathError']
     export const isCreateDiscError = (obj?: { __typename?: any } | null): obj is CreateDiscError => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isCreateDiscError"')
       return CreateDiscError_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const DeleteBoxsetError_possibleTypes: string[] = ['AuthenticationError','BoxsetNotFoundError','InvalidIdError','InvalidOwnershipError','InvalidBoxsetStatusError']
+    export const isDeleteBoxsetError = (obj?: { __typename?: any } | null): obj is DeleteBoxsetError => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isDeleteBoxsetError"')
+      return DeleteBoxsetError_possibleTypes.includes(obj.__typename)
     }
     
 
@@ -2532,6 +3729,22 @@ export type MutationGenqlSelection = ContributionMutationsGenqlSelection
     export const isDeleteContributionError = (obj?: { __typename?: any } | null): obj is DeleteContributionError => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isDeleteContributionError"')
       return DeleteContributionError_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const DeleteDiscFromContributionError_possibleTypes: string[] = ['ContributionNotFoundError','DiscNotFoundError','AuthenticationError','InvalidIdError','InvalidOwnershipError','InvalidContributionStatusError']
+    export const isDeleteDiscFromContributionError = (obj?: { __typename?: any } | null): obj is DeleteDiscFromContributionError => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isDeleteDiscFromContributionError"')
+      return DeleteDiscFromContributionError_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const DeleteFileNameTemplateError_possibleTypes: string[] = ['AuthenticationError']
+    export const isDeleteFileNameTemplateError = (obj?: { __typename?: any } | null): obj is DeleteFileNameTemplateError => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isDeleteFileNameTemplateError"')
+      return DeleteFileNameTemplateError_possibleTypes.includes(obj.__typename)
     }
     
 
@@ -2600,10 +3813,42 @@ export type MutationGenqlSelection = ContributionMutationsGenqlSelection
     
 
 
+    const MarkBoxsetMessagesAsReadError_possibleTypes: string[] = ['AuthenticationError']
+    export const isMarkBoxsetMessagesAsReadError = (obj?: { __typename?: any } | null): obj is MarkBoxsetMessagesAsReadError => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isMarkBoxsetMessagesAsReadError"')
+      return MarkBoxsetMessagesAsReadError_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
     const MarkMessagesAsReadError_possibleTypes: string[] = ['AuthenticationError']
     export const isMarkMessagesAsReadError = (obj?: { __typename?: any } | null): obj is MarkMessagesAsReadError => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isMarkMessagesAsReadError"')
       return MarkMessagesAsReadError_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const RemoveBoxsetMemberError_possibleTypes: string[] = ['AuthenticationError','BoxsetNotFoundError','InvalidIdError','InvalidOwnershipError','InvalidBoxsetStatusError']
+    export const isRemoveBoxsetMemberError = (obj?: { __typename?: any } | null): obj is RemoveBoxsetMemberError => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isRemoveBoxsetMemberError"')
+      return RemoveBoxsetMemberError_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const RemoveDiscFromBoxsetError_possibleTypes: string[] = ['AuthenticationError','BoxsetNotFoundError','DiscNotFoundError','InvalidIdError','InvalidOwnershipError','InvalidBoxsetStatusError']
+    export const isRemoveDiscFromBoxsetError = (obj?: { __typename?: any } | null): obj is RemoveDiscFromBoxsetError => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isRemoveDiscFromBoxsetError"')
+      return RemoveDiscFromBoxsetError_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const ReorderBoxsetMembersError_possibleTypes: string[] = ['AuthenticationError','BoxsetNotFoundError','InvalidIdError','InvalidOwnershipError','InvalidBoxsetStatusError']
+    export const isReorderBoxsetMembersError = (obj?: { __typename?: any } | null): obj is ReorderBoxsetMembersError => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isReorderBoxsetMembersError"')
+      return ReorderBoxsetMembersError_possibleTypes.includes(obj.__typename)
     }
     
 
@@ -2624,6 +3869,14 @@ export type MutationGenqlSelection = ContributionMutationsGenqlSelection
     
 
 
+    const SendAdminBoxsetMessageError_possibleTypes: string[] = ['BoxsetNotFoundError','AuthenticationError','InvalidIdError']
+    export const isSendAdminBoxsetMessageError = (obj?: { __typename?: any } | null): obj is SendAdminBoxsetMessageError => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isSendAdminBoxsetMessageError"')
+      return SendAdminBoxsetMessageError_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
     const SendAdminMessageError_possibleTypes: string[] = ['ContributionNotFoundError','AuthenticationError']
     export const isSendAdminMessageError = (obj?: { __typename?: any } | null): obj is SendAdminMessageError => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isSendAdminMessageError"')
@@ -2632,10 +3885,34 @@ export type MutationGenqlSelection = ContributionMutationsGenqlSelection
     
 
 
+    const SendBoxsetUserMessageError_possibleTypes: string[] = ['BoxsetNotFoundError','AuthenticationError','InvalidIdError','InvalidOwnershipError']
+    export const isSendBoxsetUserMessageError = (obj?: { __typename?: any } | null): obj is SendBoxsetUserMessageError => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isSendBoxsetUserMessageError"')
+      return SendBoxsetUserMessageError_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
     const SendUserMessageError_possibleTypes: string[] = ['ContributionNotFoundError','AuthenticationError','InvalidOwnershipError']
     export const isSendUserMessageError = (obj?: { __typename?: any } | null): obj is SendUserMessageError => {
       if (!obj?.__typename) throw new Error('__typename is missing in "isSendUserMessageError"')
       return SendUserMessageError_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const SetFileNameTemplateError_possibleTypes: string[] = ['AuthenticationError']
+    export const isSetFileNameTemplateError = (obj?: { __typename?: any } | null): obj is SetFileNameTemplateError => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isSetFileNameTemplateError"')
+      return SetFileNameTemplateError_possibleTypes.includes(obj.__typename)
+    }
+    
+
+
+    const UpdateBoxsetError_possibleTypes: string[] = ['AuthenticationError','BoxsetNotFoundError','InvalidIdError','InvalidOwnershipError']
+    export const isUpdateBoxsetError = (obj?: { __typename?: any } | null): obj is UpdateBoxsetError => {
+      if (!obj?.__typename) throw new Error('__typename is missing in "isUpdateBoxsetError"')
+      return UpdateBoxsetError_possibleTypes.includes(obj.__typename)
     }
     
 
@@ -2659,6 +3936,14 @@ export const enumApplyPolicy = {
    BEFORE_RESOLVER: 'BEFORE_RESOLVER' as const,
    AFTER_RESOLVER: 'AFTER_RESOLVER' as const,
    VALIDATION: 'VALIDATION' as const
+}
+
+export const enumAttachDiscIdOutcome = {
+   APPLIED: 'APPLIED' as const,
+   ALREADY_RECORDED: 'ALREADY_RECORDED' as const,
+   CONFLICT: 'CONFLICT' as const,
+   NOT_FOUND: 'NOT_FOUND' as const,
+   MISMATCH: 'MISMATCH' as const
 }
 
 export const enumContributionHistoryType = {

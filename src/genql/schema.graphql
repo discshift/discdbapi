@@ -266,6 +266,7 @@ input ReleaseDiscFilterInput {
   titles: ListFilterInputTypeOfTitleFilterInput
   format: StringOperationFilterInput
   contentHash: StringOperationFilterInput
+  globalDiscId: StringOperationFilterInput
 }
 
 input ListFilterInputTypeOfReleaseGroupFilterInput {
@@ -518,6 +519,7 @@ input DiscSortInput {
   name: SortEnumType
   format: SortEnumType
   contentHash: SortEnumType
+  globalDiscId: SortEnumType
   release: ReleaseSortInput
 }
 
@@ -656,6 +658,7 @@ input DiscFilterInput {
   name: StringOperationFilterInput
   format: StringOperationFilterInput
   contentHash: StringOperationFilterInput
+  globalDiscId: StringOperationFilterInput
   titles: ListFilterInputTypeOfTitleFilterInput
   release: ReleaseFilterInput
   releaseDiscs: ListReleaseDiscFilterTypeFilterInput
@@ -699,6 +702,7 @@ input ReleaseDiscSortInput {
   name: SortEnumType
   format: SortEnumType
   contentHash: SortEnumType
+  globalDiscId: SortEnumType
 }
 
 type Release {
@@ -780,6 +784,7 @@ type Disc {
   name: String
   format: String
   contentHash: String
+  globalDiscId: String
   titles(where: TitleFilterInput, order: [TitleSortInput!]): [Title!]!
   release: Release
   releaseDiscs: [ReleaseDisc!]!
@@ -856,6 +861,7 @@ type ReleaseDisc {
   name: String
   format: String
   contentHash: String
+  globalDiscId: String
   titles(where: TitleFilterInput, order: [TitleSortInput!]): [Title!]!
 }
 

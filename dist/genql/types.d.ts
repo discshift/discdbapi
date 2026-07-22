@@ -231,6 +231,7 @@ declare const _default: {
             titles: number[];
             format: number[];
             contentHash: number[];
+            globalDiscId: number[];
             __typename: number[];
         };
         ListFilterInputTypeOfReleaseGroupFilterInput: {
@@ -460,6 +461,7 @@ declare const _default: {
             name: number[];
             format: number[];
             contentHash: number[];
+            globalDiscId: number[];
             release: number[];
             __typename: number[];
         };
@@ -568,6 +570,7 @@ declare const _default: {
             name: number[];
             format: number[];
             contentHash: number[];
+            globalDiscId: number[];
             titles: number[];
             release: number[];
             releaseDiscs: number[];
@@ -611,6 +614,7 @@ declare const _default: {
             name: number[];
             format: number[];
             contentHash: number[];
+            globalDiscId: number[];
             __typename: number[];
         };
         Release: {
@@ -701,6 +705,7 @@ declare const _default: {
             name: number[];
             format: number[];
             contentHash: number[];
+            globalDiscId: number[];
             titles: (number | {
                 where: number[];
                 order: (string | number)[];
@@ -789,6 +794,7 @@ declare const _default: {
             name: number[];
             format: number[];
             contentHash: number[];
+            globalDiscId: number[];
             titles: (number | {
                 where: number[];
                 order: (string | number)[];

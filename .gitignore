@@ -38,3 +38,4 @@ cache
 
 # local-only artifacts
 docs/build/
+contributions.graphql

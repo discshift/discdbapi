@@ -5,17 +5,23 @@ declare const _default: {
             message: number[];
             on_ApiKeyNotFoundError: number[];
             on_AuthenticationError: number[];
+            on_BoxsetNotFoundError: number[];
+            on_ContributionAlreadyInBoxsetError: number[];
             on_ContributionNotFoundError: number[];
             on_CouldNotParseLogsError: number[];
             on_DiscItemNotFoundError: number[];
             on_DiscNotFoundError: number[];
+            on_ExistingDiscAlreadyInBoxsetError: number[];
             on_ExternalDataNotFoundError: number[];
             on_ExternalDataSerializationError: number[];
             on_FieldRequiredError: number[];
+            on_InvalidBoxsetStatusError: number[];
             on_InvalidContributionStatusError: number[];
+            on_InvalidDiscPathError: number[];
             on_InvalidIdError: number[];
             on_InvalidOwnershipError: number[];
             on_LogsNotFoundError: number[];
+            on_MismatchedReleaseSlugError: number[];
             __typename: number[];
         };
         String: {};
@@ -29,8 +35,23 @@ declare const _default: {
             errors: number[];
             __typename: number[];
         };
+        AddDiscToBoxsetPayload: {
+            userContributionBoxset: number[];
+            errors: number[];
+            __typename: number[];
+        };
+        AddExistingDiscToBoxsetPayload: {
+            userContributionBoxset: number[];
+            errors: number[];
+            __typename: number[];
+        };
         AddItemToDiscPayload: {
             userContributionDiscItem: number[];
+            errors: number[];
+            __typename: number[];
+        };
+        AddSubtitleTrackToItemPayload: {
+            userContributionSubtitleTrack: number[];
             errors: number[];
             __typename: number[];
         };
@@ -107,7 +128,58 @@ declare const _default: {
             node: number[];
             __typename: number[];
         };
+        AttachDiscIdResult: {
+            outcome: number[];
+            contentHash: number[];
+            mediaItemSlug: number[];
+            boxsetSlug: number[];
+            mediaItemType: number[];
+            releaseSlug: number[];
+            discSlug: number[];
+            discIndex: number[];
+            globalDiscId: number[];
+            existingGlobalDiscId: number[];
+            matchedDifferentDisc: number[];
+            __typename: number[];
+        };
+        AttachGlobalDiscIdPayload: {
+            attachDiscIdResult: number[];
+            errors: number[];
+            __typename: number[];
+        };
         AuthenticationError: {
+            message: number[];
+            __typename: number[];
+        };
+        BoxsetChatConnection: {
+            pageInfo: number[];
+            edges: number[];
+            nodes: number[];
+            totalCount: number[];
+            __typename: number[];
+        };
+        BoxsetChatEdge: {
+            cursor: number[];
+            node: number[];
+            __typename: number[];
+        };
+        BoxsetContributionsConnection: {
+            pageInfo: number[];
+            edges: number[];
+            nodes: number[];
+            totalCount: number[];
+            __typename: number[];
+        };
+        BoxsetContributionsEdge: {
+            cursor: number[];
+            node: number[];
+            __typename: number[];
+        };
+        BoxsetNotFoundError: {
+            message: number[];
+            __typename: number[];
+        };
+        ContributionAlreadyInBoxsetError: {
             message: number[];
             __typename: number[];
         };
@@ -164,6 +236,11 @@ declare const _default: {
             message: number[];
             __typename: number[];
         };
+        CreateBoxsetPayload: {
+            userContributionBoxset: number[];
+            errors: number[];
+            __typename: number[];
+        };
         CreateContributionPayload: {
             userContribution: number[];
             errors: number[];
@@ -174,8 +251,23 @@ declare const _default: {
             errors: number[];
             __typename: number[];
         };
+        DeleteBoxsetPayload: {
+            userContributionBoxset: number[];
+            errors: number[];
+            __typename: number[];
+        };
         DeleteContributionPayload: {
             userContribution: number[];
+            errors: number[];
+            __typename: number[];
+        };
+        DeleteDiscFromContributionPayload: {
+            userContributionDisc: number[];
+            errors: number[];
+            __typename: number[];
+        };
+        DeleteFileNameTemplatePayload: {
+            boolean: number[];
             errors: number[];
             __typename: number[];
         };
@@ -236,6 +328,10 @@ declare const _default: {
             errors: number[];
             __typename: number[];
         };
+        ExistingDiscAlreadyInBoxsetError: {
+            message: number[];
+            __typename: number[];
+        };
         ExternalDataForContributionPayload: {
             externalMetadata: number[];
             errors: number[];
@@ -289,7 +385,15 @@ declare const _default: {
             prefix: number[];
             __typename: number[];
         };
+        InvalidBoxsetStatusError: {
+            message: number[];
+            __typename: number[];
+        };
         InvalidContributionStatusError: {
+            message: number[];
+            __typename: number[];
+        };
+        InvalidDiscPathError: {
             message: number[];
             __typename: number[];
         };
@@ -303,6 +407,11 @@ declare const _default: {
         };
         LogsNotFoundError: {
             message: number[];
+            __typename: number[];
+        };
+        MarkBoxsetMessagesAsReadPayload: {
+            boolean: number[];
+            errors: number[];
             __typename: number[];
         };
         MarkMessagesAsReadPayload: {
@@ -319,6 +428,26 @@ declare const _default: {
             lastMessageAt: number[];
             unreadCount: number[];
             totalCount: number[];
+            isBoxset: number[];
+            __typename: number[];
+        };
+        MismatchedReleaseSlugError: {
+            message: number[];
+            boxsetSlug: number[];
+            offendingReleaseSlug: number[];
+            contributionTitle: number[];
+            __typename: number[];
+        };
+        MyBoxsetsConnection: {
+            pageInfo: number[];
+            edges: number[];
+            nodes: number[];
+            totalCount: number[];
+            __typename: number[];
+        };
+        MyBoxsetsEdge: {
+            cursor: number[];
+            node: number[];
             __typename: number[];
         };
         MyContributionsConnection: {
@@ -352,6 +481,21 @@ declare const _default: {
             endCursor: number[];
             __typename: number[];
         };
+        RemoveBoxsetMemberPayload: {
+            userContributionBoxset: number[];
+            errors: number[];
+            __typename: number[];
+        };
+        RemoveDiscFromBoxsetPayload: {
+            userContributionBoxset: number[];
+            errors: number[];
+            __typename: number[];
+        };
+        ReorderBoxsetMembersPayload: {
+            userContributionBoxset: number[];
+            errors: number[];
+            __typename: number[];
+        };
         ReorderDiscsPayload: {
             userContributionDisc: number[];
             errors: number[];
@@ -373,7 +517,17 @@ declare const _default: {
             aspectRatio: number[];
             __typename: number[];
         };
+        SendAdminBoxsetMessagePayload: {
+            userMessage: number[];
+            errors: number[];
+            __typename: number[];
+        };
         SendAdminMessagePayload: {
+            userMessage: number[];
+            errors: number[];
+            __typename: number[];
+        };
+        SendBoxsetUserMessagePayload: {
             userMessage: number[];
             errors: number[];
             __typename: number[];
@@ -399,6 +553,11 @@ declare const _default: {
             episodes: number[];
             __typename: number[];
         };
+        SetFileNameTemplatePayload: {
+            userFileNameTemplate: number[];
+            errors: number[];
+            __typename: number[];
+        };
         Title: {
             index: number[];
             chapterCount: number[];
@@ -411,6 +570,11 @@ declare const _default: {
             javaComment: number[];
             segments: number[];
             lengthAsTimeSpan: number[];
+            __typename: number[];
+        };
+        UpdateBoxsetPayload: {
+            userContributionBoxset: number[];
+            errors: number[];
             __typename: number[];
         };
         UpdateContributionPayload: {
@@ -428,6 +592,8 @@ declare const _default: {
             userId: number[];
             created: number[];
             status: number[];
+            boxsetId: number[];
+            boxset: number[];
             discs: (number | {
                 where: number[];
                 order: (string | number)[];
@@ -462,6 +628,38 @@ declare const _default: {
             encodedId: number[];
             __typename: number[];
         };
+        UserContributionBoxset: {
+            id: number[];
+            userId: number[];
+            created: number[];
+            status: number[];
+            title: number[];
+            sortTitle: number[];
+            slug: number[];
+            frontImageUrl: number[];
+            backImageUrl: number[];
+            asin: number[];
+            upc: number[];
+            releaseDate: number[];
+            locale: number[];
+            regionCode: number[];
+            members: (number | {
+                where: number[];
+                order: (string | number)[];
+            })[];
+            encodedId: number[];
+            __typename: number[];
+        };
+        UserContributionBoxsetMember: {
+            id: number[];
+            boxset: number[];
+            disc: number[];
+            sortOrder: number[];
+            existingDiscPath: number[];
+            existingDiscName: number[];
+            existingDiscFormat: number[];
+            __typename: number[];
+        };
         UserContributionChapter: {
             id: number[];
             index: number[];
@@ -474,6 +672,7 @@ declare const _default: {
             id: number[];
             userContribution: number[];
             contentHash: number[];
+            globalDiscId: number[];
             format: number[];
             name: number[];
             slug: number[];
@@ -521,12 +720,36 @@ declare const _default: {
                 where: number[];
                 order: (string | number)[];
             })[];
+            subtitleTracks: (number | {
+                where: number[];
+                order: (string | number)[];
+            })[];
             encodedId: number[];
+            filename: number[];
+            __typename: number[];
+        };
+        UserContributionSubtitleTrack: {
+            id: number[];
+            index: number[];
+            title: number[];
+            item: number[];
+            encodedId: number[];
+            __typename: number[];
+        };
+        UserFileNameTemplate: {
+            id: number[];
+            userId: number[];
+            itemType: number[];
+            template: number[];
+            updatedAt: number[];
             __typename: number[];
         };
         UserMessage: {
             id: number[];
             contributionId: number[];
+            boxsetId: number[];
+            contribution: number[];
+            boxset: number[];
             fromUserId: number[];
             toUserId: number[];
             message: number[];
@@ -555,6 +778,30 @@ declare const _default: {
             on_Error: number[];
             __typename: number[];
         };
+        AddDiscToBoxsetError: {
+            on_AuthenticationError: number[];
+            on_BoxsetNotFoundError: number[];
+            on_DiscNotFoundError: number[];
+            on_ContributionAlreadyInBoxsetError: number[];
+            on_InvalidIdError: number[];
+            on_InvalidOwnershipError: number[];
+            on_InvalidBoxsetStatusError: number[];
+            on_MismatchedReleaseSlugError: number[];
+            on_Error: number[];
+            __typename: number[];
+        };
+        AddExistingDiscToBoxsetError: {
+            on_AuthenticationError: number[];
+            on_BoxsetNotFoundError: number[];
+            on_InvalidIdError: number[];
+            on_InvalidOwnershipError: number[];
+            on_InvalidDiscPathError: number[];
+            on_ExistingDiscAlreadyInBoxsetError: number[];
+            on_InvalidBoxsetStatusError: number[];
+            on_MismatchedReleaseSlugError: number[];
+            on_Error: number[];
+            __typename: number[];
+        };
         AddItemToDiscError: {
             on_ContributionNotFoundError: number[];
             on_DiscNotFoundError: number[];
@@ -564,8 +811,32 @@ declare const _default: {
             on_Error: number[];
             __typename: number[];
         };
+        AddSubtitleTrackToItemError: {
+            on_ContributionNotFoundError: number[];
+            on_DiscNotFoundError: number[];
+            on_DiscItemNotFoundError: number[];
+            on_AuthenticationError: number[];
+            on_InvalidIdError: number[];
+            on_InvalidOwnershipError: number[];
+            on_Error: number[];
+            __typename: number[];
+        };
+        AttachGlobalDiscIdError: {
+            on_AuthenticationError: number[];
+            on_Error: number[];
+            __typename: number[];
+        };
+        CreateBoxsetError: {
+            on_AuthenticationError: number[];
+            on_Error: number[];
+            __typename: number[];
+        };
         CreateContributionError: {
             on_AuthenticationError: number[];
+            on_BoxsetNotFoundError: number[];
+            on_InvalidIdError: number[];
+            on_InvalidOwnershipError: number[];
+            on_InvalidBoxsetStatusError: number[];
             on_Error: number[];
             __typename: number[];
         };
@@ -574,6 +845,16 @@ declare const _default: {
             on_AuthenticationError: number[];
             on_InvalidIdError: number[];
             on_InvalidOwnershipError: number[];
+            on_InvalidDiscPathError: number[];
+            on_Error: number[];
+            __typename: number[];
+        };
+        DeleteBoxsetError: {
+            on_AuthenticationError: number[];
+            on_BoxsetNotFoundError: number[];
+            on_InvalidIdError: number[];
+            on_InvalidOwnershipError: number[];
+            on_InvalidBoxsetStatusError: number[];
             on_Error: number[];
             __typename: number[];
         };
@@ -583,6 +864,21 @@ declare const _default: {
             on_InvalidIdError: number[];
             on_InvalidOwnershipError: number[];
             on_InvalidContributionStatusError: number[];
+            on_Error: number[];
+            __typename: number[];
+        };
+        DeleteDiscFromContributionError: {
+            on_ContributionNotFoundError: number[];
+            on_DiscNotFoundError: number[];
+            on_AuthenticationError: number[];
+            on_InvalidIdError: number[];
+            on_InvalidOwnershipError: number[];
+            on_InvalidContributionStatusError: number[];
+            on_Error: number[];
+            __typename: number[];
+        };
+        DeleteFileNameTemplateError: {
+            on_AuthenticationError: number[];
             on_Error: number[];
             __typename: number[];
         };
@@ -657,8 +953,41 @@ declare const _default: {
             on_Error: number[];
             __typename: number[];
         };
+        MarkBoxsetMessagesAsReadError: {
+            on_AuthenticationError: number[];
+            on_Error: number[];
+            __typename: number[];
+        };
         MarkMessagesAsReadError: {
             on_AuthenticationError: number[];
+            on_Error: number[];
+            __typename: number[];
+        };
+        RemoveBoxsetMemberError: {
+            on_AuthenticationError: number[];
+            on_BoxsetNotFoundError: number[];
+            on_InvalidIdError: number[];
+            on_InvalidOwnershipError: number[];
+            on_InvalidBoxsetStatusError: number[];
+            on_Error: number[];
+            __typename: number[];
+        };
+        RemoveDiscFromBoxsetError: {
+            on_AuthenticationError: number[];
+            on_BoxsetNotFoundError: number[];
+            on_DiscNotFoundError: number[];
+            on_InvalidIdError: number[];
+            on_InvalidOwnershipError: number[];
+            on_InvalidBoxsetStatusError: number[];
+            on_Error: number[];
+            __typename: number[];
+        };
+        ReorderBoxsetMembersError: {
+            on_AuthenticationError: number[];
+            on_BoxsetNotFoundError: number[];
+            on_InvalidIdError: number[];
+            on_InvalidOwnershipError: number[];
+            on_InvalidBoxsetStatusError: number[];
             on_Error: number[];
             __typename: number[];
         };
@@ -675,15 +1004,43 @@ declare const _default: {
             on_Error: number[];
             __typename: number[];
         };
+        SendAdminBoxsetMessageError: {
+            on_BoxsetNotFoundError: number[];
+            on_AuthenticationError: number[];
+            on_InvalidIdError: number[];
+            on_Error: number[];
+            __typename: number[];
+        };
         SendAdminMessageError: {
             on_ContributionNotFoundError: number[];
             on_AuthenticationError: number[];
             on_Error: number[];
             __typename: number[];
         };
+        SendBoxsetUserMessageError: {
+            on_BoxsetNotFoundError: number[];
+            on_AuthenticationError: number[];
+            on_InvalidIdError: number[];
+            on_InvalidOwnershipError: number[];
+            on_Error: number[];
+            __typename: number[];
+        };
         SendUserMessageError: {
             on_ContributionNotFoundError: number[];
             on_AuthenticationError: number[];
+            on_InvalidOwnershipError: number[];
+            on_Error: number[];
+            __typename: number[];
+        };
+        SetFileNameTemplateError: {
+            on_AuthenticationError: number[];
+            on_Error: number[];
+            __typename: number[];
+        };
+        UpdateBoxsetError: {
+            on_AuthenticationError: number[];
+            on_BoxsetNotFoundError: number[];
+            on_InvalidIdError: number[];
             on_InvalidOwnershipError: number[];
             on_Error: number[];
             __typename: number[];
@@ -722,6 +1079,18 @@ declare const _default: {
             chapterName: number[];
             __typename: number[];
         };
+        AddDiscToBoxsetInput: {
+            boxsetId: number[];
+            discId: number[];
+            __typename: number[];
+        };
+        AddExistingDiscToBoxsetInput: {
+            boxsetId: number[];
+            existingDiscPath: number[];
+            discName: number[];
+            discFormat: number[];
+            __typename: number[];
+        };
         AddItemToDiscInput: {
             contributionId: number[];
             discId: number[];
@@ -736,6 +1105,14 @@ declare const _default: {
             description: number[];
             season: number[];
             episode: number[];
+            __typename: number[];
+        };
+        AddSubtitleTrackToItemInput: {
+            contributionId: number[];
+            discId: number[];
+            itemId: number[];
+            trackIndex: number[];
+            trackName: number[];
             __typename: number[];
         };
         ApiKeyInfoFilterInput: {
@@ -786,9 +1163,32 @@ declare const _default: {
             durationMs: number[];
             __typename: number[];
         };
+        AttachGlobalDiscIdInput: {
+            files: number[];
+            globalDiscId: number[];
+            mediaItemSlug: number[];
+            boxsetSlug: number[];
+            releaseSlug: number[];
+            discSlug: number[];
+            discIndex: number[];
+            __typename: number[];
+        };
         BooleanOperationFilterInput: {
             eq: number[];
             neq: number[];
+            __typename: number[];
+        };
+        BoxsetMutationRequestInput: {
+            title: number[];
+            sortTitle: number[];
+            slug: number[];
+            frontImageUrl: number[];
+            backImageUrl: number[];
+            asin: number[];
+            upc: number[];
+            releaseDate: number[];
+            locale: number[];
+            regionCode: number[];
             __typename: number[];
         };
         ContributionHistorySortInput: {
@@ -817,6 +1217,11 @@ declare const _default: {
             year: number[];
             storageId: number[];
             status: number[];
+            boxsetId: number[];
+            __typename: number[];
+        };
+        CreateBoxsetInput: {
+            input: number[];
             __typename: number[];
         };
         CreateContributionInput: {
@@ -830,6 +1235,7 @@ declare const _default: {
             name: number[];
             slug: number[];
             existingDiscPath: number[];
+            globalDiscId: number[];
             __typename: number[];
         };
         DateTimeOperationFilterInput: {
@@ -847,8 +1253,21 @@ declare const _default: {
             nlte: number[];
             __typename: number[];
         };
+        DeleteBoxsetInput: {
+            boxsetId: number[];
+            __typename: number[];
+        };
         DeleteContributionInput: {
             contributionId: number[];
+            __typename: number[];
+        };
+        DeleteDiscFromContributionInput: {
+            contributionId: number[];
+            discId: number[];
+            __typename: number[];
+        };
+        DeleteFileNameTemplateInput: {
+            itemType: number[];
             __typename: number[];
         };
         DeleteItemFromDiscInput: {
@@ -988,6 +1407,20 @@ declare const _default: {
             any: number[];
             __typename: number[];
         };
+        ListEncodedIdFilterTypeOfUserContributionSubtitleTrackFilterInput: {
+            all: number[];
+            none: number[];
+            some: number[];
+            any: number[];
+            __typename: number[];
+        };
+        ListFilterInputTypeOfUserContributionBoxsetMemberFilterInput: {
+            all: number[];
+            none: number[];
+            some: number[];
+            any: number[];
+            __typename: number[];
+        };
         LongOperationFilterInput: {
             eq: number[];
             neq: number[];
@@ -1003,8 +1436,27 @@ declare const _default: {
             nlte: number[];
             __typename: number[];
         };
+        MarkBoxsetMessagesAsReadInput: {
+            boxsetId: number[];
+            __typename: number[];
+        };
         MarkMessagesAsReadInput: {
             contributionId: number[];
+            __typename: number[];
+        };
+        RemoveBoxsetMemberInput: {
+            boxsetId: number[];
+            memberId: number[];
+            __typename: number[];
+        };
+        RemoveDiscFromBoxsetInput: {
+            boxsetId: number[];
+            discId: number[];
+            __typename: number[];
+        };
+        ReorderBoxsetMembersInput: {
+            boxsetId: number[];
+            memberIds: number[];
             __typename: number[];
         };
         ReorderDiscsInput: {
@@ -1016,14 +1468,29 @@ declare const _default: {
             keyPrefix: number[];
             __typename: number[];
         };
+        SendAdminBoxsetMessageInput: {
+            boxsetId: number[];
+            message: number[];
+            __typename: number[];
+        };
         SendAdminMessageInput: {
             contributionId: number[];
+            message: number[];
+            __typename: number[];
+        };
+        SendBoxsetUserMessageInput: {
+            boxsetId: number[];
             message: number[];
             __typename: number[];
         };
         SendUserMessageInput: {
             contributionId: number[];
             message: number[];
+            __typename: number[];
+        };
+        SetFileNameTemplateInput: {
+            itemType: number[];
+            template: number[];
             __typename: number[];
         };
         StringOperationFilterInput: {
@@ -1039,6 +1506,11 @@ declare const _default: {
             nstartsWith: number[];
             endsWith: number[];
             nendsWith: number[];
+            __typename: number[];
+        };
+        UpdateBoxsetInput: {
+            boxsetId: number[];
+            input: number[];
             __typename: number[];
         };
         UpdateContributionInput: {
@@ -1079,6 +1551,65 @@ declare const _default: {
             item: number[];
             __typename: number[];
         };
+        UserContributionBoxsetFilterInput: {
+            and: number[];
+            or: number[];
+            encodedId: number[];
+            userId: number[];
+            created: number[];
+            status: number[];
+            title: number[];
+            sortTitle: number[];
+            slug: number[];
+            frontImageUrl: number[];
+            backImageUrl: number[];
+            asin: number[];
+            upc: number[];
+            releaseDate: number[];
+            locale: number[];
+            regionCode: number[];
+            members: number[];
+            __typename: number[];
+        };
+        UserContributionBoxsetMemberFilterInput: {
+            and: number[];
+            or: number[];
+            id: number[];
+            boxset: number[];
+            disc: number[];
+            sortOrder: number[];
+            existingDiscPath: number[];
+            existingDiscName: number[];
+            existingDiscFormat: number[];
+            __typename: number[];
+        };
+        UserContributionBoxsetMemberSortInput: {
+            id: number[];
+            boxset: number[];
+            disc: number[];
+            sortOrder: number[];
+            existingDiscPath: number[];
+            existingDiscName: number[];
+            existingDiscFormat: number[];
+            __typename: number[];
+        };
+        UserContributionBoxsetSortInput: {
+            id: number[];
+            userId: number[];
+            created: number[];
+            status: number[];
+            title: number[];
+            sortTitle: number[];
+            slug: number[];
+            frontImageUrl: number[];
+            backImageUrl: number[];
+            asin: number[];
+            upc: number[];
+            releaseDate: number[];
+            locale: number[];
+            regionCode: number[];
+            __typename: number[];
+        };
         UserContributionChapterFilterInput: {
             and: number[];
             or: number[];
@@ -1101,6 +1632,7 @@ declare const _default: {
             encodedId: number[];
             userContribution: number[];
             contentHash: number[];
+            globalDiscId: number[];
             format: number[];
             name: number[];
             slug: number[];
@@ -1151,6 +1683,7 @@ declare const _default: {
             episode: number[];
             chapters: number[];
             audioTracks: number[];
+            subtitleTracks: number[];
             __typename: number[];
         };
         UserContributionDiscItemSortInput: {
@@ -1173,6 +1706,7 @@ declare const _default: {
             id: number[];
             userContribution: number[];
             contentHash: number[];
+            globalDiscId: number[];
             format: number[];
             name: number[];
             slug: number[];
@@ -1189,6 +1723,8 @@ declare const _default: {
             userId: number[];
             created: number[];
             status: number[];
+            boxsetId: number[];
+            boxset: number[];
             discs: number[];
             hashItems: number[];
             mediaType: number[];
@@ -1213,6 +1749,8 @@ declare const _default: {
             userId: number[];
             created: number[];
             status: number[];
+            boxsetId: number[];
+            boxset: number[];
             mediaType: number[];
             externalId: number[];
             externalProvider: number[];
@@ -1237,9 +1775,28 @@ declare const _default: {
             nin: number[];
             __typename: number[];
         };
+        UserContributionSubtitleTrackFilterInput: {
+            and: number[];
+            or: number[];
+            encodedId: number[];
+            index: number[];
+            title: number[];
+            item: number[];
+            __typename: number[];
+        };
+        UserContributionSubtitleTrackSortInput: {
+            id: number[];
+            index: number[];
+            title: number[];
+            item: number[];
+            __typename: number[];
+        };
         UserMessageSortInput: {
             id: number[];
             contributionId: number[];
+            boxsetId: number[];
+            contribution: number[];
+            boxset: number[];
             fromUserId: number[];
             toUserId: number[];
             message: number[];
@@ -1249,6 +1806,7 @@ declare const _default: {
             __typename: number[];
         };
         ApplyPolicy: {};
+        AttachDiscIdOutcome: {};
         ContributionHistoryType: {};
         SortEnumType: {};
         UserContributionStatus: {};
@@ -1292,6 +1850,14 @@ declare const _default: {
                 before: number[];
                 order: (string | number)[];
             })[];
+            boxsetChat: (number | {
+                boxsetId: (string | number)[];
+                first: number[];
+                after: number[];
+                last: number[];
+                before: number[];
+                order: (string | number)[];
+            })[];
             hasUnreadMessages: number[];
             myMessages: (number | {
                 first: number[];
@@ -1301,6 +1867,22 @@ declare const _default: {
                 order: (string | number)[];
             })[];
             messageThreads: number[];
+            boxsetContributions: (number | {
+                first: number[];
+                after: number[];
+                last: number[];
+                before: number[];
+                where: number[];
+                order: (string | number)[];
+            })[];
+            myBoxsets: (number | {
+                first: number[];
+                after: number[];
+                last: number[];
+                before: number[];
+                where: number[];
+                order: (string | number)[];
+            })[];
             amazonProductMetadata: (number | {
                 asin: (string | number)[];
             })[];
@@ -1320,6 +1902,7 @@ declare const _default: {
                 where: number[];
                 order: (string | number)[];
             })[];
+            myFileNameTemplates: number[];
             __typename: number[];
         };
         Mutation: {
@@ -1329,7 +1912,22 @@ declare const _default: {
             addChapterToItem: (number | {
                 input: (string | number)[];
             })[];
+            addDiscToBoxset: (number | {
+                input: (string | number)[];
+            })[];
+            addExistingDiscToBoxset: (number | {
+                input: (string | number)[];
+            })[];
             addItemToDisc: (number | {
+                input: (string | number)[];
+            })[];
+            addSubtitleTrackToItem: (number | {
+                input: (string | number)[];
+            })[];
+            attachGlobalDiscId: (number | {
+                input: (string | number)[];
+            })[];
+            createBoxset: (number | {
                 input: (string | number)[];
             })[];
             createContribution: (number | {
@@ -1338,13 +1936,25 @@ declare const _default: {
             createDisc: (number | {
                 input: (string | number)[];
             })[];
+            deleteBoxset: (number | {
+                input: (string | number)[];
+            })[];
             deleteContribution: (number | {
+                input: (string | number)[];
+            })[];
+            deleteDiscFromContribution: (number | {
                 input: (string | number)[];
             })[];
             deleteItemFromDisc: (number | {
                 input: (string | number)[];
             })[];
             editItemOnDisc: (number | {
+                input: (string | number)[];
+            })[];
+            setFileNameTemplate: (number | {
+                input: (string | number)[];
+            })[];
+            deleteFileNameTemplate: (number | {
                 input: (string | number)[];
             })[];
             generateApiKey: (number | {
@@ -1371,6 +1981,18 @@ declare const _default: {
             markMessagesAsRead: (number | {
                 input: (string | number)[];
             })[];
+            markBoxsetMessagesAsRead: (number | {
+                input: (string | number)[];
+            })[];
+            removeBoxsetMember: (number | {
+                input: (string | number)[];
+            })[];
+            removeDiscFromBoxset: (number | {
+                input: (string | number)[];
+            })[];
+            reorderBoxsetMembers: (number | {
+                input: (string | number)[];
+            })[];
             reorderDiscs: (number | {
                 input: (string | number)[];
             })[];
@@ -1381,6 +2003,15 @@ declare const _default: {
                 input: (string | number)[];
             })[];
             sendUserMessage: (number | {
+                input: (string | number)[];
+            })[];
+            sendAdminBoxsetMessage: (number | {
+                input: (string | number)[];
+            })[];
+            sendBoxsetUserMessage: (number | {
+                input: (string | number)[];
+            })[];
+            updateBoxset: (number | {
                 input: (string | number)[];
             })[];
             updateContribution: (number | {

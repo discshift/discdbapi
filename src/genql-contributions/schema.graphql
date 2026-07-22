@@ -73,9 +73,24 @@ type AddChapterToItemPayload {
   errors: [AddChapterToItemError!]
 }
 
+type AddDiscToBoxsetPayload {
+  userContributionBoxset: UserContributionBoxset
+  errors: [AddDiscToBoxsetError!]
+}
+
+type AddExistingDiscToBoxsetPayload {
+  userContributionBoxset: UserContributionBoxset
+  errors: [AddExistingDiscToBoxsetError!]
+}
+
 type AddItemToDiscPayload {
   userContributionDiscItem: UserContributionDiscItem
   errors: [AddItemToDiscError!]
+}
+
+type AddSubtitleTrackToItemPayload {
+  userContributionSubtitleTrack: UserContributionSubtitleTrack
+  errors: [AddSubtitleTrackToItemError!]
 }
 
 type AmazonProductMetadata {
@@ -168,7 +183,82 @@ type ApiKeysEdge {
   node: ApiKeyInfo!
 }
 
+type AttachDiscIdResult {
+  outcome: AttachDiscIdOutcome!
+  contentHash: String!
+  mediaItemSlug: String
+  boxsetSlug: String
+  mediaItemType: String
+  releaseSlug: String
+  discSlug: String
+  discIndex: Int
+  globalDiscId: String
+  existingGlobalDiscId: String
+  matchedDifferentDisc: Boolean!
+}
+
+type AttachGlobalDiscIdPayload {
+  attachDiscIdResult: AttachDiscIdResult
+  errors: [AttachGlobalDiscIdError!]
+}
+
 type AuthenticationError implements Error {
+  message: String!
+}
+
+"""A connection to a list of items."""
+type BoxsetChatConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [BoxsetChatEdge!]
+
+  """A flattened list of the nodes."""
+  nodes: [UserMessage!]
+
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+
+"""An edge in a connection."""
+type BoxsetChatEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+
+  """The item at the end of the edge."""
+  node: UserMessage!
+}
+
+"""A connection to a list of items."""
+type BoxsetContributionsConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [BoxsetContributionsEdge!]
+
+  """A flattened list of the nodes."""
+  nodes: [UserContributionBoxset!]
+
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+
+"""An edge in a connection."""
+type BoxsetContributionsEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+
+  """The item at the end of the edge."""
+  node: UserContributionBoxset!
+}
+
+type BoxsetNotFoundError implements Error {
+  message: String!
+}
+
+type ContributionAlreadyInBoxsetError implements Error {
   message: String!
 }
 
@@ -232,12 +322,21 @@ type ContributionHistoryEdge {
 type ContributionMutations {
   addAudioTrackToItem(input: AddAudioTrackToItemInput!): AddAudioTrackToItemPayload!
   addChapterToItem(input: AddChapterToItemInput!): AddChapterToItemPayload!
+  addDiscToBoxset(input: AddDiscToBoxsetInput!): AddDiscToBoxsetPayload!
+  addExistingDiscToBoxset(input: AddExistingDiscToBoxsetInput!): AddExistingDiscToBoxsetPayload!
   addItemToDisc(input: AddItemToDiscInput!): AddItemToDiscPayload!
+  addSubtitleTrackToItem(input: AddSubtitleTrackToItemInput!): AddSubtitleTrackToItemPayload!
+  attachGlobalDiscId(input: AttachGlobalDiscIdInput!): AttachGlobalDiscIdPayload!
+  createBoxset(input: CreateBoxsetInput!): CreateBoxsetPayload!
   createContribution(input: CreateContributionInput!): CreateContributionPayload!
   createDisc(input: CreateDiscInput!): CreateDiscPayload!
+  deleteBoxset(input: DeleteBoxsetInput!): DeleteBoxsetPayload!
   deleteContribution(input: DeleteContributionInput!): DeleteContributionPayload!
+  deleteDiscFromContribution(input: DeleteDiscFromContributionInput!): DeleteDiscFromContributionPayload!
   deleteItemFromDisc(input: DeleteItemFromDiscInput!): DeleteItemFromDiscPayload!
   editItemOnDisc(input: EditItemOnDiscInput!): EditItemOnDiscPayload!
+  setFileNameTemplate(input: SetFileNameTemplateInput!): SetFileNameTemplatePayload!
+  deleteFileNameTemplate(input: DeleteFileNameTemplateInput!): DeleteFileNameTemplatePayload!
   generateApiKey(input: GenerateApiKeyInput!): GenerateApiKeyPayload!
   discLogs(input: DiscLogsInput!): DiscLogsPayload!
   discUploadStatus(input: DiscUploadStatusInput!): DiscUploadStatusPayload!
@@ -246,10 +345,17 @@ type ContributionMutations {
   externalDataForContribution(input: ExternalDataForContributionInput!): ExternalDataForContributionPayload!
   hashDisc(input: HashDiscInput!): HashDiscPayload!
   markMessagesAsRead(input: MarkMessagesAsReadInput!): MarkMessagesAsReadPayload!
+  markBoxsetMessagesAsRead(input: MarkBoxsetMessagesAsReadInput!): MarkBoxsetMessagesAsReadPayload!
+  removeBoxsetMember(input: RemoveBoxsetMemberInput!): RemoveBoxsetMemberPayload!
+  removeDiscFromBoxset(input: RemoveDiscFromBoxsetInput!): RemoveDiscFromBoxsetPayload!
+  reorderBoxsetMembers(input: ReorderBoxsetMembersInput!): ReorderBoxsetMembersPayload!
   reorderDiscs(input: ReorderDiscsInput!): ReorderDiscsPayload!
   revokeApiKey(input: RevokeApiKeyInput!): RevokeApiKeyPayload!
   sendAdminMessage(input: SendAdminMessageInput!): SendAdminMessagePayload!
   sendUserMessage(input: SendUserMessageInput!): SendUserMessagePayload!
+  sendAdminBoxsetMessage(input: SendAdminBoxsetMessageInput!): SendAdminBoxsetMessagePayload!
+  sendBoxsetUserMessage(input: SendBoxsetUserMessageInput!): SendBoxsetUserMessagePayload!
+  updateBoxset(input: UpdateBoxsetInput!): UpdateBoxsetPayload!
   updateContribution(input: UpdateContributionInput!): UpdateContributionPayload!
   updateDisc(input: UpdateDiscInput!): UpdateDiscPayload!
 }
@@ -329,6 +435,24 @@ type ContributionQuery {
     before: String
     order: [UserMessageSortInput!]
   ): ContributionChatConnection
+  boxsetChat(
+    boxsetId: String!
+
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    order: [UserMessageSortInput!]
+  ): BoxsetChatConnection
   hasUnreadMessages: Boolean!
   myMessages(
     """Returns the first _n_ elements from the list."""
@@ -347,6 +471,40 @@ type ContributionQuery {
     order: [UserMessageSortInput!]
   ): MyMessagesConnection
   messageThreads: [MessageThread!]!
+  boxsetContributions(
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    where: UserContributionBoxsetFilterInput
+    order: [UserContributionBoxsetSortInput!]
+  ): BoxsetContributionsConnection
+  myBoxsets(
+    """Returns the first _n_ elements from the list."""
+    first: Int
+
+    """Returns the elements in the list that come after the specified cursor."""
+    after: String
+
+    """Returns the last _n_ elements from the list."""
+    last: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: String
+    where: UserContributionBoxsetFilterInput
+    order: [UserContributionBoxsetSortInput!]
+  ): MyBoxsetsConnection
   amazonProductMetadata(asin: String!): AmazonProductMetadata
   apiKeys(
     """Returns the first _n_ elements from the list."""
@@ -382,6 +540,7 @@ type ContributionQuery {
     where: ApiKeyUsageLogInfoFilterInput
     order: [ApiKeyUsageLogInfoSortInput!]
   ): ApiKeyUsageLogsConnection
+  myFileNameTemplates: [UserFileNameTemplate!]!
 }
 
 """A connection to a list of items."""
@@ -412,6 +571,11 @@ type CouldNotParseLogsError implements Error {
   message: String!
 }
 
+type CreateBoxsetPayload {
+  userContributionBoxset: UserContributionBoxset
+  errors: [CreateBoxsetError!]
+}
+
 type CreateContributionPayload {
   userContribution: UserContribution
   errors: [CreateContributionError!]
@@ -422,9 +586,24 @@ type CreateDiscPayload {
   errors: [CreateDiscError!]
 }
 
+type DeleteBoxsetPayload {
+  userContributionBoxset: UserContributionBoxset
+  errors: [DeleteBoxsetError!]
+}
+
 type DeleteContributionPayload {
   userContribution: UserContribution
   errors: [DeleteContributionError!]
+}
+
+type DeleteDiscFromContributionPayload {
+  userContributionDisc: UserContributionDisc
+  errors: [DeleteDiscFromContributionError!]
+}
+
+type DeleteFileNameTemplatePayload {
+  boolean: Boolean
+  errors: [DeleteFileNameTemplateError!]
 }
 
 type DeleteItemFromDiscPayload {
@@ -484,6 +663,10 @@ type EpisodeNamesPayload {
   errors: [EpisodeNamesError!]
 }
 
+type ExistingDiscAlreadyInBoxsetError implements Error {
+  message: String!
+}
+
 type ExternalDataForContributionPayload {
   externalMetadata: ExternalMetadata
   errors: [ExternalDataForContributionError!]
@@ -535,7 +718,15 @@ type HashInfoLogLine {
   prefix: String
 }
 
+type InvalidBoxsetStatusError implements Error {
+  message: String!
+}
+
 type InvalidContributionStatusError implements Error {
+  message: String!
+}
+
+type InvalidDiscPathError implements Error {
   message: String!
 }
 
@@ -549,6 +740,11 @@ type InvalidOwnershipError implements Error {
 
 type LogsNotFoundError implements Error {
   message: String!
+}
+
+type MarkBoxsetMessagesAsReadPayload {
+  boolean: Boolean
+  errors: [MarkBoxsetMessagesAsReadError!]
 }
 
 type MarkMessagesAsReadPayload {
@@ -565,6 +761,38 @@ type MessageThread {
   lastMessageAt: DateTime!
   unreadCount: Int!
   totalCount: Int!
+  isBoxset: Boolean!
+}
+
+type MismatchedReleaseSlugError implements Error {
+  message: String!
+  boxsetSlug: String!
+  offendingReleaseSlug: String!
+  contributionTitle: String!
+}
+
+"""A connection to a list of items."""
+type MyBoxsetsConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [MyBoxsetsEdge!]
+
+  """A flattened list of the nodes."""
+  nodes: [UserContributionBoxset!]
+
+  """Identifies the total count of items in the connection."""
+  totalCount: Int!
+}
+
+"""An edge in a connection."""
+type MyBoxsetsEdge {
+  """A cursor for use in pagination."""
+  cursor: String!
+
+  """The item at the end of the edge."""
+  node: UserContributionBoxset!
 }
 
 """A connection to a list of items."""
@@ -634,6 +862,21 @@ type PageInfo {
   endCursor: String
 }
 
+type RemoveBoxsetMemberPayload {
+  userContributionBoxset: UserContributionBoxset
+  errors: [RemoveBoxsetMemberError!]
+}
+
+type RemoveDiscFromBoxsetPayload {
+  userContributionBoxset: UserContributionBoxset
+  errors: [RemoveDiscFromBoxsetError!]
+}
+
+type ReorderBoxsetMembersPayload {
+  userContributionBoxset: UserContributionBoxset
+  errors: [ReorderBoxsetMembersError!]
+}
+
 type ReorderDiscsPayload {
   userContributionDisc: [UserContributionDisc!]
   errors: [ReorderDiscsError!]
@@ -655,9 +898,19 @@ type Segment {
   aspectRatio: String
 }
 
+type SendAdminBoxsetMessagePayload {
+  userMessage: UserMessage
+  errors: [SendAdminBoxsetMessageError!]
+}
+
 type SendAdminMessagePayload {
   userMessage: UserMessage
   errors: [SendAdminMessageError!]
+}
+
+type SendBoxsetUserMessagePayload {
+  userMessage: UserMessage
+  errors: [SendBoxsetUserMessageError!]
 }
 
 type SendUserMessagePayload {
@@ -678,6 +931,11 @@ type SeriesEpisodeNames {
   episodes: [SeriesEpisodeNameEntry!]!
 }
 
+type SetFileNameTemplatePayload {
+  userFileNameTemplate: UserFileNameTemplate
+  errors: [SetFileNameTemplateError!]
+}
+
 type Title {
   index: Int!
   chapterCount: Int!
@@ -690,6 +948,11 @@ type Title {
   javaComment: String
   segments: [Segment!]!
   lengthAsTimeSpan: TimeSpan!
+}
+
+type UpdateBoxsetPayload {
+  userContributionBoxset: UserContributionBoxset
+  errors: [UpdateBoxsetError!]
 }
 
 type UpdateContributionPayload {
@@ -707,6 +970,8 @@ type UserContribution {
   userId: String!
   created: DateTime!
   status: UserContributionStatus!
+  boxsetId: Int
+  boxset: UserContributionBoxset
   discs(where: UserContributionDiscFilterInput, order: [UserContributionDiscSortInput!]): [UserContributionDisc!]!
   hashItems(where: UserContributionDiscHashItemFilterInput, order: [UserContributionDiscHashItemSortInput!]): [UserContributionDiscHashItem!]!
   mediaType: String!
@@ -735,6 +1000,35 @@ type UserContributionAudioTrack {
   encodedId: EncodedId!
 }
 
+type UserContributionBoxset {
+  id: Int!
+  userId: String!
+  created: DateTime!
+  status: UserContributionStatus!
+  title: String!
+  sortTitle: String
+  slug: String!
+  frontImageUrl: String
+  backImageUrl: String
+  asin: String
+  upc: String
+  releaseDate: DateTime
+  locale: String
+  regionCode: String
+  members(where: UserContributionBoxsetMemberFilterInput, order: [UserContributionBoxsetMemberSortInput!]): [UserContributionBoxsetMember!]!
+  encodedId: EncodedId!
+}
+
+type UserContributionBoxsetMember {
+  id: Int!
+  boxset: UserContributionBoxset!
+  disc: UserContributionDisc
+  sortOrder: Int!
+  existingDiscPath: String
+  existingDiscName: String
+  existingDiscFormat: String
+}
+
 type UserContributionChapter {
   id: Int!
   index: Int!
@@ -747,6 +1041,7 @@ type UserContributionDisc {
   id: Int!
   userContribution: UserContribution!
   contentHash: String!
+  globalDiscId: String
   format: String!
   name: String!
   slug: String!
@@ -785,12 +1080,33 @@ type UserContributionDiscItem {
   episode: String
   chapters(where: UserContributionChapterFilterInput, order: [UserContributionChapterSortInput!]): [UserContributionChapter!]!
   audioTracks(where: UserContributionAudioTrackFilterInput, order: [UserContributionAudioTrackSortInput!]): [UserContributionAudioTrack!]!
+  subtitleTracks(where: UserContributionSubtitleTrackFilterInput, order: [UserContributionSubtitleTrackSortInput!]): [UserContributionSubtitleTrack!]!
   encodedId: EncodedId!
+  filename: String!
+}
+
+type UserContributionSubtitleTrack {
+  id: Int!
+  index: Int!
+  title: String!
+  item: UserContributionDiscItem!
+  encodedId: EncodedId!
+}
+
+type UserFileNameTemplate {
+  id: Int!
+  userId: String!
+  itemType: String!
+  template: String!
+  updatedAt: DateTime!
 }
 
 type UserMessage {
   id: Int!
-  contributionId: Int!
+  contributionId: Int
+  boxsetId: Int
+  contribution: UserContribution
+  boxset: UserContributionBoxset
   fromUserId: String!
   toUserId: String!
   message: String!
@@ -803,13 +1119,29 @@ union AddAudioTrackToItemError = ContributionNotFoundError | DiscNotFoundError |
 
 union AddChapterToItemError = ContributionNotFoundError | DiscNotFoundError | DiscItemNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError
 
+union AddDiscToBoxsetError = AuthenticationError | BoxsetNotFoundError | DiscNotFoundError | ContributionAlreadyInBoxsetError | InvalidIdError | InvalidOwnershipError | InvalidBoxsetStatusError | MismatchedReleaseSlugError
+
+union AddExistingDiscToBoxsetError = AuthenticationError | BoxsetNotFoundError | InvalidIdError | InvalidOwnershipError | InvalidDiscPathError | ExistingDiscAlreadyInBoxsetError | InvalidBoxsetStatusError | MismatchedReleaseSlugError
+
 union AddItemToDiscError = ContributionNotFoundError | DiscNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError
 
-union CreateContributionError = AuthenticationError
+union AddSubtitleTrackToItemError = ContributionNotFoundError | DiscNotFoundError | DiscItemNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError
 
-union CreateDiscError = ContributionNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError
+union AttachGlobalDiscIdError = AuthenticationError
+
+union CreateBoxsetError = AuthenticationError
+
+union CreateContributionError = AuthenticationError | BoxsetNotFoundError | InvalidIdError | InvalidOwnershipError | InvalidBoxsetStatusError
+
+union CreateDiscError = ContributionNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError | InvalidDiscPathError
+
+union DeleteBoxsetError = AuthenticationError | BoxsetNotFoundError | InvalidIdError | InvalidOwnershipError | InvalidBoxsetStatusError
 
 union DeleteContributionError = ContributionNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError | InvalidContributionStatusError
+
+union DeleteDiscFromContributionError = ContributionNotFoundError | DiscNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError | InvalidContributionStatusError
+
+union DeleteFileNameTemplateError = AuthenticationError
 
 union DeleteItemFromDiscError = ContributionNotFoundError | DiscNotFoundError | DiscItemNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError
 
@@ -827,15 +1159,31 @@ union ExternalDataForContributionError = ContributionNotFoundError | ExternalDat
 
 union HashDiscError = ContributionNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError
 
+union MarkBoxsetMessagesAsReadError = AuthenticationError
+
 union MarkMessagesAsReadError = AuthenticationError
+
+union RemoveBoxsetMemberError = AuthenticationError | BoxsetNotFoundError | InvalidIdError | InvalidOwnershipError | InvalidBoxsetStatusError
+
+union RemoveDiscFromBoxsetError = AuthenticationError | BoxsetNotFoundError | DiscNotFoundError | InvalidIdError | InvalidOwnershipError | InvalidBoxsetStatusError
+
+union ReorderBoxsetMembersError = AuthenticationError | BoxsetNotFoundError | InvalidIdError | InvalidOwnershipError | InvalidBoxsetStatusError
 
 union ReorderDiscsError = ContributionNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError
 
 union RevokeApiKeyError = ApiKeyNotFoundError
 
+union SendAdminBoxsetMessageError = BoxsetNotFoundError | AuthenticationError | InvalidIdError
+
 union SendAdminMessageError = ContributionNotFoundError | AuthenticationError
 
+union SendBoxsetUserMessageError = BoxsetNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError
+
 union SendUserMessageError = ContributionNotFoundError | AuthenticationError | InvalidOwnershipError
+
+union SetFileNameTemplateError = AuthenticationError
+
+union UpdateBoxsetError = AuthenticationError | BoxsetNotFoundError | InvalidIdError | InvalidOwnershipError
 
 union UpdateContributionError = ContributionNotFoundError | AuthenticationError | InvalidIdError | InvalidOwnershipError | InvalidContributionStatusError
 
@@ -857,6 +1205,18 @@ input AddChapterToItemInput {
   chapterName: String!
 }
 
+input AddDiscToBoxsetInput {
+  boxsetId: String!
+  discId: String!
+}
+
+input AddExistingDiscToBoxsetInput {
+  boxsetId: String!
+  existingDiscPath: String!
+  discName: String!
+  discFormat: String!
+}
+
 input AddItemToDiscInput {
   contributionId: String!
   discId: String!
@@ -871,6 +1231,14 @@ input AddItemToDiscInput {
   description: String
   season: String
   episode: String
+}
+
+input AddSubtitleTrackToItemInput {
+  contributionId: String!
+  discId: String!
+  itemId: String!
+  trackIndex: Int!
+  trackName: String!
 }
 
 input ApiKeyInfoFilterInput {
@@ -921,9 +1289,32 @@ input ApiKeyUsageLogInfoSortInput {
   durationMs: SortEnumType
 }
 
+input AttachGlobalDiscIdInput {
+  files: [FileHashInfoInput!]!
+  globalDiscId: String!
+  mediaItemSlug: String
+  boxsetSlug: String
+  releaseSlug: String
+  discSlug: String
+  discIndex: Int
+}
+
 input BooleanOperationFilterInput {
   eq: Boolean
   neq: Boolean
+}
+
+input BoxsetMutationRequestInput {
+  title: String!
+  sortTitle: String
+  slug: String!
+  frontImageUrl: String
+  backImageUrl: String
+  asin: String
+  upc: String
+  releaseDate: DateTime
+  locale: String
+  regionCode: String
 }
 
 input ContributionHistorySortInput {
@@ -952,6 +1343,11 @@ input ContributionMutationRequestInput {
   year: String!
   storageId: UUID!
   status: UserContributionStatus!
+  boxsetId: String
+}
+
+input CreateBoxsetInput {
+  input: BoxsetMutationRequestInput!
 }
 
 input CreateContributionInput {
@@ -965,6 +1361,7 @@ input CreateDiscInput {
   name: String!
   slug: String!
   existingDiscPath: String
+  globalDiscId: String
 }
 
 input DateTimeOperationFilterInput {
@@ -982,8 +1379,21 @@ input DateTimeOperationFilterInput {
   nlte: DateTime
 }
 
+input DeleteBoxsetInput {
+  boxsetId: String!
+}
+
 input DeleteContributionInput {
   contributionId: String!
+}
+
+input DeleteDiscFromContributionInput {
+  contributionId: String!
+  discId: String!
+}
+
+input DeleteFileNameTemplateInput {
+  itemType: String!
 }
 
 input DeleteItemFromDiscInput {
@@ -1123,6 +1533,20 @@ input ListEncodedIdFilterTypeOfUserContributionDiscItemFilterInput {
   any: Boolean
 }
 
+input ListEncodedIdFilterTypeOfUserContributionSubtitleTrackFilterInput {
+  all: UserContributionSubtitleTrackFilterInput
+  none: UserContributionSubtitleTrackFilterInput
+  some: UserContributionSubtitleTrackFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfUserContributionBoxsetMemberFilterInput {
+  all: UserContributionBoxsetMemberFilterInput
+  none: UserContributionBoxsetMemberFilterInput
+  some: UserContributionBoxsetMemberFilterInput
+  any: Boolean
+}
+
 input LongOperationFilterInput {
   eq: Long
   neq: Long
@@ -1138,8 +1562,27 @@ input LongOperationFilterInput {
   nlte: Long
 }
 
+input MarkBoxsetMessagesAsReadInput {
+  boxsetId: String!
+}
+
 input MarkMessagesAsReadInput {
   contributionId: String!
+}
+
+input RemoveBoxsetMemberInput {
+  boxsetId: String!
+  memberId: Int!
+}
+
+input RemoveDiscFromBoxsetInput {
+  boxsetId: String!
+  discId: String!
+}
+
+input ReorderBoxsetMembersInput {
+  boxsetId: String!
+  memberIds: [Int!]!
 }
 
 input ReorderDiscsInput {
@@ -1151,14 +1594,29 @@ input RevokeApiKeyInput {
   keyPrefix: String!
 }
 
+input SendAdminBoxsetMessageInput {
+  boxsetId: String!
+  message: String!
+}
+
 input SendAdminMessageInput {
   contributionId: String!
+  message: String!
+}
+
+input SendBoxsetUserMessageInput {
+  boxsetId: String!
   message: String!
 }
 
 input SendUserMessageInput {
   contributionId: String!
   message: String!
+}
+
+input SetFileNameTemplateInput {
+  itemType: String!
+  template: String!
 }
 
 input StringOperationFilterInput {
@@ -1174,6 +1632,11 @@ input StringOperationFilterInput {
   nstartsWith: String
   endsWith: String
   nendsWith: String
+}
+
+input UpdateBoxsetInput {
+  boxsetId: String!
+  input: BoxsetMutationRequestInput!
 }
 
 input UpdateContributionInput {
@@ -1214,6 +1677,65 @@ input UserContributionAudioTrackSortInput {
   item: UserContributionDiscItemSortInput
 }
 
+input UserContributionBoxsetFilterInput {
+  and: [UserContributionBoxsetFilterInput!]
+  or: [UserContributionBoxsetFilterInput!]
+  encodedId: EncodedIdOperationFilterInput
+  userId: StringOperationFilterInput
+  created: DateTimeOperationFilterInput
+  status: UserContributionStatusOperationFilterInput
+  title: StringOperationFilterInput
+  sortTitle: StringOperationFilterInput
+  slug: StringOperationFilterInput
+  frontImageUrl: StringOperationFilterInput
+  backImageUrl: StringOperationFilterInput
+  asin: StringOperationFilterInput
+  upc: StringOperationFilterInput
+  releaseDate: DateTimeOperationFilterInput
+  locale: StringOperationFilterInput
+  regionCode: StringOperationFilterInput
+  members: ListFilterInputTypeOfUserContributionBoxsetMemberFilterInput
+}
+
+input UserContributionBoxsetMemberFilterInput {
+  and: [UserContributionBoxsetMemberFilterInput!]
+  or: [UserContributionBoxsetMemberFilterInput!]
+  id: IntOperationFilterInput
+  boxset: UserContributionBoxsetFilterInput
+  disc: UserContributionDiscFilterInput
+  sortOrder: IntOperationFilterInput
+  existingDiscPath: StringOperationFilterInput
+  existingDiscName: StringOperationFilterInput
+  existingDiscFormat: StringOperationFilterInput
+}
+
+input UserContributionBoxsetMemberSortInput {
+  id: SortEnumType
+  boxset: UserContributionBoxsetSortInput
+  disc: UserContributionDiscSortInput
+  sortOrder: SortEnumType
+  existingDiscPath: SortEnumType
+  existingDiscName: SortEnumType
+  existingDiscFormat: SortEnumType
+}
+
+input UserContributionBoxsetSortInput {
+  id: SortEnumType
+  userId: SortEnumType
+  created: SortEnumType
+  status: SortEnumType
+  title: SortEnumType
+  sortTitle: SortEnumType
+  slug: SortEnumType
+  frontImageUrl: SortEnumType
+  backImageUrl: SortEnumType
+  asin: SortEnumType
+  upc: SortEnumType
+  releaseDate: SortEnumType
+  locale: SortEnumType
+  regionCode: SortEnumType
+}
+
 input UserContributionChapterFilterInput {
   and: [UserContributionChapterFilterInput!]
   or: [UserContributionChapterFilterInput!]
@@ -1236,6 +1758,7 @@ input UserContributionDiscFilterInput {
   encodedId: EncodedIdOperationFilterInput
   userContribution: UserContributionFilterInput
   contentHash: StringOperationFilterInput
+  globalDiscId: StringOperationFilterInput
   format: StringOperationFilterInput
   name: StringOperationFilterInput
   slug: StringOperationFilterInput
@@ -1286,6 +1809,7 @@ input UserContributionDiscItemFilterInput {
   episode: StringOperationFilterInput
   chapters: ListEncodedIdFilterTypeOfUserContributionChapterFilterInput
   audioTracks: ListEncodedIdFilterTypeOfUserContributionAudioTrackFilterInput
+  subtitleTracks: ListEncodedIdFilterTypeOfUserContributionSubtitleTrackFilterInput
 }
 
 input UserContributionDiscItemSortInput {
@@ -1308,6 +1832,7 @@ input UserContributionDiscSortInput {
   id: SortEnumType
   userContribution: UserContributionSortInput
   contentHash: SortEnumType
+  globalDiscId: SortEnumType
   format: SortEnumType
   name: SortEnumType
   slug: SortEnumType
@@ -1324,6 +1849,8 @@ input UserContributionFilterInput {
   userId: StringOperationFilterInput
   created: DateTimeOperationFilterInput
   status: UserContributionStatusOperationFilterInput
+  boxsetId: IntOperationFilterInput
+  boxset: UserContributionBoxsetFilterInput
   discs: ListEncodedIdFilterTypeOfUserContributionDiscFilterInput
   hashItems: ListEncodedIdFilterTypeOfUserContributionDiscHashItemFilterInput
   mediaType: StringOperationFilterInput
@@ -1348,6 +1875,8 @@ input UserContributionSortInput {
   userId: SortEnumType
   created: SortEnumType
   status: SortEnumType
+  boxsetId: SortEnumType
+  boxset: UserContributionBoxsetSortInput
   mediaType: SortEnumType
   externalId: SortEnumType
   externalProvider: SortEnumType
@@ -1372,9 +1901,28 @@ input UserContributionStatusOperationFilterInput {
   nin: [UserContributionStatus!]
 }
 
+input UserContributionSubtitleTrackFilterInput {
+  and: [UserContributionSubtitleTrackFilterInput!]
+  or: [UserContributionSubtitleTrackFilterInput!]
+  encodedId: EncodedIdOperationFilterInput
+  index: IntOperationFilterInput
+  title: StringOperationFilterInput
+  item: UserContributionDiscItemFilterInput
+}
+
+input UserContributionSubtitleTrackSortInput {
+  id: SortEnumType
+  index: SortEnumType
+  title: SortEnumType
+  item: UserContributionDiscItemSortInput
+}
+
 input UserMessageSortInput {
   id: SortEnumType
   contributionId: SortEnumType
+  boxsetId: SortEnumType
+  contribution: UserContributionSortInput
+  boxset: UserContributionBoxsetSortInput
   fromUserId: SortEnumType
   toUserId: SortEnumType
   message: SortEnumType
@@ -1393,6 +1941,14 @@ enum ApplyPolicy {
 
   """The policy is applied in the validation step before the execution."""
   VALIDATION
+}
+
+enum AttachDiscIdOutcome {
+  APPLIED
+  ALREADY_RECORDED
+  CONFLICT
+  NOT_FOUND
+  MISMATCH
 }
 
 enum ContributionHistoryType {

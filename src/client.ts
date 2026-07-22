@@ -299,6 +299,71 @@ export class DiscDBClient {
   }
 
   /**
+   * Using a precalculated global disc ID and/or content hash, find a unique
+   * disc with its nested releases and media items.
+   *
+   * Most discs in the database have a content hash, but the global ID is
+   * slightly easier to obtain due to its use in other tools.
+   *
+   * @param values the ID and/or hash of the disc
+   * @returns matching disc with releases
+   */
+  async getDiscByIdOrHash(
+    values: { id: string } | { hash: string } | { id: string; hash: string },
+  ): Promise<ReverseMappedDisc> {
+    const valuesWhere = [];
+    if ("id" in values) {
+      valuesWhere.push({ globalDiscId: { eq: values.id } });
+    }
+    if ("hash" in values) {
+      valuesWhere.push({ contentHash: { eq: values.hash } });
+    }
+
+    const data = await this.gql.query({
+      mediaItems: {
+        __args: {
+          where: {
+            releases: {
+              some: { discs: { some: { or: valuesWhere } } },
+            },
+          },
+        },
+        nodes: GQL_NODE_QUERY,
+      },
+    });
+    let disc: ReverseMappedDisc | undefined;
+    const releases = (data.mediaItems?.nodes ?? []).flatMap((mediaItem) =>
+      mediaItem.releases.map((release) => ({
+        ...release,
+        mediaItem: { ...mediaItem, releases: undefined },
+      })),
+    );
+    for (const release of releases) {
+      const matched = release.discs.find((d) => {
+        if ("hash" in values && d.contentHash !== null) {
+          return d.contentHash === values.hash;
+        }
+        if ("id" in values && d.globalDiscId !== null) {
+          return d.globalDiscId === values.id;
+        }
+        return false;
+      });
+      if (matched) {
+        if (disc) {
+          disc.releases.push(release);
+        } else {
+          disc = { ...matched, releases: [release] };
+        }
+      }
+    }
+    if (!disc) {
+      throw Error("No disc could be found with the provided values");
+    }
+
+    return disc;
+  }
+
+  /**
    * Get all media items which are "tagged" with a specific group.
    * This is used by TheDiscDB to identify cast, crew, genres, and studios.
    *
@@ -625,6 +690,7 @@ const GQL_NODE_QUERY = {
     asin: true,
     discs: {
       __args: { order: [{ index: enumSortEnumType.ASC }] },
+      globalDiscId: true,
       contentHash: true,
       index: true,
       name: true,
@@ -660,3 +726,9 @@ export type MediaItemViaStandardQuery = FieldsSelection<
 >;
 export type MediaItemVSQRelease = MediaItemViaStandardQuery["releases"][number];
 export type MediaItemVSQDisc = MediaItemVSQRelease["discs"][number];
+
+type ReverseMappedDisc = MediaItemVSQDisc & {
+  releases: (MediaItemVSQRelease & {
+    mediaItem: Omit<MediaItemViaStandardQuery, "releases">;
+  })[];
+};

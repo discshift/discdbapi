@@ -110,6 +110,24 @@ export declare class DiscDBClient {
      */
     getMediaItemsByDiscHashes(hashes: string[]): Promise<Record<string, MediaItemViaStandardQuery[]>>;
     /**
+     * Using a precalculated global disc ID and/or content hash, find a unique
+     * disc with its nested releases and media items.
+     *
+     * Most discs in the database have a content hash, but the global ID is
+     * slightly easier to obtain due to its use in other tools.
+     *
+     * @param values the ID and/or hash of the disc
+     * @returns matching disc with releases
+     */
+    getDiscByIdOrHash(values: {
+        id: string;
+    } | {
+        hash: string;
+    } | {
+        id: string;
+        hash: string;
+    }): Promise<ReverseMappedDisc>;
+    /**
      * Get all media items which are "tagged" with a specific group.
      * This is used by TheDiscDB to identify cast, crew, genres, and studios.
      *
@@ -171,6 +189,7 @@ export declare class DiscDBClient {
                     name: (import("./genql").Scalars["String"] | null);
                     format: (import("./genql").Scalars["String"] | null);
                     contentHash: (import("./genql").Scalars["String"] | null);
+                    globalDiscId: (import("./genql").Scalars["String"] | null);
                     titles: import("./genql").Title[];
                     __typename: "ReleaseDisc";
                 }, "name" | "index" | "format" | "on_Disc">[];
@@ -309,6 +328,7 @@ export declare class DiscDBClient {
                         index: "ASC";
                     }[];
                 };
+                globalDiscId: boolean;
                 contentHash: boolean;
                 index: boolean;
                 name: boolean;
@@ -375,6 +395,7 @@ declare const GQL_NODE_QUERY: {
                     index: "ASC";
                 }[];
             };
+            globalDiscId: boolean;
             contentHash: boolean;
             index: boolean;
             name: boolean;
@@ -414,4 +435,9 @@ declare const GQL_NODE_QUERY: {
 export type MediaItemViaStandardQuery = FieldsSelection<MediaItem, typeof GQL_NODE_QUERY>;
 export type MediaItemVSQRelease = MediaItemViaStandardQuery["releases"][number];
 export type MediaItemVSQDisc = MediaItemVSQRelease["discs"][number];
+type ReverseMappedDisc = MediaItemVSQDisc & {
+    releases: (MediaItemVSQRelease & {
+        mediaItem: Omit<MediaItemViaStandardQuery, "releases">;
+    })[];
+};
 export {};

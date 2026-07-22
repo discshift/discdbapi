@@ -211,6 +211,7 @@ export interface Disc {
     name: (Scalars['String'] | null);
     format: (Scalars['String'] | null);
     contentHash: (Scalars['String'] | null);
+    globalDiscId: (Scalars['String'] | null);
     titles: Title[];
     release: (Release | null);
     releaseDiscs: ReleaseDisc[];
@@ -248,6 +249,7 @@ export interface ReleaseDisc {
     name: (Scalars['String'] | null);
     format: (Scalars['String'] | null);
     contentHash: (Scalars['String'] | null);
+    globalDiscId: (Scalars['String'] | null);
     titles: Title[];
     __typename: 'ReleaseDisc';
 }
@@ -493,6 +495,7 @@ export interface ReleaseDiscFilterInput {
     titles?: (ListFilterInputTypeOfTitleFilterInput | null);
     format?: (StringOperationFilterInput | null);
     contentHash?: (StringOperationFilterInput | null);
+    globalDiscId?: (StringOperationFilterInput | null);
 }
 export interface ListFilterInputTypeOfReleaseGroupFilterInput {
     all?: (ReleaseGroupFilterInput | null);
@@ -725,6 +728,7 @@ export interface DiscSortInput {
     name?: (SortEnumType | null);
     format?: (SortEnumType | null);
     contentHash?: (SortEnumType | null);
+    globalDiscId?: (SortEnumType | null);
     release?: (ReleaseSortInput | null);
 }
 export interface TrackGenqlSelection {
@@ -858,6 +862,7 @@ export interface DiscFilterInput {
     name?: (StringOperationFilterInput | null);
     format?: (StringOperationFilterInput | null);
     contentHash?: (StringOperationFilterInput | null);
+    globalDiscId?: (StringOperationFilterInput | null);
     titles?: (ListFilterInputTypeOfTitleFilterInput | null);
     release?: (ReleaseFilterInput | null);
     releaseDiscs?: (ListReleaseDiscFilterTypeFilterInput | null);
@@ -898,6 +903,7 @@ export interface ReleaseDiscSortInput {
     name?: (SortEnumType | null);
     format?: (SortEnumType | null);
     contentHash?: (SortEnumType | null);
+    globalDiscId?: (SortEnumType | null);
 }
 export interface ReleaseGenqlSelection {
     id?: boolean | number;
@@ -994,6 +1000,7 @@ export interface DiscGenqlSelection {
     name?: boolean | number;
     format?: boolean | number;
     contentHash?: boolean | number;
+    globalDiscId?: boolean | number;
     titles?: (TitleGenqlSelection & {
         __args?: {
             where?: (TitleFilterInput | null);
@@ -1090,6 +1097,7 @@ export interface ReleaseDiscGenqlSelection {
     name?: boolean | number;
     format?: boolean | number;
     contentHash?: boolean | number;
+    globalDiscId?: boolean | number;
     titles?: (TitleGenqlSelection & {
         __args?: {
             where?: (TitleFilterInput | null);

@@ -1,20 +1,21 @@
 export default {
     "scalars": [
         1,
-        6,
-        7,
-        11,
-        153,
-        154,
-        155,
-        156,
-        157,
-        158,
-        159,
-        160,
-        161,
-        162,
-        163
+        9,
+        10,
+        14,
+        227,
+        228,
+        229,
+        230,
+        231,
+        232,
+        233,
+        234,
+        235,
+        236,
+        237,
+        238
     ],
     "types": {
         "Error": {
@@ -22,43 +23,61 @@ export default {
                 1
             ],
             "on_ApiKeyNotFoundError": [
-                9
+                12
             ],
             "on_AuthenticationError": [
-                16
+                21
+            ],
+            "on_BoxsetNotFoundError": [
+                26
+            ],
+            "on_ContributionAlreadyInBoxsetError": [
+                27
             ],
             "on_ContributionNotFoundError": [
-                22
+                33
             ],
             "on_CouldNotParseLogsError": [
-                25
+                36
             ],
             "on_DiscItemNotFoundError": [
-                32
+                47
             ],
             "on_DiscNotFoundError": [
-                35
-            ],
-            "on_ExternalDataNotFoundError": [
-                41
-            ],
-            "on_ExternalDataSerializationError": [
-                43
-            ],
-            "on_FieldRequiredError": [
-                45
-            ],
-            "on_InvalidContributionStatusError": [
-                49
-            ],
-            "on_InvalidIdError": [
                 50
             ],
+            "on_ExistingDiscAlreadyInBoxsetError": [
+                55
+            ],
+            "on_ExternalDataNotFoundError": [
+                57
+            ],
+            "on_ExternalDataSerializationError": [
+                59
+            ],
+            "on_FieldRequiredError": [
+                61
+            ],
+            "on_InvalidBoxsetStatusError": [
+                65
+            ],
+            "on_InvalidContributionStatusError": [
+                66
+            ],
+            "on_InvalidDiscPathError": [
+                67
+            ],
+            "on_InvalidIdError": [
+                68
+            ],
             "on_InvalidOwnershipError": [
-                51
+                69
             ],
             "on_LogsNotFoundError": [
-                52
+                70
+            ],
+            "on_MismatchedReleaseSlugError": [
+                74
             ],
             "__typename": [
                 1
@@ -67,10 +86,10 @@ export default {
         "String": {},
         "AddAudioTrackToItemPayload": {
             "userContributionAudioTrack": [
-                71
+                100
             ],
             "errors": [
-                77
+                110
             ],
             "__typename": [
                 1
@@ -78,10 +97,32 @@ export default {
         },
         "AddChapterToItemPayload": {
             "userContributionChapter": [
-                72
+                103
             ],
             "errors": [
-                78
+                111
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "AddDiscToBoxsetPayload": {
+            "userContributionBoxset": [
+                101
+            ],
+            "errors": [
+                112
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "AddExistingDiscToBoxsetPayload": {
+            "userContributionBoxset": [
+                101
+            ],
+            "errors": [
+                113
             ],
             "__typename": [
                 1
@@ -89,10 +130,21 @@ export default {
         },
         "AddItemToDiscPayload": {
             "userContributionDiscItem": [
-                75
+                106
             ],
             "errors": [
-                79
+                114
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "AddSubtitleTrackToItemPayload": {
+            "userContributionSubtitleTrack": [
+                107
+            ],
+            "errors": [
+                115
             ],
             "__typename": [
                 1
@@ -115,16 +167,16 @@ export default {
                 1
             ],
             "releaseDate": [
-                158
+                233
             ],
             "numberOfDiscs": [
-                6
+                9
             ],
             "aspectRatio": [
                 1
             ],
             "isDiscontinued": [
-                7
+                10
             ],
             "mpaaRating": [
                 1
@@ -170,10 +222,10 @@ export default {
                 1
             ],
             "isActive": [
-                7
+                10
             ],
             "logUsage": [
-                7
+                10
             ],
             "roles": [
                 1
@@ -182,13 +234,13 @@ export default {
                 1
             ],
             "createdAt": [
-                158
+                233
             ],
             "expiresAt": [
-                158
+                233
             ],
             "lastUsedAt": [
-                158
+                233
             ],
             "__typename": [
                 1
@@ -210,19 +262,19 @@ export default {
                 1
             ],
             "timestamp": [
-                158
+                233
             ],
             "operationName": [
                 1
             ],
             "fieldCost": [
-                11
+                14
             ],
             "typeCost": [
-                11
+                14
             ],
             "durationMs": [
-                6
+                9
             ],
             "__typename": [
                 1
@@ -231,13 +283,13 @@ export default {
         "Float": {},
         "ApiKeyUsageLogsConnection": {
             "pageInfo": [
-                59
+                81
             ],
             "edges": [
-                13
+                16
             ],
             "nodes": [
-                10
+                13
             ],
             "__typename": [
                 1
@@ -248,7 +300,7 @@ export default {
                 1
             ],
             "node": [
-                10
+                13
             ],
             "__typename": [
                 1
@@ -256,13 +308,13 @@ export default {
         },
         "ApiKeysConnection": {
             "pageInfo": [
-                59
+                81
             ],
             "edges": [
-                15
+                18
             ],
             "nodes": [
-                8
+                11
             ],
             "__typename": [
                 1
@@ -273,7 +325,56 @@ export default {
                 1
             ],
             "node": [
-                8
+                11
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "AttachDiscIdResult": {
+            "outcome": [
+                228
+            ],
+            "contentHash": [
+                1
+            ],
+            "mediaItemSlug": [
+                1
+            ],
+            "boxsetSlug": [
+                1
+            ],
+            "mediaItemType": [
+                1
+            ],
+            "releaseSlug": [
+                1
+            ],
+            "discSlug": [
+                1
+            ],
+            "discIndex": [
+                9
+            ],
+            "globalDiscId": [
+                1
+            ],
+            "existingGlobalDiscId": [
+                1
+            ],
+            "matchedDifferentDisc": [
+                10
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "AttachGlobalDiscIdPayload": {
+            "attachDiscIdResult": [
+                19
+            ],
+            "errors": [
+                116
             ],
             "__typename": [
                 1
@@ -287,18 +388,90 @@ export default {
                 1
             ]
         },
-        "ContributionChatConnection": {
+        "BoxsetChatConnection": {
             "pageInfo": [
-                59
+                81
             ],
             "edges": [
-                18
+                23
             ],
             "nodes": [
-                76
+                109
             ],
             "totalCount": [
-                6
+                9
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "BoxsetChatEdge": {
+            "cursor": [
+                1
+            ],
+            "node": [
+                109
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "BoxsetContributionsConnection": {
+            "pageInfo": [
+                81
+            ],
+            "edges": [
+                25
+            ],
+            "nodes": [
+                101
+            ],
+            "totalCount": [
+                9
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "BoxsetContributionsEdge": {
+            "cursor": [
+                1
+            ],
+            "node": [
+                101
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "BoxsetNotFoundError": {
+            "message": [
+                1
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "ContributionAlreadyInBoxsetError": {
+            "message": [
+                1
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "ContributionChatConnection": {
+            "pageInfo": [
+                81
+            ],
+            "edges": [
+                29
+            ],
+            "nodes": [
+                109
+            ],
+            "totalCount": [
+                9
             ],
             "__typename": [
                 1
@@ -309,7 +482,7 @@ export default {
                 1
             ],
             "node": [
-                76
+                109
             ],
             "__typename": [
                 1
@@ -317,13 +490,13 @@ export default {
         },
         "ContributionHistory": {
             "id": [
-                6
+                9
             ],
             "contributionId": [
-                6
+                9
             ],
             "timeStamp": [
-                158
+                233
             ],
             "description": [
                 1
@@ -332,7 +505,7 @@ export default {
                 1
             ],
             "type": [
-                154
+                229
             ],
             "__typename": [
                 1
@@ -340,16 +513,16 @@ export default {
         },
         "ContributionHistoryConnection": {
             "pageInfo": [
-                59
+                81
             ],
             "edges": [
-                21
+                32
             ],
             "nodes": [
-                19
+                30
             ],
             "totalCount": [
-                6
+                9
             ],
             "__typename": [
                 1
@@ -360,7 +533,7 @@ export default {
                 1
             ],
             "node": [
-                19
+                30
             ],
             "__typename": [
                 1
@@ -376,16 +549,16 @@ export default {
         },
         "ContributionsConnection": {
             "pageInfo": [
-                59
+                81
             ],
             "edges": [
-                24
+                35
             ],
             "nodes": [
-                70
+                99
             ],
             "totalCount": [
-                6
+                9
             ],
             "__typename": [
                 1
@@ -396,7 +569,7 @@ export default {
                 1
             ],
             "node": [
-                70
+                99
             ],
             "__typename": [
                 1
@@ -410,12 +583,23 @@ export default {
                 1
             ]
         },
-        "CreateContributionPayload": {
-            "userContribution": [
-                70
+        "CreateBoxsetPayload": {
+            "userContributionBoxset": [
+                101
             ],
             "errors": [
-                80
+                117
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "CreateContributionPayload": {
+            "userContribution": [
+                99
+            ],
+            "errors": [
+                118
             ],
             "__typename": [
                 1
@@ -423,10 +607,21 @@ export default {
         },
         "CreateDiscPayload": {
             "userContributionDisc": [
-                73
+                104
             ],
             "errors": [
-                81
+                119
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "DeleteBoxsetPayload": {
+            "userContributionBoxset": [
+                101
+            ],
+            "errors": [
+                120
             ],
             "__typename": [
                 1
@@ -434,10 +629,32 @@ export default {
         },
         "DeleteContributionPayload": {
             "userContribution": [
-                70
+                99
             ],
             "errors": [
-                82
+                121
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "DeleteDiscFromContributionPayload": {
+            "userContributionDisc": [
+                104
+            ],
+            "errors": [
+                122
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "DeleteFileNameTemplatePayload": {
+            "boolean": [
+                10
+            ],
+            "errors": [
+                123
             ],
             "__typename": [
                 1
@@ -445,10 +662,10 @@ export default {
         },
         "DeleteItemFromDiscPayload": {
             "userContributionDiscItem": [
-                75
+                106
             ],
             "errors": [
-                83
+                124
             ],
             "__typename": [
                 1
@@ -476,10 +693,10 @@ export default {
                 1
             ],
             "titles": [
-                67
+                95
             ],
             "hashInfo": [
-                48
+                64
             ],
             "__typename": [
                 1
@@ -495,13 +712,13 @@ export default {
         },
         "DiscLogs": {
             "info": [
-                31
+                46
             ],
             "disc": [
-                73
+                104
             ],
             "contribution": [
-                70
+                99
             ],
             "__typename": [
                 1
@@ -509,10 +726,10 @@ export default {
         },
         "DiscLogsPayload": {
             "discLogs": [
-                33
+                48
             ],
             "errors": [
-                84
+                125
             ],
             "__typename": [
                 1
@@ -528,7 +745,7 @@ export default {
         },
         "DiscUploadStatus": {
             "logsUploaded": [
-                7
+                10
             ],
             "logUploadError": [
                 1
@@ -539,10 +756,10 @@ export default {
         },
         "DiscUploadStatusPayload": {
             "discUploadStatus": [
-                36
+                51
             ],
             "errors": [
-                85
+                126
             ],
             "__typename": [
                 1
@@ -550,10 +767,10 @@ export default {
         },
         "EditItemOnDiscPayload": {
             "userContributionDiscItem": [
-                75
+                106
             ],
             "errors": [
-                86
+                127
             ],
             "__typename": [
                 1
@@ -561,10 +778,18 @@ export default {
         },
         "EpisodeNamesPayload": {
             "seriesEpisodeNames": [
-                66
+                93
             ],
             "errors": [
-                87
+                128
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "ExistingDiscAlreadyInBoxsetError": {
+            "message": [
+                1
             ],
             "__typename": [
                 1
@@ -572,10 +797,10 @@ export default {
         },
         "ExternalDataForContributionPayload": {
             "externalMetadata": [
-                44
+                60
             ],
             "errors": [
-                89
+                130
             ],
             "__typename": [
                 1
@@ -591,10 +816,10 @@ export default {
         },
         "ExternalDataPayload": {
             "externalMetadata": [
-                44
+                60
             ],
             "errors": [
-                88
+                129
             ],
             "__typename": [
                 1
@@ -610,13 +835,13 @@ export default {
         },
         "ExternalMetadata": {
             "id": [
-                6
+                9
             ],
             "title": [
                 1
             ],
             "year": [
-                6
+                9
             ],
             "imageUrl": [
                 1
@@ -652,10 +877,10 @@ export default {
         },
         "HashDiscPayload": {
             "discHash": [
-                30
+                45
             ],
             "errors": [
-                90
+                131
             ],
             "__typename": [
                 1
@@ -663,7 +888,7 @@ export default {
         },
         "HashInfoLogLine": {
             "matches": [
-                7,
+                10,
                 {
                     "prefix": [
                         1,
@@ -672,16 +897,16 @@ export default {
                 }
             ],
             "index": [
-                6
+                9
             ],
             "name": [
                 1
             ],
             "creationTime": [
-                158
+                233
             ],
             "size": [
-                161
+                236
             ],
             "originalLine": [
                 1
@@ -693,7 +918,23 @@ export default {
                 1
             ]
         },
+        "InvalidBoxsetStatusError": {
+            "message": [
+                1
+            ],
+            "__typename": [
+                1
+            ]
+        },
         "InvalidContributionStatusError": {
+            "message": [
+                1
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "InvalidDiscPathError": {
             "message": [
                 1
             ],
@@ -725,12 +966,23 @@ export default {
                 1
             ]
         },
-        "MarkMessagesAsReadPayload": {
+        "MarkBoxsetMessagesAsReadPayload": {
             "boolean": [
-                7
+                10
             ],
             "errors": [
-                91
+                132
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "MarkMessagesAsReadPayload": {
+            "boolean": [
+                10
+            ],
+            "errors": [
+                133
             ],
             "__typename": [
                 1
@@ -738,7 +990,7 @@ export default {
         },
         "MessageThread": {
             "contributionId": [
-                6
+                9
             ],
             "encodedContributionId": [
                 1
@@ -753,13 +1005,61 @@ export default {
                 1
             ],
             "lastMessageAt": [
-                158
+                233
             ],
             "unreadCount": [
-                6
+                9
             ],
             "totalCount": [
-                6
+                9
+            ],
+            "isBoxset": [
+                10
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "MismatchedReleaseSlugError": {
+            "message": [
+                1
+            ],
+            "boxsetSlug": [
+                1
+            ],
+            "offendingReleaseSlug": [
+                1
+            ],
+            "contributionTitle": [
+                1
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "MyBoxsetsConnection": {
+            "pageInfo": [
+                81
+            ],
+            "edges": [
+                76
+            ],
+            "nodes": [
+                101
+            ],
+            "totalCount": [
+                9
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "MyBoxsetsEdge": {
+            "cursor": [
+                1
+            ],
+            "node": [
+                101
             ],
             "__typename": [
                 1
@@ -767,16 +1067,16 @@ export default {
         },
         "MyContributionsConnection": {
             "pageInfo": [
-                59
+                81
             ],
             "edges": [
-                56
+                78
             ],
             "nodes": [
-                70
+                99
             ],
             "totalCount": [
-                6
+                9
             ],
             "__typename": [
                 1
@@ -787,7 +1087,7 @@ export default {
                 1
             ],
             "node": [
-                70
+                99
             ],
             "__typename": [
                 1
@@ -795,16 +1095,16 @@ export default {
         },
         "MyMessagesConnection": {
             "pageInfo": [
-                59
+                81
             ],
             "edges": [
-                58
+                80
             ],
             "nodes": [
-                76
+                109
             ],
             "totalCount": [
-                6
+                9
             ],
             "__typename": [
                 1
@@ -815,7 +1115,7 @@ export default {
                 1
             ],
             "node": [
-                76
+                109
             ],
             "__typename": [
                 1
@@ -823,10 +1123,10 @@ export default {
         },
         "PageInfo": {
             "hasNextPage": [
-                7
+                10
             ],
             "hasPreviousPage": [
-                7
+                10
             ],
             "startCursor": [
                 1
@@ -838,12 +1138,45 @@ export default {
                 1
             ]
         },
-        "ReorderDiscsPayload": {
-            "userContributionDisc": [
-                73
+        "RemoveBoxsetMemberPayload": {
+            "userContributionBoxset": [
+                101
             ],
             "errors": [
-                92
+                134
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "RemoveDiscFromBoxsetPayload": {
+            "userContributionBoxset": [
+                101
+            ],
+            "errors": [
+                135
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "ReorderBoxsetMembersPayload": {
+            "userContributionBoxset": [
+                101
+            ],
+            "errors": [
+                136
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "ReorderDiscsPayload": {
+            "userContributionDisc": [
+                104
+            ],
+            "errors": [
+                137
             ],
             "__typename": [
                 1
@@ -851,10 +1184,10 @@ export default {
         },
         "RevokeApiKeyPayload": {
             "apiKeyInfo": [
-                8
+                11
             ],
             "errors": [
-                93
+                138
             ],
             "__typename": [
                 1
@@ -862,7 +1195,7 @@ export default {
         },
         "Segment": {
             "index": [
-                6
+                9
             ],
             "type": [
                 1
@@ -889,12 +1222,34 @@ export default {
                 1
             ]
         },
-        "SendAdminMessagePayload": {
+        "SendAdminBoxsetMessagePayload": {
             "userMessage": [
-                76
+                109
             ],
             "errors": [
-                94
+                139
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "SendAdminMessagePayload": {
+            "userMessage": [
+                109
+            ],
+            "errors": [
+                140
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "SendBoxsetUserMessagePayload": {
+            "userMessage": [
+                109
+            ],
+            "errors": [
+                141
             ],
             "__typename": [
                 1
@@ -902,10 +1257,10 @@ export default {
         },
         "SendUserMessagePayload": {
             "userMessage": [
-                76
+                109
             ],
             "errors": [
-                95
+                142
             ],
             "__typename": [
                 1
@@ -927,7 +1282,7 @@ export default {
         },
         "SeriesEpisodeNames": {
             "tryFind": [
-                65,
+                92,
                 {
                     "season": [
                         1,
@@ -946,7 +1301,18 @@ export default {
                 1
             ],
             "episodes": [
-                65
+                92
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "SetFileNameTemplatePayload": {
+            "userFileNameTemplate": [
+                108
+            ],
+            "errors": [
+                143
             ],
             "__typename": [
                 1
@@ -954,10 +1320,10 @@ export default {
         },
         "Title": {
             "index": [
-                6
+                9
             ],
             "chapterCount": [
-                6
+                9
             ],
             "length": [
                 1
@@ -966,7 +1332,7 @@ export default {
                 1
             ],
             "size": [
-                161
+                236
             ],
             "playlist": [
                 1
@@ -981,10 +1347,21 @@ export default {
                 1
             ],
             "segments": [
-                62
+                87
             ],
             "lengthAsTimeSpan": [
-                162
+                237
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "UpdateBoxsetPayload": {
+            "userContributionBoxset": [
+                101
+            ],
+            "errors": [
+                144
             ],
             "__typename": [
                 1
@@ -992,10 +1369,10 @@ export default {
         },
         "UpdateContributionPayload": {
             "userContribution": [
-                70
+                99
             ],
             "errors": [
-                96
+                145
             ],
             "__typename": [
                 1
@@ -1003,10 +1380,10 @@ export default {
         },
         "UpdateDiscPayload": {
             "userContributionDisc": [
-                73
+                104
             ],
             "errors": [
-                97
+                146
             ],
             "__typename": [
                 1
@@ -1014,37 +1391,43 @@ export default {
         },
         "UserContribution": {
             "id": [
-                6
+                9
             ],
             "userId": [
                 1
             ],
             "created": [
-                158
+                233
             ],
             "status": [
-                156
+                231
+            ],
+            "boxsetId": [
+                9
+            ],
+            "boxset": [
+                101
             ],
             "discs": [
-                73,
+                104,
                 {
                     "where": [
-                        143
+                        215
                     ],
                     "order": [
-                        148,
+                        220,
                         "[UserContributionDiscSortInput!]"
                     ]
                 }
             ],
             "hashItems": [
-                74,
+                105,
                 {
                     "where": [
-                        144
+                        216
                     ],
                     "order": [
-                        145,
+                        217,
                         "[UserContributionDiscHashItemSortInput!]"
                     ]
                 }
@@ -1059,7 +1442,7 @@ export default {
                 1
             ],
             "releaseDate": [
-                158
+                233
             ],
             "asin": [
                 1
@@ -1095,7 +1478,7 @@ export default {
                 1
             ],
             "encodedId": [
-                159
+                234
             ],
             "__typename": [
                 1
@@ -1103,19 +1486,107 @@ export default {
         },
         "UserContributionAudioTrack": {
             "id": [
-                6
+                9
             ],
             "index": [
-                6
+                9
             ],
             "title": [
                 1
             ],
             "item": [
-                75
+                106
             ],
             "encodedId": [
-                159
+                234
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "UserContributionBoxset": {
+            "id": [
+                9
+            ],
+            "userId": [
+                1
+            ],
+            "created": [
+                233
+            ],
+            "status": [
+                231
+            ],
+            "title": [
+                1
+            ],
+            "sortTitle": [
+                1
+            ],
+            "slug": [
+                1
+            ],
+            "frontImageUrl": [
+                1
+            ],
+            "backImageUrl": [
+                1
+            ],
+            "asin": [
+                1
+            ],
+            "upc": [
+                1
+            ],
+            "releaseDate": [
+                233
+            ],
+            "locale": [
+                1
+            ],
+            "regionCode": [
+                1
+            ],
+            "members": [
+                102,
+                {
+                    "where": [
+                        210
+                    ],
+                    "order": [
+                        211,
+                        "[UserContributionBoxsetMemberSortInput!]"
+                    ]
+                }
+            ],
+            "encodedId": [
+                234
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "UserContributionBoxsetMember": {
+            "id": [
+                9
+            ],
+            "boxset": [
+                101
+            ],
+            "disc": [
+                104
+            ],
+            "sortOrder": [
+                9
+            ],
+            "existingDiscPath": [
+                1
+            ],
+            "existingDiscName": [
+                1
+            ],
+            "existingDiscFormat": [
+                1
             ],
             "__typename": [
                 1
@@ -1123,19 +1594,19 @@ export default {
         },
         "UserContributionChapter": {
             "id": [
-                6
+                9
             ],
             "index": [
-                6
+                9
             ],
             "title": [
                 1
             ],
             "item": [
-                75
+                106
             ],
             "encodedId": [
-                159
+                234
             ],
             "__typename": [
                 1
@@ -1143,12 +1614,15 @@ export default {
         },
         "UserContributionDisc": {
             "id": [
-                6
+                9
             ],
             "userContribution": [
-                70
+                99
             ],
             "contentHash": [
+                1
+            ],
+            "globalDiscId": [
                 1
             ],
             "format": [
@@ -1161,31 +1635,31 @@ export default {
                 1
             ],
             "logsUploaded": [
-                7
+                10
             ],
             "logUploadError": [
                 1
             ],
             "index": [
-                6
+                9
             ],
             "existingDiscPath": [
                 1
             ],
             "items": [
-                75,
+                106,
                 {
                     "where": [
-                        146
+                        218
                     ],
                     "order": [
-                        147,
+                        219,
                         "[UserContributionDiscItemSortInput!]"
                     ]
                 }
             ],
             "encodedId": [
-                159
+                234
             ],
             "__typename": [
                 1
@@ -1193,28 +1667,28 @@ export default {
         },
         "UserContributionDiscHashItem": {
             "id": [
-                6
+                9
             ],
             "userContribution": [
-                70
+                99
             ],
             "discHash": [
                 1
             ],
             "index": [
-                6
+                9
             ],
             "name": [
                 1
             ],
             "creationTime": [
-                158
+                233
             ],
             "size": [
-                161
+                236
             ],
             "encodedId": [
-                159
+                234
             ],
             "__typename": [
                 1
@@ -1222,10 +1696,10 @@ export default {
         },
         "UserContributionDiscItem": {
             "id": [
-                6
+                9
             ],
             "disc": [
-                73
+                104
             ],
             "name": [
                 1
@@ -1240,10 +1714,10 @@ export default {
                 1
             ],
             "chapterCount": [
-                6
+                9
             ],
             "segmentCount": [
-                6
+                9
             ],
             "segmentMap": [
                 1
@@ -1261,31 +1735,86 @@ export default {
                 1
             ],
             "chapters": [
-                72,
+                103,
                 {
                     "where": [
-                        141
+                        213
                     ],
                     "order": [
-                        142,
+                        214,
                         "[UserContributionChapterSortInput!]"
                     ]
                 }
             ],
             "audioTracks": [
-                71,
+                100,
                 {
                     "where": [
-                        139
+                        207
                     ],
                     "order": [
-                        140,
+                        208,
                         "[UserContributionAudioTrackSortInput!]"
                     ]
                 }
             ],
+            "subtitleTracks": [
+                107,
+                {
+                    "where": [
+                        224
+                    ],
+                    "order": [
+                        225,
+                        "[UserContributionSubtitleTrackSortInput!]"
+                    ]
+                }
+            ],
             "encodedId": [
-                159
+                234
+            ],
+            "filename": [
+                1
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "UserContributionSubtitleTrack": {
+            "id": [
+                9
+            ],
+            "index": [
+                9
+            ],
+            "title": [
+                1
+            ],
+            "item": [
+                106
+            ],
+            "encodedId": [
+                234
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "UserFileNameTemplate": {
+            "id": [
+                9
+            ],
+            "userId": [
+                1
+            ],
+            "itemType": [
+                1
+            ],
+            "template": [
+                1
+            ],
+            "updatedAt": [
+                233
             ],
             "__typename": [
                 1
@@ -1293,10 +1822,19 @@ export default {
         },
         "UserMessage": {
             "id": [
-                6
+                9
             ],
             "contributionId": [
-                6
+                9
+            ],
+            "boxsetId": [
+                9
+            ],
+            "contribution": [
+                99
+            ],
+            "boxset": [
+                101
             ],
             "fromUserId": [
                 1
@@ -1308,13 +1846,13 @@ export default {
                 1
             ],
             "isRead": [
-                7
+                10
             ],
             "createdAt": [
-                158
+                233
             ],
             "type": [
-                157
+                232
             ],
             "__typename": [
                 1
@@ -1322,22 +1860,22 @@ export default {
         },
         "AddAudioTrackToItemError": {
             "on_ContributionNotFoundError": [
-                22
+                33
             ],
             "on_DiscNotFoundError": [
-                35
-            ],
-            "on_DiscItemNotFoundError": [
-                32
-            ],
-            "on_AuthenticationError": [
-                16
-            ],
-            "on_InvalidIdError": [
                 50
             ],
+            "on_DiscItemNotFoundError": [
+                47
+            ],
+            "on_AuthenticationError": [
+                21
+            ],
+            "on_InvalidIdError": [
+                68
+            ],
             "on_InvalidOwnershipError": [
-                51
+                69
             ],
             "on_Error": [
                 0
@@ -1348,22 +1886,86 @@ export default {
         },
         "AddChapterToItemError": {
             "on_ContributionNotFoundError": [
-                22
+                33
             ],
             "on_DiscNotFoundError": [
-                35
-            ],
-            "on_DiscItemNotFoundError": [
-                32
-            ],
-            "on_AuthenticationError": [
-                16
-            ],
-            "on_InvalidIdError": [
                 50
             ],
+            "on_DiscItemNotFoundError": [
+                47
+            ],
+            "on_AuthenticationError": [
+                21
+            ],
+            "on_InvalidIdError": [
+                68
+            ],
             "on_InvalidOwnershipError": [
-                51
+                69
+            ],
+            "on_Error": [
+                0
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "AddDiscToBoxsetError": {
+            "on_AuthenticationError": [
+                21
+            ],
+            "on_BoxsetNotFoundError": [
+                26
+            ],
+            "on_DiscNotFoundError": [
+                50
+            ],
+            "on_ContributionAlreadyInBoxsetError": [
+                27
+            ],
+            "on_InvalidIdError": [
+                68
+            ],
+            "on_InvalidOwnershipError": [
+                69
+            ],
+            "on_InvalidBoxsetStatusError": [
+                65
+            ],
+            "on_MismatchedReleaseSlugError": [
+                74
+            ],
+            "on_Error": [
+                0
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "AddExistingDiscToBoxsetError": {
+            "on_AuthenticationError": [
+                21
+            ],
+            "on_BoxsetNotFoundError": [
+                26
+            ],
+            "on_InvalidIdError": [
+                68
+            ],
+            "on_InvalidOwnershipError": [
+                69
+            ],
+            "on_InvalidDiscPathError": [
+                67
+            ],
+            "on_ExistingDiscAlreadyInBoxsetError": [
+                55
+            ],
+            "on_InvalidBoxsetStatusError": [
+                65
+            ],
+            "on_MismatchedReleaseSlugError": [
+                74
             ],
             "on_Error": [
                 0
@@ -1374,19 +1976,67 @@ export default {
         },
         "AddItemToDiscError": {
             "on_ContributionNotFoundError": [
-                22
+                33
             ],
             "on_DiscNotFoundError": [
-                35
-            ],
-            "on_AuthenticationError": [
-                16
-            ],
-            "on_InvalidIdError": [
                 50
             ],
+            "on_AuthenticationError": [
+                21
+            ],
+            "on_InvalidIdError": [
+                68
+            ],
             "on_InvalidOwnershipError": [
-                51
+                69
+            ],
+            "on_Error": [
+                0
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "AddSubtitleTrackToItemError": {
+            "on_ContributionNotFoundError": [
+                33
+            ],
+            "on_DiscNotFoundError": [
+                50
+            ],
+            "on_DiscItemNotFoundError": [
+                47
+            ],
+            "on_AuthenticationError": [
+                21
+            ],
+            "on_InvalidIdError": [
+                68
+            ],
+            "on_InvalidOwnershipError": [
+                69
+            ],
+            "on_Error": [
+                0
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "AttachGlobalDiscIdError": {
+            "on_AuthenticationError": [
+                21
+            ],
+            "on_Error": [
+                0
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "CreateBoxsetError": {
+            "on_AuthenticationError": [
+                21
             ],
             "on_Error": [
                 0
@@ -1397,7 +2047,19 @@ export default {
         },
         "CreateContributionError": {
             "on_AuthenticationError": [
-                16
+                21
+            ],
+            "on_BoxsetNotFoundError": [
+                26
+            ],
+            "on_InvalidIdError": [
+                68
+            ],
+            "on_InvalidOwnershipError": [
+                69
+            ],
+            "on_InvalidBoxsetStatusError": [
+                65
             ],
             "on_Error": [
                 0
@@ -1408,16 +2070,42 @@ export default {
         },
         "CreateDiscError": {
             "on_ContributionNotFoundError": [
-                22
+                33
             ],
             "on_AuthenticationError": [
-                16
+                21
             ],
             "on_InvalidIdError": [
-                50
+                68
             ],
             "on_InvalidOwnershipError": [
-                51
+                69
+            ],
+            "on_InvalidDiscPathError": [
+                67
+            ],
+            "on_Error": [
+                0
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "DeleteBoxsetError": {
+            "on_AuthenticationError": [
+                21
+            ],
+            "on_BoxsetNotFoundError": [
+                26
+            ],
+            "on_InvalidIdError": [
+                68
+            ],
+            "on_InvalidOwnershipError": [
+                69
+            ],
+            "on_InvalidBoxsetStatusError": [
+                65
             ],
             "on_Error": [
                 0
@@ -1428,19 +2116,56 @@ export default {
         },
         "DeleteContributionError": {
             "on_ContributionNotFoundError": [
-                22
+                33
             ],
             "on_AuthenticationError": [
-                16
+                21
             ],
             "on_InvalidIdError": [
-                50
+                68
             ],
             "on_InvalidOwnershipError": [
-                51
+                69
             ],
             "on_InvalidContributionStatusError": [
-                49
+                66
+            ],
+            "on_Error": [
+                0
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "DeleteDiscFromContributionError": {
+            "on_ContributionNotFoundError": [
+                33
+            ],
+            "on_DiscNotFoundError": [
+                50
+            ],
+            "on_AuthenticationError": [
+                21
+            ],
+            "on_InvalidIdError": [
+                68
+            ],
+            "on_InvalidOwnershipError": [
+                69
+            ],
+            "on_InvalidContributionStatusError": [
+                66
+            ],
+            "on_Error": [
+                0
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "DeleteFileNameTemplateError": {
+            "on_AuthenticationError": [
+                21
             ],
             "on_Error": [
                 0
@@ -1451,22 +2176,22 @@ export default {
         },
         "DeleteItemFromDiscError": {
             "on_ContributionNotFoundError": [
-                22
+                33
             ],
             "on_DiscNotFoundError": [
-                35
-            ],
-            "on_DiscItemNotFoundError": [
-                32
-            ],
-            "on_AuthenticationError": [
-                16
-            ],
-            "on_InvalidIdError": [
                 50
             ],
+            "on_DiscItemNotFoundError": [
+                47
+            ],
+            "on_AuthenticationError": [
+                21
+            ],
+            "on_InvalidIdError": [
+                68
+            ],
             "on_InvalidOwnershipError": [
-                51
+                69
             ],
             "on_Error": [
                 0
@@ -1477,25 +2202,25 @@ export default {
         },
         "DiscLogsError": {
             "on_LogsNotFoundError": [
-                52
+                70
             ],
             "on_ContributionNotFoundError": [
-                22
+                33
             ],
             "on_DiscNotFoundError": [
-                35
-            ],
-            "on_CouldNotParseLogsError": [
-                25
-            ],
-            "on_AuthenticationError": [
-                16
-            ],
-            "on_InvalidIdError": [
                 50
             ],
+            "on_CouldNotParseLogsError": [
+                36
+            ],
+            "on_AuthenticationError": [
+                21
+            ],
+            "on_InvalidIdError": [
+                68
+            ],
             "on_InvalidOwnershipError": [
-                51
+                69
             ],
             "on_Error": [
                 0
@@ -1506,13 +2231,13 @@ export default {
         },
         "DiscUploadStatusError": {
             "on_DiscNotFoundError": [
-                35
+                50
             ],
             "on_FieldRequiredError": [
-                45
+                61
             ],
             "on_InvalidIdError": [
-                50
+                68
             ],
             "on_Error": [
                 0
@@ -1523,22 +2248,22 @@ export default {
         },
         "EditItemOnDiscError": {
             "on_ContributionNotFoundError": [
-                22
+                33
             ],
             "on_DiscNotFoundError": [
-                35
-            ],
-            "on_DiscItemNotFoundError": [
-                32
-            ],
-            "on_AuthenticationError": [
-                16
-            ],
-            "on_InvalidIdError": [
                 50
             ],
+            "on_DiscItemNotFoundError": [
+                47
+            ],
+            "on_AuthenticationError": [
+                21
+            ],
+            "on_InvalidIdError": [
+                68
+            ],
             "on_InvalidOwnershipError": [
-                51
+                69
             ],
             "on_Error": [
                 0
@@ -1549,19 +2274,19 @@ export default {
         },
         "EpisodeNamesError": {
             "on_ContributionNotFoundError": [
-                22
+                33
             ],
             "on_ExternalDataNotFoundError": [
-                41
+                57
             ],
             "on_AuthenticationError": [
-                16
+                21
             ],
             "on_InvalidIdError": [
-                50
+                68
             ],
             "on_InvalidOwnershipError": [
-                51
+                69
             ],
             "on_Error": [
                 0
@@ -1572,10 +2297,10 @@ export default {
         },
         "ExternalDataError": {
             "on_ContributionNotFoundError": [
-                22
+                33
             ],
             "on_ExternalDataNotFoundError": [
-                41
+                57
             ],
             "on_Error": [
                 0
@@ -1586,22 +2311,22 @@ export default {
         },
         "ExternalDataForContributionError": {
             "on_ContributionNotFoundError": [
-                22
+                33
             ],
             "on_ExternalDataSerializationError": [
-                43
+                59
             ],
             "on_ExternalDataNotFoundError": [
-                41
+                57
             ],
             "on_AuthenticationError": [
-                16
+                21
             ],
             "on_InvalidIdError": [
-                50
+                68
             ],
             "on_InvalidOwnershipError": [
-                51
+                69
             ],
             "on_Error": [
                 0
@@ -1612,16 +2337,27 @@ export default {
         },
         "HashDiscError": {
             "on_ContributionNotFoundError": [
-                22
+                33
             ],
             "on_AuthenticationError": [
-                16
+                21
             ],
             "on_InvalidIdError": [
-                50
+                68
             ],
             "on_InvalidOwnershipError": [
-                51
+                69
+            ],
+            "on_Error": [
+                0
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "MarkBoxsetMessagesAsReadError": {
+            "on_AuthenticationError": [
+                21
             ],
             "on_Error": [
                 0
@@ -1632,7 +2368,79 @@ export default {
         },
         "MarkMessagesAsReadError": {
             "on_AuthenticationError": [
-                16
+                21
+            ],
+            "on_Error": [
+                0
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "RemoveBoxsetMemberError": {
+            "on_AuthenticationError": [
+                21
+            ],
+            "on_BoxsetNotFoundError": [
+                26
+            ],
+            "on_InvalidIdError": [
+                68
+            ],
+            "on_InvalidOwnershipError": [
+                69
+            ],
+            "on_InvalidBoxsetStatusError": [
+                65
+            ],
+            "on_Error": [
+                0
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "RemoveDiscFromBoxsetError": {
+            "on_AuthenticationError": [
+                21
+            ],
+            "on_BoxsetNotFoundError": [
+                26
+            ],
+            "on_DiscNotFoundError": [
+                50
+            ],
+            "on_InvalidIdError": [
+                68
+            ],
+            "on_InvalidOwnershipError": [
+                69
+            ],
+            "on_InvalidBoxsetStatusError": [
+                65
+            ],
+            "on_Error": [
+                0
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "ReorderBoxsetMembersError": {
+            "on_AuthenticationError": [
+                21
+            ],
+            "on_BoxsetNotFoundError": [
+                26
+            ],
+            "on_InvalidIdError": [
+                68
+            ],
+            "on_InvalidOwnershipError": [
+                69
+            ],
+            "on_InvalidBoxsetStatusError": [
+                65
             ],
             "on_Error": [
                 0
@@ -1643,16 +2451,16 @@ export default {
         },
         "ReorderDiscsError": {
             "on_ContributionNotFoundError": [
-                22
+                33
             ],
             "on_AuthenticationError": [
-                16
+                21
             ],
             "on_InvalidIdError": [
-                50
+                68
             ],
             "on_InvalidOwnershipError": [
-                51
+                69
             ],
             "on_Error": [
                 0
@@ -1663,7 +2471,24 @@ export default {
         },
         "RevokeApiKeyError": {
             "on_ApiKeyNotFoundError": [
-                9
+                12
+            ],
+            "on_Error": [
+                0
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "SendAdminBoxsetMessageError": {
+            "on_BoxsetNotFoundError": [
+                26
+            ],
+            "on_AuthenticationError": [
+                21
+            ],
+            "on_InvalidIdError": [
+                68
             ],
             "on_Error": [
                 0
@@ -1674,10 +2499,30 @@ export default {
         },
         "SendAdminMessageError": {
             "on_ContributionNotFoundError": [
-                22
+                33
             ],
             "on_AuthenticationError": [
-                16
+                21
+            ],
+            "on_Error": [
+                0
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "SendBoxsetUserMessageError": {
+            "on_BoxsetNotFoundError": [
+                26
+            ],
+            "on_AuthenticationError": [
+                21
+            ],
+            "on_InvalidIdError": [
+                68
+            ],
+            "on_InvalidOwnershipError": [
+                69
             ],
             "on_Error": [
                 0
@@ -1688,13 +2533,44 @@ export default {
         },
         "SendUserMessageError": {
             "on_ContributionNotFoundError": [
-                22
+                33
             ],
             "on_AuthenticationError": [
-                16
+                21
             ],
             "on_InvalidOwnershipError": [
-                51
+                69
+            ],
+            "on_Error": [
+                0
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "SetFileNameTemplateError": {
+            "on_AuthenticationError": [
+                21
+            ],
+            "on_Error": [
+                0
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "UpdateBoxsetError": {
+            "on_AuthenticationError": [
+                21
+            ],
+            "on_BoxsetNotFoundError": [
+                26
+            ],
+            "on_InvalidIdError": [
+                68
+            ],
+            "on_InvalidOwnershipError": [
+                69
             ],
             "on_Error": [
                 0
@@ -1705,19 +2581,19 @@ export default {
         },
         "UpdateContributionError": {
             "on_ContributionNotFoundError": [
-                22
+                33
             ],
             "on_AuthenticationError": [
-                16
+                21
             ],
             "on_InvalidIdError": [
-                50
+                68
             ],
             "on_InvalidOwnershipError": [
-                51
+                69
             ],
             "on_InvalidContributionStatusError": [
-                49
+                66
             ],
             "on_Error": [
                 0
@@ -1728,19 +2604,19 @@ export default {
         },
         "UpdateDiscError": {
             "on_ContributionNotFoundError": [
-                22
+                33
             ],
             "on_DiscNotFoundError": [
-                35
-            ],
-            "on_AuthenticationError": [
-                16
-            ],
-            "on_InvalidIdError": [
                 50
             ],
+            "on_AuthenticationError": [
+                21
+            ],
+            "on_InvalidIdError": [
+                68
+            ],
             "on_InvalidOwnershipError": [
-                51
+                69
             ],
             "on_Error": [
                 0
@@ -1760,7 +2636,7 @@ export default {
                 1
             ],
             "trackIndex": [
-                6
+                9
             ],
             "trackName": [
                 1
@@ -1780,9 +2656,37 @@ export default {
                 1
             ],
             "chapterIndex": [
-                6
+                9
             ],
             "chapterName": [
+                1
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "AddDiscToBoxsetInput": {
+            "boxsetId": [
+                1
+            ],
+            "discId": [
+                1
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "AddExistingDiscToBoxsetInput": {
+            "boxsetId": [
+                1
+            ],
+            "existingDiscPath": [
+                1
+            ],
+            "discName": [
+                1
+            ],
+            "discFormat": [
                 1
             ],
             "__typename": [
@@ -1809,10 +2713,10 @@ export default {
                 1
             ],
             "chapterCount": [
-                6
+                9
             ],
             "segmentCount": [
-                6
+                9
             ],
             "segmentMap": [
                 1
@@ -1833,39 +2737,59 @@ export default {
                 1
             ]
         },
+        "AddSubtitleTrackToItemInput": {
+            "contributionId": [
+                1
+            ],
+            "discId": [
+                1
+            ],
+            "itemId": [
+                1
+            ],
+            "trackIndex": [
+                9
+            ],
+            "trackName": [
+                1
+            ],
+            "__typename": [
+                1
+            ]
+        },
         "ApiKeyInfoFilterInput": {
             "and": [
-                101
+                153
             ],
             "or": [
-                101
+                153
             ],
             "name": [
-                136
+                203
             ],
             "keyPrefix": [
-                136
+                203
             ],
             "isActive": [
-                105
+                158
             ],
             "logUsage": [
-                105
+                158
             ],
             "roles": [
-                136
+                203
             ],
             "ownerEmail": [
-                136
+                203
             ],
             "createdAt": [
-                110
+                165
             ],
             "expiresAt": [
-                110
+                165
             ],
             "lastUsedAt": [
-                110
+                165
             ],
             "__typename": [
                 1
@@ -1873,31 +2797,31 @@ export default {
         },
         "ApiKeyInfoSortInput": {
             "name": [
-                155
+                230
             ],
             "keyPrefix": [
-                155
+                230
             ],
             "isActive": [
-                155
+                230
             ],
             "logUsage": [
-                155
+                230
             ],
             "roles": [
-                155
+                230
             ],
             "ownerEmail": [
-                155
+                230
             ],
             "createdAt": [
-                155
+                230
             ],
             "expiresAt": [
-                155
+                230
             ],
             "lastUsedAt": [
-                155
+                230
             ],
             "__typename": [
                 1
@@ -1905,31 +2829,31 @@ export default {
         },
         "ApiKeyUsageLogInfoFilterInput": {
             "and": [
-                103
+                155
             ],
             "or": [
-                103
+                155
             ],
             "apiKeyPrefix": [
-                136
+                203
             ],
             "apiKeyName": [
-                136
+                203
             ],
             "timestamp": [
-                110
+                165
             ],
             "operationName": [
-                136
+                203
             ],
             "fieldCost": [
-                121
+                179
             ],
             "typeCost": [
-                121
+                179
             ],
             "durationMs": [
-                124
+                182
             ],
             "__typename": [
                 1
@@ -1937,25 +2861,51 @@ export default {
         },
         "ApiKeyUsageLogInfoSortInput": {
             "apiKeyPrefix": [
-                155
+                230
             ],
             "apiKeyName": [
-                155
+                230
             ],
             "timestamp": [
-                155
+                230
             ],
             "operationName": [
-                155
+                230
             ],
             "fieldCost": [
-                155
+                230
             ],
             "typeCost": [
-                155
+                230
             ],
             "durationMs": [
-                155
+                230
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "AttachGlobalDiscIdInput": {
+            "files": [
+                178
+            ],
+            "globalDiscId": [
+                1
+            ],
+            "mediaItemSlug": [
+                1
+            ],
+            "boxsetSlug": [
+                1
+            ],
+            "releaseSlug": [
+                1
+            ],
+            "discSlug": [
+                1
+            ],
+            "discIndex": [
+                9
             ],
             "__typename": [
                 1
@@ -1963,10 +2913,45 @@ export default {
         },
         "BooleanOperationFilterInput": {
             "eq": [
-                7
+                10
             ],
             "neq": [
-                7
+                10
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "BoxsetMutationRequestInput": {
+            "title": [
+                1
+            ],
+            "sortTitle": [
+                1
+            ],
+            "slug": [
+                1
+            ],
+            "frontImageUrl": [
+                1
+            ],
+            "backImageUrl": [
+                1
+            ],
+            "asin": [
+                1
+            ],
+            "upc": [
+                1
+            ],
+            "releaseDate": [
+                233
+            ],
+            "locale": [
+                1
+            ],
+            "regionCode": [
+                1
             ],
             "__typename": [
                 1
@@ -1974,22 +2959,22 @@ export default {
         },
         "ContributionHistorySortInput": {
             "id": [
-                155
+                230
             ],
             "contributionId": [
-                155
+                230
             ],
             "timeStamp": [
-                155
+                230
             ],
             "description": [
-                155
+                230
             ],
             "userId": [
-                155
+                230
             ],
             "type": [
-                155
+                230
             ],
             "__typename": [
                 1
@@ -2006,7 +2991,7 @@ export default {
                 1
             ],
             "releaseDate": [
-                158
+                233
             ],
             "asin": [
                 1
@@ -2039,10 +3024,21 @@ export default {
                 1
             ],
             "storageId": [
-                163
+                238
             ],
             "status": [
-                156
+                231
+            ],
+            "boxsetId": [
+                1
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "CreateBoxsetInput": {
+            "input": [
+                159
             ],
             "__typename": [
                 1
@@ -2050,7 +3046,7 @@ export default {
         },
         "CreateContributionInput": {
             "input": [
-                107
+                161
             ],
             "__typename": [
                 1
@@ -2075,46 +3071,57 @@ export default {
             "existingDiscPath": [
                 1
             ],
+            "globalDiscId": [
+                1
+            ],
             "__typename": [
                 1
             ]
         },
         "DateTimeOperationFilterInput": {
             "eq": [
-                158
+                233
             ],
             "neq": [
-                158
+                233
             ],
             "in": [
-                158
+                233
             ],
             "nin": [
-                158
+                233
             ],
             "gt": [
-                158
+                233
             ],
             "ngt": [
-                158
+                233
             ],
             "gte": [
-                158
+                233
             ],
             "ngte": [
-                158
+                233
             ],
             "lt": [
-                158
+                233
             ],
             "nlt": [
-                158
+                233
             ],
             "lte": [
-                158
+                233
             ],
             "nlte": [
-                158
+                233
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "DeleteBoxsetInput": {
+            "boxsetId": [
+                1
             ],
             "__typename": [
                 1
@@ -2122,6 +3129,25 @@ export default {
         },
         "DeleteContributionInput": {
             "contributionId": [
+                1
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "DeleteDiscFromContributionInput": {
+            "contributionId": [
+                1
+            ],
+            "discId": [
+                1
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "DeleteFileNameTemplateInput": {
+            "itemType": [
                 1
             ],
             "__typename": [
@@ -2184,10 +3210,10 @@ export default {
                 1
             ],
             "chapterCount": [
-                6
+                9
             ],
             "segmentCount": [
-                6
+                9
             ],
             "segmentMap": [
                 1
@@ -2210,16 +3236,16 @@ export default {
         },
         "EncodedIdOperationFilterInput": {
             "and": [
-                116
+                174
             ],
             "or": [
-                116
+                174
             ],
             "eq": [
-                160
+                235
             ],
             "neq": [
-                160
+                235
             ],
             "__typename": [
                 1
@@ -2257,16 +3283,16 @@ export default {
         },
         "FileHashInfoInput": {
             "index": [
-                6
+                9
             ],
             "name": [
                 1
             ],
             "creationTime": [
-                158
+                233
             ],
             "size": [
-                161
+                236
             ],
             "__typename": [
                 1
@@ -2274,40 +3300,40 @@ export default {
         },
         "FloatOperationFilterInput": {
             "eq": [
-                11
+                14
             ],
             "neq": [
-                11
+                14
             ],
             "in": [
-                11
+                14
             ],
             "nin": [
-                11
+                14
             ],
             "gt": [
-                11
+                14
             ],
             "ngt": [
-                11
+                14
             ],
             "gte": [
-                11
+                14
             ],
             "ngte": [
-                11
+                14
             ],
             "lt": [
-                11
+                14
             ],
             "nlt": [
-                11
+                14
             ],
             "lte": [
-                11
+                14
             ],
             "nlte": [
-                11
+                14
             ],
             "__typename": [
                 1
@@ -2324,7 +3350,7 @@ export default {
                 1
             ],
             "expiresAt": [
-                158
+                233
             ],
             "__typename": [
                 1
@@ -2335,7 +3361,7 @@ export default {
                 1
             ],
             "files": [
-                120
+                178
             ],
             "__typename": [
                 1
@@ -2343,40 +3369,40 @@ export default {
         },
         "IntOperationFilterInput": {
             "eq": [
-                6
+                9
             ],
             "neq": [
-                6
+                9
             ],
             "in": [
-                6
+                9
             ],
             "nin": [
-                6
+                9
             ],
             "gt": [
-                6
+                9
             ],
             "ngt": [
-                6
+                9
             ],
             "gte": [
-                6
+                9
             ],
             "ngte": [
-                6
+                9
             ],
             "lt": [
-                6
+                9
             ],
             "nlt": [
-                6
+                9
             ],
             "lte": [
-                6
+                9
             ],
             "nlte": [
-                6
+                9
             ],
             "__typename": [
                 1
@@ -2384,16 +3410,16 @@ export default {
         },
         "ListEncodedIdFilterTypeOfUserContributionAudioTrackFilterInput": {
             "all": [
-                139
+                207
             ],
             "none": [
-                139
+                207
             ],
             "some": [
-                139
+                207
             ],
             "any": [
-                7
+                10
             ],
             "__typename": [
                 1
@@ -2401,16 +3427,16 @@ export default {
         },
         "ListEncodedIdFilterTypeOfUserContributionChapterFilterInput": {
             "all": [
-                141
+                213
             ],
             "none": [
-                141
+                213
             ],
             "some": [
-                141
+                213
             ],
             "any": [
-                7
+                10
             ],
             "__typename": [
                 1
@@ -2418,16 +3444,16 @@ export default {
         },
         "ListEncodedIdFilterTypeOfUserContributionDiscFilterInput": {
             "all": [
-                143
+                215
             ],
             "none": [
-                143
+                215
             ],
             "some": [
-                143
+                215
             ],
             "any": [
-                7
+                10
             ],
             "__typename": [
                 1
@@ -2435,16 +3461,16 @@ export default {
         },
         "ListEncodedIdFilterTypeOfUserContributionDiscHashItemFilterInput": {
             "all": [
-                144
+                216
             ],
             "none": [
-                144
+                216
             ],
             "some": [
-                144
+                216
             ],
             "any": [
-                7
+                10
             ],
             "__typename": [
                 1
@@ -2452,16 +3478,50 @@ export default {
         },
         "ListEncodedIdFilterTypeOfUserContributionDiscItemFilterInput": {
             "all": [
-                146
+                218
             ],
             "none": [
-                146
+                218
             ],
             "some": [
-                146
+                218
             ],
             "any": [
-                7
+                10
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "ListEncodedIdFilterTypeOfUserContributionSubtitleTrackFilterInput": {
+            "all": [
+                224
+            ],
+            "none": [
+                224
+            ],
+            "some": [
+                224
+            ],
+            "any": [
+                10
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "ListFilterInputTypeOfUserContributionBoxsetMemberFilterInput": {
+            "all": [
+                210
+            ],
+            "none": [
+                210
+            ],
+            "some": [
+                210
+            ],
+            "any": [
+                10
             ],
             "__typename": [
                 1
@@ -2469,40 +3529,48 @@ export default {
         },
         "LongOperationFilterInput": {
             "eq": [
-                161
+                236
             ],
             "neq": [
-                161
+                236
             ],
             "in": [
-                161
+                236
             ],
             "nin": [
-                161
+                236
             ],
             "gt": [
-                161
+                236
             ],
             "ngt": [
-                161
+                236
             ],
             "gte": [
-                161
+                236
             ],
             "ngte": [
-                161
+                236
             ],
             "lt": [
-                161
+                236
             ],
             "nlt": [
-                161
+                236
             ],
             "lte": [
-                161
+                236
             ],
             "nlte": [
-                161
+                236
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "MarkBoxsetMessagesAsReadInput": {
+            "boxsetId": [
+                1
             ],
             "__typename": [
                 1
@@ -2511,6 +3579,39 @@ export default {
         "MarkMessagesAsReadInput": {
             "contributionId": [
                 1
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "RemoveBoxsetMemberInput": {
+            "boxsetId": [
+                1
+            ],
+            "memberId": [
+                9
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "RemoveDiscFromBoxsetInput": {
+            "boxsetId": [
+                1
+            ],
+            "discId": [
+                1
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "ReorderBoxsetMembersInput": {
+            "boxsetId": [
+                1
+            ],
+            "memberIds": [
+                9
             ],
             "__typename": [
                 1
@@ -2535,8 +3636,30 @@ export default {
                 1
             ]
         },
+        "SendAdminBoxsetMessageInput": {
+            "boxsetId": [
+                1
+            ],
+            "message": [
+                1
+            ],
+            "__typename": [
+                1
+            ]
+        },
         "SendAdminMessageInput": {
             "contributionId": [
+                1
+            ],
+            "message": [
+                1
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "SendBoxsetUserMessageInput": {
+            "boxsetId": [
                 1
             ],
             "message": [
@@ -2557,12 +3680,23 @@ export default {
                 1
             ]
         },
+        "SetFileNameTemplateInput": {
+            "itemType": [
+                1
+            ],
+            "template": [
+                1
+            ],
+            "__typename": [
+                1
+            ]
+        },
         "StringOperationFilterInput": {
             "and": [
-                136
+                203
             ],
             "or": [
-                136
+                203
             ],
             "eq": [
                 1
@@ -2598,6 +3732,17 @@ export default {
                 1
             ]
         },
+        "UpdateBoxsetInput": {
+            "boxsetId": [
+                1
+            ],
+            "input": [
+                159
+            ],
+            "__typename": [
+                1
+            ]
+        },
         "UpdateContributionInput": {
             "contributionId": [
                 1
@@ -2609,7 +3754,7 @@ export default {
                 1
             ],
             "releaseDate": [
-                158
+                233
             ],
             "releaseTitle": [
                 1
@@ -2630,7 +3775,7 @@ export default {
                 1
             ],
             "deleteBackImage": [
-                7
+                10
             ],
             "__typename": [
                 1
@@ -2658,22 +3803,22 @@ export default {
         },
         "UserContributionAudioTrackFilterInput": {
             "and": [
-                139
+                207
             ],
             "or": [
-                139
+                207
             ],
             "encodedId": [
-                116
+                174
             ],
             "index": [
-                124
+                182
             ],
             "title": [
-                136
+                203
             ],
             "item": [
-                146
+                218
             ],
             "__typename": [
                 1
@@ -2681,16 +3826,177 @@ export default {
         },
         "UserContributionAudioTrackSortInput": {
             "id": [
-                155
+                230
             ],
             "index": [
-                155
+                230
             ],
             "title": [
-                155
+                230
             ],
             "item": [
-                147
+                219
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "UserContributionBoxsetFilterInput": {
+            "and": [
+                209
+            ],
+            "or": [
+                209
+            ],
+            "encodedId": [
+                174
+            ],
+            "userId": [
+                203
+            ],
+            "created": [
+                165
+            ],
+            "status": [
+                223
+            ],
+            "title": [
+                203
+            ],
+            "sortTitle": [
+                203
+            ],
+            "slug": [
+                203
+            ],
+            "frontImageUrl": [
+                203
+            ],
+            "backImageUrl": [
+                203
+            ],
+            "asin": [
+                203
+            ],
+            "upc": [
+                203
+            ],
+            "releaseDate": [
+                165
+            ],
+            "locale": [
+                203
+            ],
+            "regionCode": [
+                203
+            ],
+            "members": [
+                189
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "UserContributionBoxsetMemberFilterInput": {
+            "and": [
+                210
+            ],
+            "or": [
+                210
+            ],
+            "id": [
+                182
+            ],
+            "boxset": [
+                209
+            ],
+            "disc": [
+                215
+            ],
+            "sortOrder": [
+                182
+            ],
+            "existingDiscPath": [
+                203
+            ],
+            "existingDiscName": [
+                203
+            ],
+            "existingDiscFormat": [
+                203
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "UserContributionBoxsetMemberSortInput": {
+            "id": [
+                230
+            ],
+            "boxset": [
+                212
+            ],
+            "disc": [
+                220
+            ],
+            "sortOrder": [
+                230
+            ],
+            "existingDiscPath": [
+                230
+            ],
+            "existingDiscName": [
+                230
+            ],
+            "existingDiscFormat": [
+                230
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "UserContributionBoxsetSortInput": {
+            "id": [
+                230
+            ],
+            "userId": [
+                230
+            ],
+            "created": [
+                230
+            ],
+            "status": [
+                230
+            ],
+            "title": [
+                230
+            ],
+            "sortTitle": [
+                230
+            ],
+            "slug": [
+                230
+            ],
+            "frontImageUrl": [
+                230
+            ],
+            "backImageUrl": [
+                230
+            ],
+            "asin": [
+                230
+            ],
+            "upc": [
+                230
+            ],
+            "releaseDate": [
+                230
+            ],
+            "locale": [
+                230
+            ],
+            "regionCode": [
+                230
             ],
             "__typename": [
                 1
@@ -2698,22 +4004,22 @@ export default {
         },
         "UserContributionChapterFilterInput": {
             "and": [
-                141
+                213
             ],
             "or": [
-                141
+                213
             ],
             "encodedId": [
-                116
+                174
             ],
             "index": [
-                124
+                182
             ],
             "title": [
-                136
+                203
             ],
             "item": [
-                146
+                218
             ],
             "__typename": [
                 1
@@ -2721,16 +4027,16 @@ export default {
         },
         "UserContributionChapterSortInput": {
             "id": [
-                155
+                230
             ],
             "index": [
-                155
+                230
             ],
             "title": [
-                155
+                230
             ],
             "item": [
-                147
+                219
             ],
             "__typename": [
                 1
@@ -2738,43 +4044,46 @@ export default {
         },
         "UserContributionDiscFilterInput": {
             "and": [
-                143
+                215
             ],
             "or": [
-                143
+                215
             ],
             "encodedId": [
-                116
+                174
             ],
             "userContribution": [
-                149
+                221
             ],
             "contentHash": [
-                136
+                203
+            ],
+            "globalDiscId": [
+                203
             ],
             "format": [
-                136
+                203
             ],
             "name": [
-                136
+                203
             ],
             "slug": [
-                136
+                203
             ],
             "logsUploaded": [
-                105
+                158
             ],
             "logUploadError": [
-                136
+                203
             ],
             "index": [
-                124
+                182
             ],
             "existingDiscPath": [
-                136
+                203
             ],
             "items": [
-                129
+                187
             ],
             "__typename": [
                 1
@@ -2782,31 +4091,31 @@ export default {
         },
         "UserContributionDiscHashItemFilterInput": {
             "and": [
-                144
+                216
             ],
             "or": [
-                144
+                216
             ],
             "encodedId": [
-                116
+                174
             ],
             "userContribution": [
-                149
+                221
             ],
             "discHash": [
-                136
+                203
             ],
             "index": [
-                124
+                182
             ],
             "name": [
-                136
+                203
             ],
             "creationTime": [
-                110
+                165
             ],
             "size": [
-                130
+                190
             ],
             "__typename": [
                 1
@@ -2814,25 +4123,25 @@ export default {
         },
         "UserContributionDiscHashItemSortInput": {
             "id": [
-                155
+                230
             ],
             "userContribution": [
-                150
+                222
             ],
             "discHash": [
-                155
+                230
             ],
             "index": [
-                155
+                230
             ],
             "name": [
-                155
+                230
             ],
             "creationTime": [
-                155
+                230
             ],
             "size": [
-                155
+                230
             ],
             "__typename": [
                 1
@@ -2840,55 +4149,58 @@ export default {
         },
         "UserContributionDiscItemFilterInput": {
             "and": [
-                146
+                218
             ],
             "or": [
-                146
+                218
             ],
             "encodedId": [
-                116
+                174
             ],
             "disc": [
-                143
+                215
             ],
             "name": [
-                136
+                203
             ],
             "source": [
-                136
+                203
             ],
             "duration": [
-                136
+                203
             ],
             "size": [
-                136
+                203
             ],
             "chapterCount": [
-                124
+                182
             ],
             "segmentCount": [
-                124
+                182
             ],
             "segmentMap": [
-                136
+                203
             ],
             "type": [
-                136
+                203
             ],
             "description": [
-                136
+                203
             ],
             "season": [
-                136
+                203
             ],
             "episode": [
-                136
+                203
             ],
             "chapters": [
-                126
+                184
             ],
             "audioTracks": [
-                125
+                183
+            ],
+            "subtitleTracks": [
+                188
             ],
             "__typename": [
                 1
@@ -2896,43 +4208,43 @@ export default {
         },
         "UserContributionDiscItemSortInput": {
             "id": [
-                155
+                230
             ],
             "disc": [
-                148
+                220
             ],
             "name": [
-                155
+                230
             ],
             "source": [
-                155
+                230
             ],
             "duration": [
-                155
+                230
             ],
             "size": [
-                155
+                230
             ],
             "chapterCount": [
-                155
+                230
             ],
             "segmentCount": [
-                155
+                230
             ],
             "segmentMap": [
-                155
+                230
             ],
             "type": [
-                155
+                230
             ],
             "description": [
-                155
+                230
             ],
             "season": [
-                155
+                230
             ],
             "episode": [
-                155
+                230
             ],
             "__typename": [
                 1
@@ -2940,34 +4252,37 @@ export default {
         },
         "UserContributionDiscSortInput": {
             "id": [
-                155
+                230
             ],
             "userContribution": [
-                150
+                222
             ],
             "contentHash": [
-                155
+                230
+            ],
+            "globalDiscId": [
+                230
             ],
             "format": [
-                155
+                230
             ],
             "name": [
-                155
+                230
             ],
             "slug": [
-                155
+                230
             ],
             "logsUploaded": [
-                155
+                230
             ],
             "logUploadError": [
-                155
+                230
             ],
             "index": [
-                155
+                230
             ],
             "existingDiscPath": [
-                155
+                230
             ],
             "__typename": [
                 1
@@ -2975,73 +4290,79 @@ export default {
         },
         "UserContributionFilterInput": {
             "and": [
-                149
+                221
             ],
             "or": [
-                149
+                221
             ],
             "encodedId": [
-                116
+                174
             ],
             "userId": [
-                136
+                203
             ],
             "created": [
-                110
+                165
             ],
             "status": [
-                151
+                223
+            ],
+            "boxsetId": [
+                182
+            ],
+            "boxset": [
+                209
             ],
             "discs": [
-                127
+                185
             ],
             "hashItems": [
-                128
+                186
             ],
             "mediaType": [
-                136
+                203
             ],
             "externalId": [
-                136
+                203
             ],
             "externalProvider": [
-                136
+                203
             ],
             "releaseDate": [
-                110
+                165
             ],
             "asin": [
-                136
+                203
             ],
             "upc": [
-                136
+                203
             ],
             "frontImageUrl": [
-                136
+                203
             ],
             "backImageUrl": [
-                136
+                203
             ],
             "releaseTitle": [
-                136
+                203
             ],
             "releaseSlug": [
-                136
+                203
             ],
             "locale": [
-                136
+                203
             ],
             "regionCode": [
-                136
+                203
             ],
             "title": [
-                136
+                203
             ],
             "year": [
-                136
+                203
             ],
             "titleSlug": [
-                136
+                203
             ],
             "__typename": [
                 1
@@ -3049,61 +4370,67 @@ export default {
         },
         "UserContributionSortInput": {
             "id": [
-                155
+                230
             ],
             "userId": [
-                155
+                230
             ],
             "created": [
-                155
+                230
             ],
             "status": [
-                155
+                230
+            ],
+            "boxsetId": [
+                230
+            ],
+            "boxset": [
+                212
             ],
             "mediaType": [
-                155
+                230
             ],
             "externalId": [
-                155
+                230
             ],
             "externalProvider": [
-                155
+                230
             ],
             "releaseDate": [
-                155
+                230
             ],
             "asin": [
-                155
+                230
             ],
             "upc": [
-                155
+                230
             ],
             "frontImageUrl": [
-                155
+                230
             ],
             "backImageUrl": [
-                155
+                230
             ],
             "releaseTitle": [
-                155
+                230
             ],
             "releaseSlug": [
-                155
+                230
             ],
             "locale": [
-                155
+                230
             ],
             "regionCode": [
-                155
+                230
             ],
             "title": [
-                155
+                230
             ],
             "year": [
-                155
+                230
             ],
             "titleSlug": [
-                155
+                230
             ],
             "__typename": [
                 1
@@ -3111,16 +4438,56 @@ export default {
         },
         "UserContributionStatusOperationFilterInput": {
             "eq": [
-                156
+                231
             ],
             "neq": [
-                156
+                231
             ],
             "in": [
-                156
+                231
             ],
             "nin": [
-                156
+                231
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "UserContributionSubtitleTrackFilterInput": {
+            "and": [
+                224
+            ],
+            "or": [
+                224
+            ],
+            "encodedId": [
+                174
+            ],
+            "index": [
+                182
+            ],
+            "title": [
+                203
+            ],
+            "item": [
+                218
+            ],
+            "__typename": [
+                1
+            ]
+        },
+        "UserContributionSubtitleTrackSortInput": {
+            "id": [
+                230
+            ],
+            "index": [
+                230
+            ],
+            "title": [
+                230
+            ],
+            "item": [
+                219
             ],
             "__typename": [
                 1
@@ -3128,34 +4495,44 @@ export default {
         },
         "UserMessageSortInput": {
             "id": [
-                155
+                230
             ],
             "contributionId": [
-                155
+                230
+            ],
+            "boxsetId": [
+                230
+            ],
+            "contribution": [
+                222
+            ],
+            "boxset": [
+                212
             ],
             "fromUserId": [
-                155
+                230
             ],
             "toUserId": [
-                155
+                230
             ],
             "message": [
-                155
+                230
             ],
             "isRead": [
-                155
+                230
             ],
             "createdAt": [
-                155
+                230
             ],
             "type": [
-                155
+                230
             ],
             "__typename": [
                 1
             ]
         },
         "ApplyPolicy": {},
+        "AttachDiscIdOutcome": {},
         "ContributionHistoryType": {},
         "SortEnumType": {},
         "UserContributionStatus": {},
@@ -3168,132 +4545,205 @@ export default {
         "UUID": {},
         "Query": {
             "contributions": [
-                23,
+                34,
                 {
                     "first": [
-                        6
+                        9
                     ],
                     "after": [
                         1
                     ],
                     "last": [
-                        6
+                        9
                     ],
                     "before": [
                         1
                     ],
                     "where": [
-                        149
+                        221
                     ],
                     "order": [
-                        150,
+                        222,
                         "[UserContributionSortInput!]"
                     ]
                 }
             ],
             "myContributions": [
-                55,
+                77,
                 {
                     "first": [
-                        6
+                        9
                     ],
                     "after": [
                         1
                     ],
                     "last": [
-                        6
+                        9
                     ],
                     "before": [
                         1
                     ],
                     "where": [
-                        149
+                        221
                     ],
                     "order": [
-                        150,
+                        222,
                         "[UserContributionSortInput!]"
                     ]
                 }
             ],
             "contributionHistory": [
-                20,
+                31,
                 {
                     "contributionId": [
-                        6,
+                        9,
                         "Int!"
                     ],
                     "first": [
-                        6
+                        9
                     ],
                     "after": [
                         1
                     ],
                     "last": [
-                        6
+                        9
                     ],
                     "before": [
                         1
                     ],
                     "order": [
-                        106,
+                        160,
                         "[ContributionHistorySortInput!]"
                     ]
                 }
             ],
             "contributionChat": [
-                17,
+                28,
                 {
                     "contributionId": [
                         1,
                         "String!"
                     ],
                     "first": [
-                        6
+                        9
                     ],
                     "after": [
                         1
                     ],
                     "last": [
-                        6
+                        9
                     ],
                     "before": [
                         1
                     ],
                     "order": [
-                        152,
+                        226,
+                        "[UserMessageSortInput!]"
+                    ]
+                }
+            ],
+            "boxsetChat": [
+                22,
+                {
+                    "boxsetId": [
+                        1,
+                        "String!"
+                    ],
+                    "first": [
+                        9
+                    ],
+                    "after": [
+                        1
+                    ],
+                    "last": [
+                        9
+                    ],
+                    "before": [
+                        1
+                    ],
+                    "order": [
+                        226,
                         "[UserMessageSortInput!]"
                     ]
                 }
             ],
             "hasUnreadMessages": [
-                7
+                10
             ],
             "myMessages": [
-                57,
+                79,
                 {
                     "first": [
-                        6
+                        9
                     ],
                     "after": [
                         1
                     ],
                     "last": [
-                        6
+                        9
                     ],
                     "before": [
                         1
                     ],
                     "order": [
-                        152,
+                        226,
                         "[UserMessageSortInput!]"
                     ]
                 }
             ],
             "messageThreads": [
-                54
+                73
+            ],
+            "boxsetContributions": [
+                24,
+                {
+                    "first": [
+                        9
+                    ],
+                    "after": [
+                        1
+                    ],
+                    "last": [
+                        9
+                    ],
+                    "before": [
+                        1
+                    ],
+                    "where": [
+                        209
+                    ],
+                    "order": [
+                        212,
+                        "[UserContributionBoxsetSortInput!]"
+                    ]
+                }
+            ],
+            "myBoxsets": [
+                75,
+                {
+                    "first": [
+                        9
+                    ],
+                    "after": [
+                        1
+                    ],
+                    "last": [
+                        9
+                    ],
+                    "before": [
+                        1
+                    ],
+                    "where": [
+                        209
+                    ],
+                    "order": [
+                        212,
+                        "[UserContributionBoxsetSortInput!]"
+                    ]
+                }
             ],
             "amazonProductMetadata": [
-                5,
+                8,
                 {
                     "asin": [
                         1,
@@ -3302,52 +4752,55 @@ export default {
                 }
             ],
             "apiKeys": [
-                14,
+                17,
                 {
                     "first": [
-                        6
+                        9
                     ],
                     "after": [
                         1
                     ],
                     "last": [
-                        6
+                        9
                     ],
                     "before": [
                         1
                     ],
                     "where": [
-                        101
+                        153
                     ],
                     "order": [
-                        102,
+                        154,
                         "[ApiKeyInfoSortInput!]"
                     ]
                 }
             ],
             "apiKeyUsageLogs": [
-                12,
+                15,
                 {
                     "first": [
-                        6
+                        9
                     ],
                     "after": [
                         1
                     ],
                     "last": [
-                        6
+                        9
                     ],
                     "before": [
                         1
                     ],
                     "where": [
-                        103
+                        155
                     ],
                     "order": [
-                        104,
+                        156,
                         "[ApiKeyUsageLogInfoSortInput!]"
                     ]
                 }
+            ],
+            "myFileNameTemplates": [
+                108
             ],
             "__typename": [
                 1
@@ -3358,7 +4811,7 @@ export default {
                 2,
                 {
                     "input": [
-                        98,
+                        147,
                         "AddAudioTrackToItemInput!"
                     ]
                 }
@@ -3367,187 +4820,331 @@ export default {
                 3,
                 {
                     "input": [
-                        99,
+                        148,
                         "AddChapterToItemInput!"
                     ]
                 }
             ],
-            "addItemToDisc": [
+            "addDiscToBoxset": [
                 4,
                 {
                     "input": [
-                        100,
+                        149,
+                        "AddDiscToBoxsetInput!"
+                    ]
+                }
+            ],
+            "addExistingDiscToBoxset": [
+                5,
+                {
+                    "input": [
+                        150,
+                        "AddExistingDiscToBoxsetInput!"
+                    ]
+                }
+            ],
+            "addItemToDisc": [
+                6,
+                {
+                    "input": [
+                        151,
                         "AddItemToDiscInput!"
                     ]
                 }
             ],
-            "createContribution": [
-                26,
+            "addSubtitleTrackToItem": [
+                7,
                 {
                     "input": [
-                        108,
+                        152,
+                        "AddSubtitleTrackToItemInput!"
+                    ]
+                }
+            ],
+            "attachGlobalDiscId": [
+                20,
+                {
+                    "input": [
+                        157,
+                        "AttachGlobalDiscIdInput!"
+                    ]
+                }
+            ],
+            "createBoxset": [
+                37,
+                {
+                    "input": [
+                        162,
+                        "CreateBoxsetInput!"
+                    ]
+                }
+            ],
+            "createContribution": [
+                38,
+                {
+                    "input": [
+                        163,
                         "CreateContributionInput!"
                     ]
                 }
             ],
             "createDisc": [
-                27,
+                39,
                 {
                     "input": [
-                        109,
+                        164,
                         "CreateDiscInput!"
                     ]
                 }
             ],
-            "deleteContribution": [
-                28,
+            "deleteBoxset": [
+                40,
                 {
                     "input": [
-                        111,
+                        166,
+                        "DeleteBoxsetInput!"
+                    ]
+                }
+            ],
+            "deleteContribution": [
+                41,
+                {
+                    "input": [
+                        167,
                         "DeleteContributionInput!"
                     ]
                 }
             ],
-            "deleteItemFromDisc": [
-                29,
+            "deleteDiscFromContribution": [
+                42,
                 {
                     "input": [
-                        112,
+                        168,
+                        "DeleteDiscFromContributionInput!"
+                    ]
+                }
+            ],
+            "deleteItemFromDisc": [
+                44,
+                {
+                    "input": [
+                        170,
                         "DeleteItemFromDiscInput!"
                     ]
                 }
             ],
             "editItemOnDisc": [
-                38,
+                53,
                 {
                     "input": [
-                        115,
+                        173,
                         "EditItemOnDiscInput!"
                     ]
                 }
             ],
-            "generateApiKey": [
-                46,
+            "setFileNameTemplate": [
+                94,
                 {
                     "input": [
-                        122,
+                        202,
+                        "SetFileNameTemplateInput!"
+                    ]
+                }
+            ],
+            "deleteFileNameTemplate": [
+                43,
+                {
+                    "input": [
+                        169,
+                        "DeleteFileNameTemplateInput!"
+                    ]
+                }
+            ],
+            "generateApiKey": [
+                62,
+                {
+                    "input": [
+                        180,
                         "GenerateApiKeyInput!"
                     ]
                 }
             ],
             "discLogs": [
-                34,
+                49,
                 {
                     "input": [
-                        113,
+                        171,
                         "DiscLogsInput!"
                     ]
                 }
             ],
             "discUploadStatus": [
-                37,
+                52,
                 {
                     "input": [
-                        114,
+                        172,
                         "DiscUploadStatusInput!"
                     ]
                 }
             ],
             "episodeNames": [
-                39,
+                54,
                 {
                     "input": [
-                        117,
+                        175,
                         "EpisodeNamesInput!"
                     ]
                 }
             ],
             "externalData": [
-                42,
+                58,
                 {
                     "input": [
-                        119,
+                        177,
                         "ExternalDataInput!"
                     ]
                 }
             ],
             "externalDataForContribution": [
-                40,
+                56,
                 {
                     "input": [
-                        118,
+                        176,
                         "ExternalDataForContributionInput!"
                     ]
                 }
             ],
             "hashDisc": [
-                47,
+                63,
                 {
                     "input": [
-                        123,
+                        181,
                         "HashDiscInput!"
                     ]
                 }
             ],
             "markMessagesAsRead": [
-                53,
+                72,
                 {
                     "input": [
-                        131,
+                        192,
                         "MarkMessagesAsReadInput!"
                     ]
                 }
             ],
-            "reorderDiscs": [
-                60,
+            "markBoxsetMessagesAsRead": [
+                71,
                 {
                     "input": [
-                        132,
+                        191,
+                        "MarkBoxsetMessagesAsReadInput!"
+                    ]
+                }
+            ],
+            "removeBoxsetMember": [
+                82,
+                {
+                    "input": [
+                        193,
+                        "RemoveBoxsetMemberInput!"
+                    ]
+                }
+            ],
+            "removeDiscFromBoxset": [
+                83,
+                {
+                    "input": [
+                        194,
+                        "RemoveDiscFromBoxsetInput!"
+                    ]
+                }
+            ],
+            "reorderBoxsetMembers": [
+                84,
+                {
+                    "input": [
+                        195,
+                        "ReorderBoxsetMembersInput!"
+                    ]
+                }
+            ],
+            "reorderDiscs": [
+                85,
+                {
+                    "input": [
+                        196,
                         "ReorderDiscsInput!"
                     ]
                 }
             ],
             "revokeApiKey": [
-                61,
+                86,
                 {
                     "input": [
-                        133,
+                        197,
                         "RevokeApiKeyInput!"
                     ]
                 }
             ],
             "sendAdminMessage": [
-                63,
+                89,
                 {
                     "input": [
-                        134,
+                        199,
                         "SendAdminMessageInput!"
                     ]
                 }
             ],
             "sendUserMessage": [
-                64,
+                91,
                 {
                     "input": [
-                        135,
+                        201,
                         "SendUserMessageInput!"
                     ]
                 }
             ],
-            "updateContribution": [
-                68,
+            "sendAdminBoxsetMessage": [
+                88,
                 {
                     "input": [
-                        137,
+                        198,
+                        "SendAdminBoxsetMessageInput!"
+                    ]
+                }
+            ],
+            "sendBoxsetUserMessage": [
+                90,
+                {
+                    "input": [
+                        200,
+                        "SendBoxsetUserMessageInput!"
+                    ]
+                }
+            ],
+            "updateBoxset": [
+                96,
+                {
+                    "input": [
+                        204,
+                        "UpdateBoxsetInput!"
+                    ]
+                }
+            ],
+            "updateContribution": [
+                97,
+                {
+                    "input": [
+                        205,
                         "UpdateContributionInput!"
                     ]
                 }
             ],
             "updateDisc": [
-                69,
+                98,
                 {
                     "input": [
-                        138,
+                        206,
                         "UpdateDiscInput!"
                     ]
                 }

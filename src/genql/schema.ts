@@ -241,6 +241,7 @@ export interface Disc {
     name: (Scalars['String'] | null)
     format: (Scalars['String'] | null)
     contentHash: (Scalars['String'] | null)
+    globalDiscId: (Scalars['String'] | null)
     titles: Title[]
     release: (Release | null)
     releaseDiscs: ReleaseDisc[]
@@ -281,6 +282,7 @@ export interface ReleaseDisc {
     name: (Scalars['String'] | null)
     format: (Scalars['String'] | null)
     contentHash: (Scalars['String'] | null)
+    globalDiscId: (Scalars['String'] | null)
     titles: Title[]
     __typename: 'ReleaseDisc'
 }
@@ -375,7 +377,7 @@ export interface MediaItemsConnectionGenqlSelection{
     __scalar?: boolean | number
 }
 
-export interface ReleaseDiscFilterInput {and?: (ReleaseDiscFilterInput[] | null),or?: (ReleaseDiscFilterInput[] | null),id?: (IntOperationFilterInput | null),releaseId?: (IntOperationFilterInput | null),release?: (ReleaseFilterInput | null),discId?: (IntOperationFilterInput | null),disc?: (DiscFilterInput | null),index?: (IntOperationFilterInput | null),slug?: (StringOperationFilterInput | null),name?: (StringOperationFilterInput | null),titles?: (ListFilterInputTypeOfTitleFilterInput | null),format?: (StringOperationFilterInput | null),contentHash?: (StringOperationFilterInput | null)}
+export interface ReleaseDiscFilterInput {and?: (ReleaseDiscFilterInput[] | null),or?: (ReleaseDiscFilterInput[] | null),id?: (IntOperationFilterInput | null),releaseId?: (IntOperationFilterInput | null),release?: (ReleaseFilterInput | null),discId?: (IntOperationFilterInput | null),disc?: (DiscFilterInput | null),index?: (IntOperationFilterInput | null),slug?: (StringOperationFilterInput | null),name?: (StringOperationFilterInput | null),titles?: (ListFilterInputTypeOfTitleFilterInput | null),format?: (StringOperationFilterInput | null),contentHash?: (StringOperationFilterInput | null),globalDiscId?: (StringOperationFilterInput | null)}
 
 export interface ListFilterInputTypeOfReleaseGroupFilterInput {all?: (ReleaseGroupFilterInput | null),none?: (ReleaseGroupFilterInput | null),some?: (ReleaseGroupFilterInput | null),any?: (Scalars['Boolean'] | null)}
 
@@ -488,7 +490,7 @@ export interface MediaItemsByGroupEdgeGenqlSelection{
 
 export interface BoxsetSortInput {id?: (SortEnumType | null),title?: (SortEnumType | null),sortTitle?: (SortEnumType | null),slug?: (SortEnumType | null),imageUrl?: (SortEnumType | null),release?: (ReleaseSortInput | null),releaseId?: (SortEnumType | null),type?: (SortEnumType | null)}
 
-export interface DiscSortInput {id?: (SortEnumType | null),index?: (SortEnumType | null),slug?: (SortEnumType | null),name?: (SortEnumType | null),format?: (SortEnumType | null),contentHash?: (SortEnumType | null),release?: (ReleaseSortInput | null)}
+export interface DiscSortInput {id?: (SortEnumType | null),index?: (SortEnumType | null),slug?: (SortEnumType | null),name?: (SortEnumType | null),format?: (SortEnumType | null),contentHash?: (SortEnumType | null),globalDiscId?: (SortEnumType | null),release?: (ReleaseSortInput | null)}
 
 export interface TrackGenqlSelection{
     id?: boolean | number
@@ -575,13 +577,13 @@ export interface MediaItemsByGroupConnectionGenqlSelection{
     __scalar?: boolean | number
 }
 
-export interface DiscFilterInput {and?: (DiscFilterInput[] | null),or?: (DiscFilterInput[] | null),id?: (IntOperationFilterInput | null),index?: (IntOperationFilterInput | null),slug?: (StringOperationFilterInput | null),name?: (StringOperationFilterInput | null),format?: (StringOperationFilterInput | null),contentHash?: (StringOperationFilterInput | null),titles?: (ListFilterInputTypeOfTitleFilterInput | null),release?: (ReleaseFilterInput | null),releaseDiscs?: (ListReleaseDiscFilterTypeFilterInput | null)}
+export interface DiscFilterInput {and?: (DiscFilterInput[] | null),or?: (DiscFilterInput[] | null),id?: (IntOperationFilterInput | null),index?: (IntOperationFilterInput | null),slug?: (StringOperationFilterInput | null),name?: (StringOperationFilterInput | null),format?: (StringOperationFilterInput | null),contentHash?: (StringOperationFilterInput | null),globalDiscId?: (StringOperationFilterInput | null),titles?: (ListFilterInputTypeOfTitleFilterInput | null),release?: (ReleaseFilterInput | null),releaseDiscs?: (ListReleaseDiscFilterTypeFilterInput | null)}
 
 export interface TitleSortInput {index?: (SortEnumType | null),disc?: (DiscSortInput | null),id?: (SortEnumType | null),comment?: (SortEnumType | null),sourceFile?: (SortEnumType | null),segmentMap?: (SortEnumType | null),duration?: (SortEnumType | null),size?: (SortEnumType | null),displaySize?: (SortEnumType | null),item?: (DiscItemReferenceSortInput | null),discItemReferenceId?: (SortEnumType | null),description?: (SortEnumType | null),itemType?: (SortEnumType | null),season?: (SortEnumType | null),episode?: (SortEnumType | null),hasItem?: (SortEnumType | null)}
 
 export interface ChapterFilterInput {and?: (ChapterFilterInput[] | null),or?: (ChapterFilterInput[] | null),id?: (IntOperationFilterInput | null),index?: (IntOperationFilterInput | null),title?: (StringOperationFilterInput | null)}
 
-export interface ReleaseDiscSortInput {id?: (SortEnumType | null),releaseId?: (SortEnumType | null),release?: (ReleaseSortInput | null),discId?: (SortEnumType | null),disc?: (DiscSortInput | null),index?: (SortEnumType | null),slug?: (SortEnumType | null),name?: (SortEnumType | null),format?: (SortEnumType | null),contentHash?: (SortEnumType | null)}
+export interface ReleaseDiscSortInput {id?: (SortEnumType | null),releaseId?: (SortEnumType | null),release?: (ReleaseSortInput | null),discId?: (SortEnumType | null),disc?: (DiscSortInput | null),index?: (SortEnumType | null),slug?: (SortEnumType | null),name?: (SortEnumType | null),format?: (SortEnumType | null),contentHash?: (SortEnumType | null),globalDiscId?: (SortEnumType | null)}
 
 export interface ReleaseGenqlSelection{
     id?: boolean | number
@@ -642,6 +644,7 @@ export interface DiscGenqlSelection{
     name?: boolean | number
     format?: boolean | number
     contentHash?: boolean | number
+    globalDiscId?: boolean | number
     titles?: (TitleGenqlSelection & { __args?: {where?: (TitleFilterInput | null), order?: (TitleSortInput[] | null)} })
     release?: ReleaseGenqlSelection
     releaseDiscs?: ReleaseDiscGenqlSelection
@@ -691,6 +694,7 @@ export interface ReleaseDiscGenqlSelection{
     name?: boolean | number
     format?: boolean | number
     contentHash?: boolean | number
+    globalDiscId?: boolean | number
     titles?: (TitleGenqlSelection & { __args?: {where?: (TitleFilterInput | null), order?: (TitleSortInput[] | null)} })
     __typename?: boolean | number
     __scalar?: boolean | number

@@ -1,5 +1,5 @@
 import { type BidirectionalPaginationQuery } from "./common";
-import { type ApiKeyInfoFilterInput, type ApiKeyInfoSortInput, type ApiKeyUsageLogInfoFilterInput, type ApiKeyUsageLogInfoSortInput, type ContributionHistorySortInput, type ContributionMutationRequestInput, type EditItemOnDiscInput, type Client as GQLClient, type UpdateContributionInput, type UserContributionFilterInput, type UserContributionGenqlSelection, type UserContributionSortInput, type UserMessageSortInput, type UserMessageType } from "./genql-contributions";
+import { type ApiKeyInfoFilterInput, type ApiKeyInfoSortInput, type ApiKeyUsageLogInfoFilterInput, type ApiKeyUsageLogInfoSortInput, type AttachDiscIdResult, type AttachGlobalDiscIdInput, type ContributionHistorySortInput, type ContributionMutationRequestInput, type EditItemOnDiscInput, type FieldsSelection, type Client as GQLClient, type UpdateContributionInput, type UserContributionFilterInput, type UserContributionGenqlSelection, type UserContributionSortInput, type UserMessageSortInput, type UserMessageType } from "./genql-contributions";
 import type { DiscFormat, MediaItemType } from "./types";
 import type { AddItemToDiscInput, ExternalMetadata, UpdateDiscInput, WithEncodedId } from "./types/contributions";
 import type { FileHashInfo } from "./types/hash";
@@ -51,7 +51,7 @@ export declare class DiscDBContributionsClient {
         frontImageUrl: true;
         created: true;
     }>(input?: BidirectionalPaginationQuery<UserContributionFilterInput, UserContributionSortInput>, select?: Selection): Promise<{
-        contributions: import("./genql-contributions").UserContribution[] | NonNullable<import("./genql-contributions").FieldsSelection<import("./genql-contributions").UserContribution[] | null, NonNullable<Selection>>>;
+        contributions: import("./genql-contributions").UserContribution[] | NonNullable<FieldsSelection<import("./genql-contributions").UserContribution[] | null, NonNullable<Selection>>>;
         page: {
             cursor: string | null;
             hasMoreData: boolean;
@@ -67,10 +67,13 @@ export declare class DiscDBContributionsClient {
         userId: import("./genql-contributions").Scalars["String"];
         created: import("./genql-contributions").Scalars["DateTime"];
         status: import("./genql-contributions").UserContributionStatus;
+        boxsetId: (import("./genql-contributions").Scalars["Int"] | null);
+        boxset: (import("./genql-contributions").UserContributionBoxset | null);
         discs: Pick<{
             id: import("./genql-contributions").Scalars["Int"];
             userContribution: import("./genql-contributions").UserContribution;
             contentHash: import("./genql-contributions").Scalars["String"];
+            globalDiscId: (import("./genql-contributions").Scalars["String"] | null);
             format: import("./genql-contributions").Scalars["String"];
             name: import("./genql-contributions").Scalars["String"];
             slug: import("./genql-contributions").Scalars["String"];
@@ -100,7 +103,7 @@ export declare class DiscDBContributionsClient {
         titleSlug: import("./genql-contributions").Scalars["String"];
         encodedId: import("./genql-contributions").Scalars["EncodedId"];
         __typename: "UserContribution";
-    }, "id" | "title" | "year" | "releaseDate" | "regionCode" | "locale" | "upc" | "asin" | "backImageUrl" | "discs" | "frontImageUrl" | "created" | "status" | "mediaType" | "externalId" | "externalProvider" | "releaseTitle" | "releaseSlug" | "encodedId">>;
+    }, "id" | "title" | "year" | "releaseDate" | "regionCode" | "locale" | "upc" | "asin" | "backImageUrl" | "discs" | "frontImageUrl" | "releaseSlug" | "created" | "status" | "mediaType" | "externalId" | "externalProvider" | "releaseTitle" | "encodedId">>;
     /**
      * Upload an image for a contribution before the contribution is actually
      * created
@@ -156,6 +159,33 @@ export declare class DiscDBContributionsClient {
      */
     hash(contributionId: string, files: (FileHashInfo | File)[]): Promise<string>;
     /**
+     * Submit a new global ID to a disc that is without one. This is different
+     * from the {@link hash}. To calculate a global disc ID:
+     *
+     * - DVD: use libdvdread/{@link https://github.com/beandog/dvd_info | dvd_info}
+     * - BD: hash the raw bytes of AACS/Unit_Key_RO.inf as SHA1, then convert to hex. see discman/io/hash#computeAacsDiscId
+     *
+     * @param input details by which to identify the disc.
+     *   for most discs, `mediaItemSlug` + `releaseSlug` + `discSlug` is sufficient.
+     *   for `files`, list the relevant media files (see {@link hash}).
+     * @returns the result, which may not be successful; check `outcome` (`APPLIED`).
+     */
+    attachGlobalDiscId(input: Omit<AttachGlobalDiscIdInput, "files"> & {
+        files: (FileHashInfo | File)[];
+    }): Promise<FieldsSelection<AttachDiscIdResult, {
+        outcome: true;
+        contentHash: true;
+        mediaItemSlug: true;
+        boxsetSlug: true;
+        mediaItemType: true;
+        releaseSlug: true;
+        discSlug: true;
+        discIndex: true;
+        globalDiscId: true;
+        existingGlobalDiscId: true;
+        matchedDifferentDisc: true;
+    }>>;
+    /**
      * Add a disc to a contribution. This is only for specifying the surface
      * details of the disc; after creating it, you must
      * {@link uploadDiscLogs | upload logs} before you can
@@ -191,10 +221,10 @@ export declare class DiscDBContributionsClient {
      * @param discId encoded ID for the disc
      * @returns upload status for the disc's logs
      */
-    getDiscUploadStatus(discId: string): Promise<import("./genql-contributions").FieldsSelection<import("./genql-contributions").DiscUploadStatus | null, {
+    getDiscUploadStatus(discId: string): Promise<FieldsSelection<import("./genql-contributions").DiscUploadStatus | null, {
         logsUploaded: true;
         logUploadError: true;
-    }> & NonNullable<import("./genql-contributions").FieldsSelection<import("./genql-contributions").DiscUploadStatus | null, {
+    }> & NonNullable<FieldsSelection<import("./genql-contributions").DiscUploadStatus | null, {
         logsUploaded: true;
         logUploadError: true;
     }>>>;
@@ -208,7 +238,7 @@ export declare class DiscDBContributionsClient {
      * @param discId encoded ID for the disc
      * @returns parsed logs for the disc, including parent contribution info
      */
-    getDiscLogs(contributionId: string, discId: string): Promise<import("./genql-contributions").FieldsSelection<import("./genql-contributions").DiscLogs | null, {
+    getDiscLogs(contributionId: string, discId: string): Promise<FieldsSelection<import("./genql-contributions").DiscLogs | null, {
         info: {
             titles: {
                 index: true;
@@ -288,7 +318,7 @@ export declare class DiscDBContributionsClient {
             };
             id: true;
         };
-    }> & NonNullable<import("./genql-contributions").FieldsSelection<import("./genql-contributions").DiscLogs | null, {
+    }> & NonNullable<FieldsSelection<import("./genql-contributions").DiscLogs | null, {
         info: {
             titles: {
                 index: true;
@@ -380,13 +410,13 @@ export declare class DiscDBContributionsClient {
      * @param discIds new order for all disc IDs
      * @returns all discs in the contribution
      */
-    reorderDiscs(contributionId: string, discIds: string[]): Promise<import("./genql-contributions").FieldsSelection<import("./genql-contributions").UserContributionDisc[] | null, {
+    reorderDiscs(contributionId: string, discIds: string[]): Promise<FieldsSelection<import("./genql-contributions").UserContributionDisc[] | null, {
         id: true;
         encodedId: true;
         index: true;
         name: true;
         slug: true;
-    }> & NonNullable<import("./genql-contributions").FieldsSelection<import("./genql-contributions").UserContributionDisc[] | null, {
+    }> & NonNullable<FieldsSelection<import("./genql-contributions").UserContributionDisc[] | null, {
         id: true;
         encodedId: true;
         index: true;
@@ -497,14 +527,14 @@ export declare class DiscDBContributionsClient {
             hasMoreData: boolean;
         } | undefined;
     }>;
-    revokeApiKey(keyPrefix: string): Promise<import("./genql-contributions").FieldsSelection<import("./genql-contributions").ApiKeyInfo | null, {
+    revokeApiKey(keyPrefix: string): Promise<FieldsSelection<import("./genql-contributions").ApiKeyInfo | null, {
         name: true;
         ownerEmail: true;
         roles: true;
         createdAt: true;
         expiresAt: true;
         lastUsedAt: true;
-    }> & NonNullable<import("./genql-contributions").FieldsSelection<import("./genql-contributions").ApiKeyInfo | null, {
+    }> & NonNullable<FieldsSelection<import("./genql-contributions").ApiKeyInfo | null, {
         name: true;
         ownerEmail: true;
         roles: true;
@@ -518,7 +548,7 @@ export declare class DiscDBContributionsClient {
      * @param input customize returned results
      */
     getContributionChat(contributionId: string, input?: BidirectionalPaginationQuery<never, UserMessageSortInput>): Promise<{
-        messages: import("./genql-contributions").FieldsSelection<import("./genql-contributions").UserMessage[] | null, {
+        messages: FieldsSelection<import("./genql-contributions").UserMessage[] | null, {
             contributionId: true;
             createdAt: true;
             id: true;
@@ -535,7 +565,7 @@ export declare class DiscDBContributionsClient {
         totalCount: number;
     }>;
     getContributionHistory(contributionId: number, input?: BidirectionalPaginationQuery<never, ContributionHistorySortInput>): Promise<{
-        history: import("./genql-contributions").FieldsSelection<import("./genql-contributions").ContributionHistory[] | null, {
+        history: FieldsSelection<import("./genql-contributions").ContributionHistory[] | null, {
             contributionId: true;
             description: true;
             id: true;
@@ -562,7 +592,7 @@ export declare class DiscDBContributionsClient {
         releaseTitle: true;
         releaseSlug: true;
     }>(input?: BidirectionalPaginationQuery<UserContributionFilterInput, UserContributionSortInput>, select?: Selection): Promise<{
-        contributions: import("./genql-contributions").UserContribution[] | NonNullable<import("./genql-contributions").FieldsSelection<import("./genql-contributions").UserContribution[] | null, NonNullable<Selection>>>;
+        contributions: import("./genql-contributions").UserContribution[] | NonNullable<FieldsSelection<import("./genql-contributions").UserContribution[] | null, NonNullable<Selection>>>;
         page: {
             cursor: string | null;
             hasMoreData: boolean;
@@ -588,7 +618,7 @@ export declare class DiscDBContributionsClient {
      * @param type if you are an admin, this may be ADMIN_MESSAGE, but it defaults to USER_MESSAGE
      * @returns the sent message
      */
-    sendMessage(contributionId: string, content: string, type?: UserMessageType): Promise<import("./genql-contributions").FieldsSelection<import("./genql-contributions").UserMessage | null, {
+    sendMessage(contributionId: string, content: string, type?: UserMessageType): Promise<FieldsSelection<import("./genql-contributions").UserMessage | null, {
         contributionId: boolean;
         createdAt: boolean;
         id: boolean;
@@ -597,7 +627,7 @@ export declare class DiscDBContributionsClient {
         fromUserId: boolean;
         toUserId: boolean;
         type: boolean;
-    }> & NonNullable<import("./genql-contributions").FieldsSelection<import("./genql-contributions").UserMessage | null, {
+    }> & NonNullable<FieldsSelection<import("./genql-contributions").UserMessage | null, {
         contributionId: boolean;
         createdAt: boolean;
         id: boolean;
@@ -620,12 +650,16 @@ export declare class DiscDBContributionsClient {
         lastMessageAt: import("./genql-contributions").Scalars["DateTime"];
         unreadCount: import("./genql-contributions").Scalars["Int"];
         totalCount: import("./genql-contributions").Scalars["Int"];
+        isBoxset: import("./genql-contributions").Scalars["Boolean"];
         __typename: "MessageThread";
-    }, "__typename" | "totalCount" | "contributionId" | "encodedContributionId" | "contributionTitle" | "mediaTitle" | "lastMessagePreview" | "lastMessageAt" | "unreadCount">[]>;
+    }, "__typename" | "contributionTitle" | "totalCount" | "contributionId" | "encodedContributionId" | "mediaTitle" | "lastMessagePreview" | "lastMessageAt" | "unreadCount" | "isBoxset">[]>;
     getMyMessages(input?: BidirectionalPaginationQuery<never, UserMessageSortInput>): Promise<{
         messages: Pick<{
             id: import("./genql-contributions").Scalars["Int"];
-            contributionId: import("./genql-contributions").Scalars["Int"];
+            contributionId: (import("./genql-contributions").Scalars["Int"] | null);
+            boxsetId: (import("./genql-contributions").Scalars["Int"] | null);
+            contribution: (import("./genql-contributions").UserContribution | null);
+            boxset: (import("./genql-contributions").UserContributionBoxset | null);
             fromUserId: import("./genql-contributions").Scalars["String"];
             toUserId: import("./genql-contributions").Scalars["String"];
             message: import("./genql-contributions").Scalars["String"];
