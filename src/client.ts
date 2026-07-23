@@ -706,6 +706,7 @@ const GQL_NODE_QUERY = {
         segmentMap: true,
         item: {
           title: true,
+          description: true,
           season: true,
           episode: true,
           type: true,

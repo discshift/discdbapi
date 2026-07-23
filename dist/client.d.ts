@@ -348,6 +348,7 @@ export declare class DiscDBClient {
                     segmentMap: boolean;
                     item: {
                         title: boolean;
+                        description: boolean;
                         season: boolean;
                         episode: boolean;
                         type: boolean;
@@ -415,6 +416,7 @@ declare const GQL_NODE_QUERY: {
                 segmentMap: boolean;
                 item: {
                     title: boolean;
+                    description: boolean;
                     season: boolean;
                     episode: boolean;
                     type: boolean;
